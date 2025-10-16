@@ -1,0 +1,6 @@
+@eGhis_WebService_Core_HostAddress = http://localhost:5288
+
+GET {{eGhis_WebService_Core_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

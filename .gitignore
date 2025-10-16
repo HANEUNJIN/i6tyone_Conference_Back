@@ -1,0 +1,51 @@
+
+## Build
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+publish/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+*.dbmdl
+*.log
+
+## ASP.NET
+wwwroot/lib/
+*.Publish.xml
+
+## Rider
+.idea/
+*.sln.iml
+
+## 기타
+*.swp
+*.tmp
+*.bak
+*.old
+*.orig
+
+## 환경파일
+.env
+secrets.json
+
+## 로그
+*.log
+
+## 테스트
+TestResults/
+coverage/
+
+## 패키지
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+## Node (JS 사용 시)
+node_modules/
