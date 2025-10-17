@@ -19,6 +19,10 @@ namespace eGhis_WebService_Core.Service.Auth
         private readonly IMapper _mapper;
         private readonly QRCodeUtil _qrCode;
 
+        private readonly string ConferenceName = "2026 Solus CHRISTUS";
+        private readonly string Today = DateTime.Now.ToString("yyyy-MM-dd");
+        private readonly string SuccessMessage = "2026 Solus CHRISTUS에 오신 것을 환영합니다!";
+
         public RegisterService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper, QRCodeUtil qrCode)
         {
             _connFactory = connFactory;
@@ -38,7 +42,7 @@ namespace eGhis_WebService_Core.Service.Auth
             if (data < 0)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "컨퍼런스 등록 실패";
+                res.ResultMsg = "컨퍼런스 참가 등록 실패";
                 return res;
             }
             var result = new RegisterAddResponseDto() { successCount = data };
@@ -55,7 +59,6 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            //QRCode 발급여부에 대해 발급하지 않은 등록자들만 result 되도록 수정하기.
             var result = await _repo.RegisterDao.GenerateRegisterQRCodeAsync(db);
             if (result is null)
             {
@@ -64,9 +67,7 @@ namespace eGhis_WebService_Core.Service.Auth
             }
 
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string baseFolder = "2026 Solus CHRISTUS";
-            string today = DateTime.Now.ToString("yyyy-MM-dd");
-            string savePath = Path.Combine(desktopPath, baseFolder, today);
+            string savePath = Path.Combine(desktopPath, ConferenceName, Today);
 
             if (!Directory.Exists(savePath))
                 Directory.CreateDirectory(savePath);
@@ -78,14 +79,22 @@ namespace eGhis_WebService_Core.Service.Auth
             {
                 try
                 {
-                    var fileName = $"{item.name}_{item.phoneNumber}";
+                    if(string.IsNullOrWhiteSpace(item.IC26UniqueId))
+                    {
+                        res.SetResult(ErrorStatusCode.Invalid_Error);
+                        res.ResultMsg = $"{item.IC26Buyer}에 대한 정보를 찾을 수 없음.";
+                        return;
+                    }
+
+                    var fileName = $"{item.IC26No}_{item.IC26Buyer}_{item.IC26Phone}";
                     var fullPath = Path.Combine(savePath, fileName + ".jpg");
-                    _qrCode.GenerateQRCodePngFile(item.id, fullPath);
+                    _qrCode.GenerateQRCodePngFile(item.IC26UniqueId, fullPath);
 
                     successBag.Add(true);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    File.AppendAllText(Path.Combine(savePath, "error.log"), $"{item.IC26Buyer}: {ex}\n");
                 }
             });
 
@@ -105,10 +114,10 @@ namespace eGhis_WebService_Core.Service.Auth
         {
             var res = new GenericResponse<RegisterResponseDto>();
 
-            if (string.IsNullOrWhiteSpace(req.name) || string.IsNullOrWhiteSpace(req.phoneNumber))
+            if (string.IsNullOrWhiteSpace(req.iC26Buyer))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "이름과 연락처를 기입해주세요.";
+                res.ResultMsg = "구매자명 누락";
                 return res;
             }
 
@@ -130,43 +139,42 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
-        public async Task<GenericResponse<CheckInResponseDto>> CheckAttendanceAsync(string qrCodeKey, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<CheckInResponseDto>> CheckAttendanceAsync(string iC26UniqueId, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<CheckInResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            if (string.IsNullOrWhiteSpace(qrCodeKey))
+            if (string.IsNullOrWhiteSpace(iC26UniqueId))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "QR Code 누락";
+                res.ResultMsg = "QR Code 발급 키 누락";
                 return res;
             }
 
-            var isCheckIn = await _repo.RegisterDao.CheckAttendanceAsync(db, qrCodeKey);
+            var isCheckIn = await _repo.RegisterDao.CheckAttendanceAsync(db, iC26UniqueId);
             if (!isCheckIn)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "컨퍼런스 체크인 실패";
+                res.ResultMsg = "현장 입장 등록 실패";
                 return res;
             }
 
-            var registerInfo = await _repo.RegisterDao.GetRegisterDetailAsync(db, qrCodeKey);
-            if (registerInfo is null || registerInfo.consentPrivacy == "N")
+            var registerInfo = await _repo.RegisterDao.GetRegisterDetailAsync(db, iC26UniqueId);
+            if (registerInfo is null)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "등록자를 찾을 수 없음.";
+                res.ResultMsg = "정보를 찾을 수 없음.";
                 return res;
             }
-            else
-            {
-                registerInfo.message = "2026 Solus CHRISTUS에 오신 것을 환영합니다!";
+            
+            var mappedInfo = _mapper.Map<CheckInResponseDto>(registerInfo);
+            mappedInfo.message = SuccessMessage;
 
-                res.SetResult(ErrorStatusCode.Success);
-                res.Data = registerInfo;
-                return res;
-            }
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = mappedInfo;
+            return res;
         }
     }
 }

@@ -5,7 +5,6 @@ using eGhis_WebService_Core.Infrastructure.Utils;
 using eGhis_WebService_Core.Models.Db;
 using eGhis_WebService_Core.Models.Dto.Auth;
 using i6tyone_Conference.Models.Dto.Register;
-using i6tyone_Conference.Models.Dto.Auth;
 using static Dapper.SqlMapper;
 
 namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
@@ -17,10 +16,42 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
             try
             {
                 string query = @"
-                                INSERT INTO i6tyone.attendee
-                                (name, email, phone_number, gender, age, church_name, region, denomination, floor_seat, consent_privacy)
-                                VALUES
-                                (@name, @email, @phoneNumber, @gender, @age, @churchName, @region, @denomination, @floorSeat, @consentPrivacy)
+                                INSERT INTO wjst4321.IC26_Data (
+                                    IC26_No,
+                                    IC26_Option,
+                                    IC26_Day,
+                                    IC26_Buyer,
+                                    IC26_Attender,
+                                    IC26_Phone,
+                                    IC26_Gender,
+                                    IC26_Age,
+                                    IC26_Church,
+                                    IC26_Local,
+                                    IC26_Denom,
+                                    IC26_Count,
+                                    IC26_Area,
+                                    IC26_Memo,
+                                    IC26_Attend,
+                                    IC26_CreateQR,
+                                )
+                                VALUES (
+                                    @iC26No,
+                                    @iC26Option,
+                                    @iC26Day,
+                                    @iC26Buyer,
+                                    @iC26Attender,
+                                    @iC26Phone,
+                                    @iC26Gender,
+                                    @iC26Age,
+                                    @iC26Church,
+                                    @iC26Local,
+                                    @iC26Denom,
+                                    @iC26Count,
+                                    @iC26Area,
+                                    @iC26Memo,
+                                    @iC26Attend,
+                                    @iC26CreateQR,
+                                );
                                 ";
 
                 return await db.ExecuteAsync(query, req);
@@ -37,22 +68,29 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
             try
             {
                 string query = @"
-                                 SELECT id AS id,
-                                        name AS name,
-                                        email AS email,
-                                        phone_number AS phoneNumber,
-                                        gender AS gender,
-                                        age AS age,
-                                        church_name AS churchName,
-                                        region AS region,
-                                        denomination AS denomination,
-                                        floor_seat AS floorSeat,
-                                        consent_privacy AS consentPrivacy,
-                                        created_at AS createdAt
-                                   FROM i6tyone.attendee
-                                  WHERE name = @name
-                                    AND phone_number = @phoneNumber;
+                                 SELECT IC26_No AS IC26No,
+                                        IC26_Option AS IC26Option,
+                                        IC26_Day AS IC26Day,
+                                        IC26_Buyer AS IC26Buyer,
+                                        IC26_Attender AS IC26Attender,
+                                        IC26_Phone AS IC26Phone,
+                                        IC26_Gender AS IC26Gender,
+                                        IC26_Age AS IC26Age,
+                                        IC26_Church AS IC26Church,
+                                        IC26_Local AS IC26Local,
+                                        IC26_Denom AS IC26Denom,
+                                        IC26_Count AS IC26Count,
+                                        IC26_Area AS IC26Area,
+                                        IC26_Memo AS IC26Memo,
+                                     -- IC26_UniqueId AS IC26UniqueId,
+                                        IC26_Attend AS IC26Attend,
+                                        IC26_CreateQR AS IC26CreateQR
+                                   FROM IC26_Data
+                                  WHERE IC26_Buyer = @IC26Buyer
                                 ";
+
+                if (!string.IsNullOrWhiteSpace(req.iC26Phone))
+                    query += "      AND IC26_Phone = @IC26Phone;";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query, req);
                 return result.ToList();
@@ -69,19 +107,24 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
             try
             {
                 string query = @"
-                                 SELECT id AS id,
-                                        name AS name,
-                                        email AS email,
-                                        phone_number AS phoneNumber,
-                                        gender AS gender,
-                                        age AS age,
-                                        church_name AS churchName,
-                                        region AS region,
-                                        denomination AS denomination,
-                                        floor_seat AS floorSeat,
-                                        consent_privacy AS consentPrivacy,
-                                        created_at AS createdAt
-                                   FROM i6tyone.attendee;
+                                 SELECT IC26_No AS IC26No,
+                                        IC26_Option AS IC26Option,
+                                        IC26_Day AS IC26Day,
+                                        IC26_Buyer AS IC26Buyer,
+                                        IC26_Attender AS IC26Attender,
+                                        IC26_Phone AS IC26Phone,
+                                        IC26_Gender AS IC26Gender,
+                                        IC26_Age AS IC26Age,
+                                        IC26_Church AS IC26Church,
+                                        IC26_Local AS IC26Local,
+                                        IC26_Denom AS IC26Denom,
+                                        IC26_Count AS IC26Count,
+                                        IC26_Area AS IC26Area,
+                                        IC26_Memo AS IC26Memo,
+                                        IC26_UniqueId AS IC26UniqueId,
+                                        IC26_Attend AS IC26Attend,
+                                        IC26_CreateQR AS IC26CreateQR
+                                   FROM IC26_Data;
                                 ";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query);
@@ -94,17 +137,17 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
             }
         }
 
-        public async Task<bool> CheckAttendanceAsync(DbSession db, string qrCodeKey)
+        public async Task<bool> CheckAttendanceAsync(DbSession db, string iC26UniqueId)
         {
             try
             {
                 string query = @"
-                                UPDATE i6tyone.attendee
-                                   SET consent_privacy = 'Y'
-                                 WHERE id = @qrCodeKey
+                                UPDATE IC26_Data
+                                   SET IC26_Attend = '1'
+                                 WHERE IC26_UniqueId = @iC26UniqueId
                                 ";
 
-                return await db.ExecuteAsync(query, new { qrCodeKey }) > 0;
+                return await db.ExecuteAsync(query, new { iC26UniqueId }) > 0;
             }
             catch (Exception ex)
             {
@@ -113,28 +156,21 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
             }
         }
 
-        public async Task<CheckInResponseDto> GetRegisterDetailAsync(DbSession db, string qrCodeKey)
+        public async Task<IC26DataRecord> GetRegisterDetailAsync(DbSession db, string iC26UniqueId)
         {
             try
             {
                 string query = @"
-                                SELECT id AS id,
-                                        name AS name,
-                                        email AS email,
-                                        phone_number AS phoneNumber,
-                                        gender AS gender,
-                                        age AS age,
-                                        church_name AS churchName,
-                                        region AS region,
-                                        denomination AS denomination,
-                                        floor_seat AS floorSeat,
-                                        consent_privacy AS consentPrivacy,
-                                        created_at AS createdAt
-                                   FROM i6tyone.attendee
-                                  WHERE id = @qrCodeKey;
+                                SELECT IC26_Option AS IC26Option,
+                                       IC26_Day AS IC26Day,
+                                       IC26_Buyer AS IC26Buyer,
+                                       IC26_Count AS IC26Count,
+                                       IC26_Area AS IC26Area
+                                  FROM IC26_Data
+                                 WHERE IC26_UniqueId = @iC26UniqueId;
                                 ";
 
-                return await db.QuerySingleAsync<CheckInResponseDto>(query, new { qrCodeKey });
+                return await db.QuerySingleAsync<IC26DataRecord>(query, new { iC26UniqueId });
             }
             catch (Exception ex)
             {

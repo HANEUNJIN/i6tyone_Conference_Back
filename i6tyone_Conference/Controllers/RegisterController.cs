@@ -29,7 +29,7 @@ namespace eGhis_WebService_Core.Controllers
         /// <returns>요청 정보<see cref="RegisterRequestDto"/></returns>
         /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
         /// <returns>컨퍼런스 참가 신청 정보를 등록합니다.</returns>
-        [HttpPost("register")]
+        [HttpPost("sign-up")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<RegisterAddResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<RegisterAddResponseDto>>> GenerateRegister(RegisterRequestDto req)
@@ -43,7 +43,7 @@ namespace eGhis_WebService_Core.Controllers
         /// </summary>
         /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
         /// <returns>등록자 목록 정보를 기반으로 각 참가자의 QR 코드를 생성하여 PNG 파일 형태로 일괄 생성 및 다운로드합니다.</returns>
-        [HttpPost("register/qrcode")]
+        [HttpPost("qrcode")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<QRCodeResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<QRCodeResponseDto>>> GenerateRegisterQRCode()
@@ -57,7 +57,7 @@ namespace eGhis_WebService_Core.Controllers
         /// </summary>
         /// <returns>응답 정보<see cref="RegisterResponseDto"/></returns>
         /// <returns>등록자 식별 정보를 이용하여 개발 등록자의 상세 정보를 조회합니다.</returns>
-        [HttpPost("register/info")]
+        [HttpPost("info")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<RegisterResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<RegisterResponseDto>>> GetRegisterInfo(RegisterInfoRequestDto req)
@@ -69,15 +69,15 @@ namespace eGhis_WebService_Core.Controllers
         /// <summary>
         /// 컨퍼런스 현장 입장 등록 (출석체크)
         /// </summary>
-        /// <param name="qrCodeKey">QR Code Key</param>
+        /// <param name="iC26UniqueId">QR Code Key</param>
         /// <returns>응답 정보<see cref="CheckInResponseDto"/></returns>
         /// <returns>현장에서 QR Code를 스캔하면 자동으로 출석이 처리됩니다.</returns>
-        [HttpPost("register/attend")]
+        [HttpPost("attend")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<CheckInResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<CheckInResponseDto>>> CheckAttendance(string qrCodeKey)
+        public async Task<ActionResult<GenericResponse<CheckInResponseDto>>> CheckAttendance(string iC26UniqueId)
         {
-            var res = await _registerService.CheckAttendanceAsync(qrCodeKey);
+            var res = await _registerService.CheckAttendanceAsync(iC26UniqueId);
             return Ok(res);
         }
     }

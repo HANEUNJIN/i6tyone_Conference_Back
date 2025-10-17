@@ -9,6 +9,7 @@ namespace eGhis_WebService_Core.Infrastructure.Utils
         public AutoMapperUtil()
         {
             CreateMap<IC26DataRecord, RegisterInfo>();
+            CreateMap<IC26DataRecord, CheckInResponseDto>();
         }
     }
 }

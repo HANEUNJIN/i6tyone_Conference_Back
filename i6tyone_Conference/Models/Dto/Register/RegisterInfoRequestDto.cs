@@ -2,7 +2,14 @@
 {
     public class RegisterInfoRequestDto
     {
-        public string name {  get; set; }
-        public string phoneNumber { get; set; }
+        /// <summary>
+        /// 구매자
+        /// </summary>
+        public string iC26Buyer {  get; set; }
+
+        /// <summary>
+        /// 전화번호
+        /// </summary>
+        public string iC26Phone { get; set; }
     }
 }
