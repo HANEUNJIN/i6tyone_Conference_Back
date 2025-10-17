@@ -11,12 +11,22 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
 {
     public class RegisterDao : IRegisterDao
     {
-        public async Task<int> GenerateRegisterAsync(DbSession db, RegisterRequestDto req)
+        public async Task<int> GetSeqAsync(DbSession db)
+        {
+            string query = @"
+                            SELECT IFNULL(MAX(IC26_No), 0) + 1
+                              FROM IC26_Data
+                            ";
+
+            return await db.ExecuteScalarAsync<int>(query);
+        }
+
+        public async Task<int> GenerateRegisterAsync(DbSession db, RegisterRequestDto req, int seq, string iC26UniqueId)
         {
             try
             {
                 string query = @"
-                                INSERT INTO wjst4321.IC26_Data (
+                                INSERT INTO IC26_Data (
                                     IC26_No,
                                     IC26_Option,
                                     IC26_Day,
@@ -31,12 +41,13 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
                                     IC26_Count,
                                     IC26_Area,
                                     IC26_Memo,
+                                    IC26_UniqueId,
                                     IC26_Attend,
                                     IC26_CreateQR,
                                     IC26_SMS
                                 )
                                 VALUES (
-                                    @iC26No,
+                                    @nextNo,
                                     @iC26Option,
                                     @iC26Day,
                                     @iC26Buyer,
@@ -50,13 +61,18 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
                                     @iC26Count,
                                     @iC26Area,
                                     @iC26Memo,
+                                    @iC26UniqueId,
                                     @iC26Attend,
                                     @iC26CreateQR,
                                     @iC26SMS
                                 );
                                 ";
 
-                return await db.ExecuteAsync(query, req);
+                var parameters = new DynamicParameters(req);
+                parameters.Add("@nextNo", seq);
+                parameters.Add("@iC26UniqueId", iC26UniqueId);
+
+                return await db.ExecuteAsync(query, parameters);
             }
             catch (Exception ex)
             {

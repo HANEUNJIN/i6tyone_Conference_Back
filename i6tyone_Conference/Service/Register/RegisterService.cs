@@ -38,7 +38,16 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            var data = await _repo.RegisterDao.GenerateRegisterAsync(db, req);
+            string iC26UniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
+            if(string.IsNullOrWhiteSpace(iC26UniqueId))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "QR Code 발급 키 생성 오류";
+                return res;
+            }
+
+            int seq = await _repo.RegisterDao.GetSeqAsync(db);
+            var data = await _repo.RegisterDao.GenerateRegisterAsync(db, req, seq, iC26UniqueId);
             if (data < 0)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);

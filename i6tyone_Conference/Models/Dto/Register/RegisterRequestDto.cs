@@ -3,11 +3,6 @@
     public class RegisterRequestDto
     {
         /// <summary>
-        /// 순번
-        /// </summary>
-        public int iC26No { get; set; }
-
-        /// <summary>
         /// 티켓구분
         /// </summary>
         public string iC26Option { get; set; }
@@ -85,6 +80,6 @@
         /// <summary>
         /// SMS 전송여부 (0:미전송, 1:전송완료)
         /// </summary>
-        public string IC26SMS { get; set; }
+        public bool iC26SMS { get; set; }
     }
 }

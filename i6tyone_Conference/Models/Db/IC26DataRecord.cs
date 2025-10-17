@@ -90,6 +90,6 @@
         /// <summary>
         /// SMS 전송여부 (0:미전송, 1:전송완료)
         /// </summary>
-        public string IC26SMS { get; set; }
+        public bool IC26SMS { get; set; }
     }
 }
