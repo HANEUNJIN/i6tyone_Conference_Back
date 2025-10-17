@@ -33,6 +33,7 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
                                     IC26_Memo,
                                     IC26_Attend,
                                     IC26_CreateQR,
+                                    IC26_SMS
                                 )
                                 VALUES (
                                     @iC26No,
@@ -51,6 +52,7 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
                                     @iC26Memo,
                                     @iC26Attend,
                                     @iC26CreateQR,
+                                    @iC26SMS
                                 );
                                 ";
 
@@ -84,7 +86,8 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
                                         IC26_Memo AS IC26Memo,
                                      -- IC26_UniqueId AS IC26UniqueId,
                                         IC26_Attend AS IC26Attend,
-                                        IC26_CreateQR AS IC26CreateQR
+                                        IC26_CreateQR AS IC26CreateQR,
+                                        IC26_SMS AS IC26SMS
                                    FROM IC26_Data
                                   WHERE IC26_Buyer = @IC26Buyer
                                 ";
@@ -123,7 +126,8 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
                                         IC26_Memo AS IC26Memo,
                                         IC26_UniqueId AS IC26UniqueId,
                                         IC26_Attend AS IC26Attend,
-                                        IC26_CreateQR AS IC26CreateQR
+                                        IC26_CreateQR AS IC26CreateQR,
+                                        IC26_SMS AS IC26SMS
                                    FROM IC26_Data;
                                 ";
 

@@ -73,13 +73,18 @@
         public string iC26Memo { get; set; }
 
         /// <summary>
-        /// 출석여부 (Y/N)
+        /// 출석여부 (0: 미등록, 1: 등록)
         /// </summary>
         public bool iC26Attend { get; set; }
 
         /// <summary>
-        /// QR 생성여부 (Y/N)
+        /// QR 생성여부 (0: 미생성, 1: 생성)
         /// </summary>
         public bool iC26CreateQR { get; set; }
+
+        /// <summary>
+        /// SMS 전송여부 (0:미전송, 1:전송완료)
+        /// </summary>
+        public string IC26SMS { get; set; }
     }
 }
