@@ -67,12 +67,12 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
-        /// 컨퍼런스 현장 입장 등록 (출석체크)
+        /// 컨퍼런스 현장 입장 등록
         /// </summary>
         /// <param name="uniqueId">QR Code Key</param>
         /// <returns>응답 정보<see cref="CheckInResponseDto"/></returns>
         /// <returns>현장에서 QR Code를 스캔하면 자동으로 출석이 처리됩니다.</returns>
-        [HttpPost("attend")]
+        [HttpPost("check-in")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<CheckInResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<CheckInResponseDto>>> CheckAttendance(string uniqueId)
