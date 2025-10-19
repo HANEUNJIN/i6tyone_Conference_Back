@@ -123,13 +123,6 @@ namespace eGhis_WebService_Core.Service.Auth
         {
             var res = new GenericResponse<RegisterResponseDto>();
 
-            if (string.IsNullOrWhiteSpace(req.iC26Buyer))
-            {
-                res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "구매자명 누락";
-                return res;
-            }
-
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 

@@ -53,11 +53,11 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
-        /// 컨퍼런스 등록자 상세 조회
+        /// 컨퍼런스 등록자 조회
         /// </summary>
         /// <returns>응답 정보<see cref="RegisterResponseDto"/></returns>
-        /// <returns>등록자 식별 정보를 이용하여 개발 등록자의 상세 정보를 조회합니다.</returns>
-        [HttpPost("info")]
+        /// <returns>등록자의 정보를 조회합니다.</returns>
+        [HttpPost("list")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<RegisterResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<RegisterResponseDto>>> GetRegisterInfo(RegisterInfoRequestDto req)

@@ -106,11 +106,17 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_CreateQR AS IC26CreateQR,
                                         IC26_SMS AS IC26SMS
                                    FROM IC26_Data
-                                  WHERE IC26_Buyer = @IC26Buyer
+                                  WHERE 1=1
                                 ";
 
+                if (!string.IsNullOrWhiteSpace(req.iC26Buyer))
+                    query += "      AND IC26_Buyer = @IC26Buyer";
+
                 if (!string.IsNullOrWhiteSpace(req.iC26Phone))
-                    query += "      AND IC26_Phone = @IC26Phone;";
+                    query += "      AND IC26_Phone = @IC26Phone";
+
+                if (!string.IsNullOrWhiteSpace(req.church))
+                    query += "      AND IC26_Church LIKE CONCAT(@church, '%')";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query, req);
                 return result.ToList();
