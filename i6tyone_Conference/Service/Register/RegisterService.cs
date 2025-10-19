@@ -118,6 +118,45 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
+        public async Task<GenericResponse<QRCodeResponseDto>> GenerateRegisterQRCodeSingleAsync(IssuanceRequestDto req, CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<QRCodeResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            if(string.IsNullOrWhiteSpace(req.buyer) && string.IsNullOrWhiteSpace(req.buyer))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = $"{req.buyer}에 대한 정보를 찾을 수 없음.";
+                return res;
+            }
+
+            var result = await _repo.IC26DataDao.GenerateRegisterQRCodeSingleAsync(db, req);
+            if (result is null && string.IsNullOrWhiteSpace(result?.UniqueId))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = $"{result?.Buyer}에 대한 정보를 찾을 수 없음.";
+                return res;
+            }
+
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string savePath = Path.Combine(desktopPath, ConferenceName);
+
+            if (!Directory.Exists(savePath))
+                Directory.CreateDirectory(savePath);
+
+            var fileName = $"{result.No}_{result.Buyer}_{result.Phone}";
+            var fullPath = Path.Combine(savePath, fileName + ".jpg");
+            _qrCode.GenerateQRCodePngFile(result.UniqueId, fullPath);
+
+            string Message = $"{result.Buyer} QRCode 생성 완료!";
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = new QRCodeResponseDto { successMsg = Message };
+            return res;
+        }
+
         public async Task<GenericResponse<RegisterResponseDto>> GetRegisterInfoAsync(RegisterInfoRequestDto req, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<RegisterResponseDto>();

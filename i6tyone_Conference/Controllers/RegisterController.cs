@@ -53,6 +53,20 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
+        /// 컨퍼런스 특정 등록자 QR Code 발급/재발급
+        /// </summary>
+        /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
+        /// <returns></returns>
+        [HttpPost("qrcode-single")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<QRCodeResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<QRCodeResponseDto>>> GenerateRegisterSingleQRCode(IssuanceRequestDto req)
+        {
+            var res = await _registerService.GenerateRegisterQRCodeSingleAsync(req);
+            return Ok(res);
+        }
+
+        /// <summary>
         /// 컨퍼런스 등록자 조회
         /// </summary>
         /// <returns>응답 정보<see cref="RegisterResponseDto"/></returns>
