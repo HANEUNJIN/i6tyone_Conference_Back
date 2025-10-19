@@ -19,7 +19,7 @@ namespace eGhis_WebService_Core.Service.Auth
         private readonly IMapper _mapper;
         private readonly QRCodeUtil _qrCode;
 
-        private readonly string ConferenceName = "2026 Solus CHRISTUS";
+        private readonly string ConferenceName = "2026 Solus CHRISTUS QRCode";
         private readonly string Today = DateTime.Now.ToString("yyyy-MM-dd");
         private readonly string SuccessMessage = "2026 Solus CHRISTUS에 오신 것을 환영합니다!";
 

@@ -39,7 +39,7 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
-        /// 컨퍼런스 등록자 QR Code 일괄발급
+        /// 전체 컨퍼런스 등록자 QR Code 일괄발급
         /// </summary>
         /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
         /// <returns>등록자 목록 정보를 기반으로 각 참가자의 QR 코드를 생성하여 PNG 파일 형태로 일괄 생성 및 다운로드합니다.</returns>
