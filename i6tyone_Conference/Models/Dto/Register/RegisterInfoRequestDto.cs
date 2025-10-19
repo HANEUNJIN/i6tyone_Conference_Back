@@ -5,12 +5,12 @@
         /// <summary>
         /// 구매자
         /// </summary>
-        public string iC26Buyer {  get; set; }
+        public string buyer {  get; set; }
 
         /// <summary>
         /// 전화번호
         /// </summary>
-        public string iC26Phone { get; set; }
+        public string phone { get; set; }
 
         /// <summary>
         /// 교회

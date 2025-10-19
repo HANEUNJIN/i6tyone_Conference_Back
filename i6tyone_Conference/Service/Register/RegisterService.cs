@@ -21,7 +21,6 @@ namespace eGhis_WebService_Core.Service.Auth
 
         private readonly string ConferenceName = "2026 Solus CHRISTUS QRCode";
         private readonly string Today = DateTime.Now.ToString("yyyy-MM-dd");
-        private readonly string SuccessMessage = "2026 Solus CHRISTUS에 오신 것을 환영합니다!";
 
         public RegisterService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper, QRCodeUtil qrCode)
         {
@@ -88,22 +87,22 @@ namespace eGhis_WebService_Core.Service.Auth
             {
                 try
                 {
-                    if(string.IsNullOrWhiteSpace(item.IC26UniqueId))
+                    if(string.IsNullOrWhiteSpace(item.UniqueId))
                     {
                         res.SetResult(ErrorStatusCode.Invalid_Error);
-                        res.ResultMsg = $"{item.IC26Buyer}에 대한 정보를 찾을 수 없음.";
+                        res.ResultMsg = $"{item.Buyer}에 대한 정보를 찾을 수 없음.";
                         return;
                     }
 
-                    var fileName = $"{item.IC26No}_{item.IC26Buyer}_{item.IC26Phone}";
+                    var fileName = $"{item.No}_{item.Buyer}_{item.Phone}";
                     var fullPath = Path.Combine(savePath, fileName + ".jpg");
-                    _qrCode.GenerateQRCodePngFile(item.IC26UniqueId, fullPath);
+                    _qrCode.GenerateQRCodePngFile(item.UniqueId, fullPath);
 
                     successBag.Add(true);
                 }
                 catch (Exception ex)
                 {
-                    File.AppendAllText(Path.Combine(savePath, "error.log"), $"{item.IC26Buyer}: {ex}\n");
+                    File.AppendAllText(Path.Combine(savePath, "error.log"), $"{item.Buyer}: {ex}\n");
                 }
             });
 
@@ -141,21 +140,21 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
-        public async Task<GenericResponse<CheckInResponseDto>> CheckAttendanceAsync(string iC26UniqueId, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<CheckInResponseDto>> CheckAttendanceAsync(string uniqueId, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<CheckInResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            if (string.IsNullOrWhiteSpace(iC26UniqueId))
+            if (string.IsNullOrWhiteSpace(uniqueId))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
                 res.ResultMsg = "QR Code 발급 키 누락";
                 return res;
             }
 
-            var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, iC26UniqueId);
+            var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
             if (!isCheckIn)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
@@ -163,7 +162,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            var registerInfo = await _repo.IC26DataDao.GetRegisterDetailAsync(db, iC26UniqueId);
+            var registerInfo = await _repo.IC26DataDao.GetRegisterDetailAsync(db, uniqueId);
             if (registerInfo is null)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
@@ -172,7 +171,6 @@ namespace eGhis_WebService_Core.Service.Auth
             }
             
             var mappedInfo = _mapper.Map<CheckInResponseDto>(registerInfo);
-            mappedInfo.message = SuccessMessage;
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = mappedInfo;

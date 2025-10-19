@@ -49,29 +49,29 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 )
                                 VALUES (
                                     @nextNo,
-                                    @iC26Option,
-                                    @iC26Day,
-                                    @iC26Buyer,
-                                    @iC26Attender,
-                                    @iC26Phone,
-                                    @iC26Gender,
-                                    @iC26Age,
-                                    @iC26Church,
-                                    @iC26Local,
-                                    @iC26Denom,
-                                    @iC26Count,
-                                    @iC26Area,
-                                    @iC26Memo,
-                                    @iC26UniqueId,
-                                    @iC26Attend,
-                                    @iC26CreateQR,
-                                    @iC26SMS
+                                    @Option,
+                                    @Day,
+                                    @Buyer,
+                                    @Attender,
+                                    @Phone,
+                                    @Gender,
+                                    @Age,
+                                    @Church,
+                                    @Local,
+                                    @Denom,
+                                    @Count,
+                                    @Area,
+                                    @Memo,
+                                    @UniqueId,
+                                    @Attend,
+                                    @CreateQR,
+                                    @SMS
                                 );
                                 ";
 
                 var parameters = new DynamicParameters(req);
                 parameters.Add("@nextNo", seq);
-                parameters.Add("@iC26UniqueId", iC26UniqueId);
+                parameters.Add("@UniqueId", iC26UniqueId);
 
                 return await db.ExecuteAsync(query, parameters);
             }
@@ -87,36 +87,36 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                 SELECT IC26_No AS IC26No,
-                                        IC26_Option AS IC26Option,
-                                        IC26_Day AS IC26Day,
-                                        IC26_Buyer AS IC26Buyer,
-                                        IC26_Attender AS IC26Attender,
-                                        IC26_Phone AS IC26Phone,
-                                        IC26_Gender AS IC26Gender,
-                                        IC26_Age AS IC26Age,
-                                        IC26_Church AS IC26Church,
-                                        IC26_Local AS IC26Local,
-                                        IC26_Denom AS IC26Denom,
-                                        IC26_Count AS IC26Count,
-                                        IC26_Area AS IC26Area,
-                                        IC26_Memo AS IC26Memo,
-                                     -- IC26_UniqueId AS IC26UniqueId,
-                                        IC26_Attend AS IC26Attend,
-                                        IC26_CreateQR AS IC26CreateQR,
-                                        IC26_SMS AS IC26SMS
+                                 SELECT IC26_No AS No,
+                                        IC26_Option AS Option,
+                                        IC26_Day AS Day,
+                                        IC26_Buyer AS Buyer,
+                                        IC26_Attender AS Attender,
+                                        IC26_Phone AS Phone,
+                                        IC26_Gender AS Gender,
+                                        IC26_Age AS Age,
+                                        IC26_Church AS Church,
+                                        IC26_Local AS Local,
+                                        IC26_Denom AS Denom,
+                                        IC26_Count AS Count,
+                                        IC26_Area AS Area,
+                                        IC26_Memo AS Memo,
+                                     -- IC26_UniqueId AS UniqueId,
+                                        IC26_Attend AS Attend,
+                                        IC26_CreateQR AS CreateQR,
+                                        IC26_SMS AS SMS
                                    FROM IC26_Data
                                   WHERE 1=1
                                 ";
 
-                if (!string.IsNullOrWhiteSpace(req.iC26Buyer))
-                    query += "      AND IC26_Buyer = @IC26Buyer";
+                if (!string.IsNullOrWhiteSpace(req.buyer))
+                    query += "      AND IC26_Buyer = @Buyer";
 
-                if (!string.IsNullOrWhiteSpace(req.iC26Phone))
-                    query += "      AND IC26_Phone = @IC26Phone";
+                if (!string.IsNullOrWhiteSpace(req.phone))
+                    query += "      AND IC26_Phone = @Phone";
 
                 if (!string.IsNullOrWhiteSpace(req.church))
-                    query += "      AND IC26_Church LIKE CONCAT(@church, '%')";
+                    query += "      AND IC26_Church LIKE CONCAT(@Church, '%')";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query, req);
                 return result.ToList();
@@ -133,24 +133,24 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                 SELECT IC26_No AS IC26No,
-                                        IC26_Option AS IC26Option,
-                                        IC26_Day AS IC26Day,
-                                        IC26_Buyer AS IC26Buyer,
-                                        IC26_Attender AS IC26Attender,
-                                        IC26_Phone AS IC26Phone,
-                                        IC26_Gender AS IC26Gender,
-                                        IC26_Age AS IC26Age,
-                                        IC26_Church AS IC26Church,
-                                        IC26_Local AS IC26Local,
-                                        IC26_Denom AS IC26Denom,
-                                        IC26_Count AS IC26Count,
-                                        IC26_Area AS IC26Area,
-                                        IC26_Memo AS IC26Memo,
-                                        IC26_UniqueId AS IC26UniqueId,
-                                        IC26_Attend AS IC26Attend,
-                                        IC26_CreateQR AS IC26CreateQR,
-                                        IC26_SMS AS IC26SMS
+                                 SELECT IC26_No AS No,
+                                        IC26_Option AS Option,
+                                        IC26_Day AS Day,
+                                        IC26_Buyer AS Buyer,
+                                        IC26_Attender AS Attender,
+                                        IC26_Phone AS Phone,
+                                        IC26_Gender AS Gender,
+                                        IC26_Age AS Age,
+                                        IC26_Church AS Church,
+                                        IC26_Local AS Local,
+                                        IC26_Denom AS Denom,
+                                        IC26_Count AS Count,
+                                        IC26_Area AS Area,
+                                        IC26_Memo AS Memo,
+                                        IC26_UniqueId AS UniqueId,
+                                        IC26_Attend AS Attend,
+                                        IC26_CreateQR AS CreateQR,
+                                        IC26_SMS AS SMS
                                    FROM IC26_Data;
                                 ";
 
@@ -171,7 +171,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                 string query = @"
                                 UPDATE IC26_Data
                                    SET IC26_Attend = '1'
-                                 WHERE IC26_UniqueId = @iC26UniqueId
+                                 WHERE IC26_UniqueId = @UniqueId
                                 ";
 
                 return await db.ExecuteAsync(query, new { iC26UniqueId }) > 0;
@@ -183,21 +183,21 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<IC26DataRecord> GetRegisterDetailAsync(DbSession db, string iC26UniqueId)
+        public async Task<IC26DataRecord> GetRegisterDetailAsync(DbSession db, string uniqueId)
         {
             try
             {
                 string query = @"
-                                SELECT IC26_Option AS IC26Option,
-                                       IC26_Day AS IC26Day,
-                                       IC26_Buyer AS IC26Buyer,
-                                       IC26_Count AS IC26Count,
-                                       IC26_Area AS IC26Area
+                                SELECT IC26_Option AS Option,
+                                       IC26_Day AS Day,
+                                       IC26_Buyer AS Buyer,
+                                       IC26_Count AS Count,
+                                       IC26_Area AS Area
                                   FROM IC26_Data
-                                 WHERE IC26_UniqueId = @iC26UniqueId;
+                                 WHERE IC26_UniqueId = @UniqueId;
                                 ";
 
-                return await db.QuerySingleAsync<IC26DataRecord>(query, new { iC26UniqueId });
+                return await db.QuerySingleAsync<IC26DataRecord>(query, new { uniqueId });
             }
             catch (Exception ex)
             {

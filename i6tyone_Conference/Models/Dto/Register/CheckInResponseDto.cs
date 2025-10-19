@@ -3,33 +3,28 @@
     public class CheckInResponseDto
     {
         /// <summary>
-        /// 안내 메시지
-        /// </summary>
-        public string message { get; set; }
-
-        /// <summary>
         /// 구매자
         /// </summary>
-        public string iC26Buyer { get; set; }
+        public string buyer { get; set; }
 
         /// <summary>
-        /// 티켓구분
+        /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 3: 얼리 3차 / 4: 일반 / 5: 원데이)
         /// </summary>
-        public string iC26Option { get; set; }
+        public int option { get; set; }
 
         /// <summary>
-        /// 신청일
+        /// 신청일 (1: Day1 / 2: Day2 / 3: Day3 / 4: ALL)
         /// </summary>
-        public string iC26Day { get; set; }
+        public int day { get; set; }
 
         /// <summary>
         /// 구매수량
         /// </summary>
-        public int iC26Count { get; set; }
+        public int count { get; set; }
 
         /// <summary>
         /// 좌석구역
         /// </summary>
-        public string iC26Area { get; set; }
+        public string area { get; set; }
     }
 }
