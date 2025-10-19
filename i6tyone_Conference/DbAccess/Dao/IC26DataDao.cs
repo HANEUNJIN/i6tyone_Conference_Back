@@ -5,11 +5,12 @@ using eGhis_WebService_Core.Infrastructure.Utils;
 using eGhis_WebService_Core.Models.Db;
 using eGhis_WebService_Core.Models.Dto.Auth;
 using i6tyone_Conference.Models.Dto.Register;
+using i6tyone_Conference.Models.Dto.Statistics;
 using static Dapper.SqlMapper;
 
-namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
+namespace i6tyone_Conference.DbAccess.Dao
 {
-    public class RegisterDao : IRegisterDao
+    public class IC26DataDao : IIC26DataDao
     {
         public async Task<int> GetSeqAsync(DbSession db)
         {
@@ -191,6 +192,115 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
                                 ";
 
                 return await db.QuerySingleAsync<IC26DataRecord>(query, new { iC26UniqueId });
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<BraceletRequestDto> GetBraceletAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                SELECT
+                                    SUM(IC26_Count) AS ticket
+                                FROM IC26_Data;
+                                ";
+
+                return await db.QuerySingleAsync<BraceletRequestDto>(query);
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<DateRequestDto> GetDataAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                SELECT
+                                    SUM(CASE WHEN IC26_Day IN (1, 4) THEN 1 ELSE 0 END) AS Day1Count,
+                                    SUM(CASE WHEN IC26_Day IN (2, 4) THEN 1 ELSE 0 END) AS Day2Count,
+                                    SUM(CASE WHEN IC26_Day IN (3, 4) THEN 1 ELSE 0 END) AS Day3Count
+                                FROM IC26_Data;
+                                ";
+
+                return await db.QuerySingleAsync<DateRequestDto>(query);
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<AreaRequestDto> GetAreaAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                SELECT
+                                    SUM(CASE WHEN IC26_Area = 'A' THEN 1 ELSE 0 END) AS A,
+                                    SUM(CASE WHEN IC26_Area = 'B' THEN 1 ELSE 0 END) AS B,
+                                    SUM(CASE WHEN IC26_Area = 'C' THEN 1 ELSE 0 END) AS C,
+                                    SUM(CASE WHEN IC26_Area = 'D' THEN 1 ELSE 0 END) AS D,
+                                    SUM(CASE WHEN IC26_Area = 'E' THEN 1 ELSE 0 END) AS E,
+                                    SUM(CASE WHEN IC26_Area = 'F' THEN 1 ELSE 0 END) AS F,
+                                    SUM(CASE WHEN IC26_Area = 'G' THEN 1 ELSE 0 END) AS G,
+                                    SUM(CASE WHEN IC26_Area = 'H' THEN 1 ELSE 0 END) AS H,
+                                    SUM(CASE WHEN IC26_Area = 'I' THEN 1 ELSE 0 END) AS I,
+                                    SUM(CASE WHEN IC26_Area = 'J' THEN 1 ELSE 0 END) AS J,
+                                    SUM(CASE WHEN IC26_Area = 'K' THEN 1 ELSE 0 END) AS K
+                                FROM IC26_Data;
+                                ";
+
+                return await db.QuerySingleAsync<AreaRequestDto>(query);
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<RegistrationRequestDto> GetRegistrationAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                SELECT count(*) AS total_users
+                                  FROM IC26_Data;
+                                ";
+
+                return await db.QuerySingleAsync<RegistrationRequestDto>(query);
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<SendRequestDto> GetSendAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                SELECT
+                                    SUM(CASE WHEN IC26_CreateQR = 0 THEN 1 ELSE 0 END) AS QRNotCreated,
+                                    SUM(CASE WHEN IC26_CreateQR = 1 THEN 1 ELSE 0 END) AS QRCreated,
+                                    SUM(CASE WHEN IC26_SMS = 0 THEN 1 ELSE 0 END) AS SMSNotSent,
+                                    SUM(CASE WHEN IC26_SMS = 1 THEN 1 ELSE 0 END) AS SMSSent
+                                FROM IC26_Data;
+                                ";
+
+                return await db.QuerySingleAsync<SendRequestDto>(query);
             }
             catch (Exception ex)
             {

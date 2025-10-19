@@ -46,8 +46,8 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            int seq = await _repo.RegisterDao.GetSeqAsync(db);
-            var data = await _repo.RegisterDao.GenerateRegisterAsync(db, req, seq, iC26UniqueId);
+            int seq = await _repo.IC26DataDao.GetSeqAsync(db);
+            var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, seq, iC26UniqueId);
             if (data < 0)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
@@ -68,7 +68,7 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            var result = await _repo.RegisterDao.GenerateRegisterQRCodeAsync(db);
+            var result = await _repo.IC26DataDao.GenerateRegisterQRCodeAsync(db);
             if (result is null)
             {
                 res.SetResult(ErrorStatusCode.Authentication_Failed);
@@ -133,7 +133,7 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            var data = await _repo.RegisterDao.GetRegisterInfoAsync(db, req);
+            var data = await _repo.IC26DataDao.GetRegisterInfoAsync(db, req);
             if (data is null)
             {
                 res.SetResult(ErrorStatusCode.Authentication_Failed);
@@ -162,7 +162,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            var isCheckIn = await _repo.RegisterDao.CheckAttendanceAsync(db, iC26UniqueId);
+            var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, iC26UniqueId);
             if (!isCheckIn)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
@@ -170,7 +170,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            var registerInfo = await _repo.RegisterDao.GetRegisterDetailAsync(db, iC26UniqueId);
+            var registerInfo = await _repo.IC26DataDao.GetRegisterDetailAsync(db, iC26UniqueId);
             if (registerInfo is null)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);

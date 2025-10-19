@@ -1,6 +1,5 @@
 ﻿using eGhis_WebService_Core.Infrastructure.Db;
-using eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew;
-using i6tyone_Conference.DbAccess.Dao.Conference;
+using i6tyone_Conference.DbAccess.Dao;
 
 namespace eGhis_WebService_Core.Repositories
 {
@@ -8,15 +7,12 @@ namespace eGhis_WebService_Core.Repositories
     {
         private readonly IDbConnectionFactory _factory;
 
-        public IRegisterDao RegisterDao { get; }
+        public IIC26DataDao IC26DataDao { get; }
 
-        public IConferenceDao ConferenceDao { get; }
-
-        public SqlRepository(IDbConnectionFactory factory, IRegisterDao registerDao, IConferenceDao conferenceDao)
+        public SqlRepository(IDbConnectionFactory factory, IIC26DataDao iC26DataDao)
         {
             _factory = factory;
-            RegisterDao = registerDao;
-            ConferenceDao = conferenceDao;
+            IC26DataDao = iC26DataDao;
         }
     }
 }

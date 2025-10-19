@@ -3,10 +3,11 @@ using eGhis_WebService_Core.Infrastructure.Db;
 using eGhis_WebService_Core.Models.Db;
 using eGhis_WebService_Core.Models.Dto.Auth;
 using i6tyone_Conference.Models.Dto.Register;
+using i6tyone_Conference.Models.Dto.Statistics;
 
-namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
+namespace i6tyone_Conference.DbAccess.Dao
 {
-    public interface IRegisterDao : IDaoMarker
+    public interface IIC26DataDao : IDaoMarker
     {
         public Task<int> GetSeqAsync(DbSession db);
         public Task<int> GenerateRegisterAsync(DbSession db, RegisterRequestDto req, int seq, string iC26UniqueId);
@@ -14,5 +15,10 @@ namespace eGhis_WebService_Core.DbAccess.Dao.PmLicenseNew
         public Task<List<IC26DataRecord>> GenerateRegisterQRCodeAsync(DbSession db);
         public Task<bool> CheckAttendanceAsync(DbSession db, string iC26UniqueId);
         public Task<IC26DataRecord> GetRegisterDetailAsync(DbSession db, string iC26UniqueId);
+        public Task<BraceletRequestDto> GetBraceletAsync(DbSession db);
+        public Task<DateRequestDto> GetDataAsync(DbSession db);
+        public Task<AreaRequestDto> GetAreaAsync(DbSession db);
+        public Task<RegistrationRequestDto> GetRegistrationAsync(DbSession db);
+        public Task<SendRequestDto> GetSendAsync(DbSession db);
     }
 }
