@@ -201,7 +201,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<bool> CheckAttendanceAsync(DbSession db, string iC26UniqueId)
+        public async Task<bool> CheckAttendanceAsync(DbSession db, string uniqueId)
         {
             try
             {
@@ -211,7 +211,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                  WHERE IC26_UniqueId = @UniqueId
                                 ";
 
-                return await db.ExecuteAsync(query, new { iC26UniqueId }) > 0;
+                return await db.ExecuteAsync(query, new { uniqueId }) > 0;
             }
             catch (Exception ex)
             {

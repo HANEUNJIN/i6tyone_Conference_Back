@@ -37,8 +37,8 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            string iC26UniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
-            if(string.IsNullOrWhiteSpace(iC26UniqueId))
+            string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
+            if(string.IsNullOrWhiteSpace(uniqueId))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
                 res.ResultMsg = "QR Code 발급 키 생성 오류";
@@ -46,12 +46,26 @@ namespace eGhis_WebService_Core.Service.Auth
             }
 
             int seq = await _repo.IC26DataDao.GetSeqAsync(db);
-            var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, seq, iC26UniqueId);
+            var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, seq, uniqueId);
             if (data < 0)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
                 res.ResultMsg = "컨퍼런스 참가 등록 실패";
                 return res;
+            }
+
+            DateTime today = DateTime.Now.Date;
+            DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
+
+            if (validDates.Contains(today))
+            {
+                var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
+                if (!isCheckIn)
+                {
+                    res.SetResult(ErrorStatusCode.Invalid_Error);
+                    res.ResultMsg = "현장 입장 등록 실패";
+                    return res;
+                }
             }
             var result = new RegisterAddResponseDto() { successCount = data };
 
