@@ -88,7 +88,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string savePath = Path.Combine(desktopPath, ConferenceName, Today);
 
             if (!Directory.Exists(savePath))
@@ -155,7 +155,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string savePath = Path.Combine(desktopPath, ConferenceName);
 
             if (!Directory.Exists(savePath))
