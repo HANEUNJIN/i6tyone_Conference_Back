@@ -206,6 +206,16 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
+            DateTime today = DateTime.Now.Date;
+            DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
+
+            if (!validDates.Contains(today))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "현장 입장 등록 기간이 아닙니다.";
+                return res;
+            }
+
             if (string.IsNullOrWhiteSpace(uniqueId))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
