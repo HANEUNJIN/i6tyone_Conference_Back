@@ -26,5 +26,10 @@
         /// 좌석구역
         /// </summary>
         public string area { get; set; }
+
+        /// <summary>
+        /// 출석여부 (0: 미등록, 1: 등록)
+        /// </summary>
+        public bool Attend { get; set; }
     }
 }
