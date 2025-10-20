@@ -127,7 +127,8 @@ namespace eGhis_WebService_Core.Service.Auth
             res.Data = new QRCodeResponseDto
             {
                 successMsg = Message,
-                qrGenTime = (int)stopwatch.Elapsed.TotalSeconds
+                qrGenTime = (int)stopwatch.Elapsed.TotalSeconds,
+                folderPath = savePath,
             };
             return res;
         }
@@ -167,7 +168,10 @@ namespace eGhis_WebService_Core.Service.Auth
             string Message = $"{result.Buyer} QRCode 생성 완료!";
 
             res.SetResult(ErrorStatusCode.Success);
-            res.Data = new QRCodeResponseDto { successMsg = Message };
+            res.Data = new QRCodeResponseDto {
+                successMsg = Message,
+                folderPath = savePath,
+            };
             return res;
         }
 
