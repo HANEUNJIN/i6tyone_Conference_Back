@@ -102,7 +102,10 @@ namespace eGhis_WebService_Core.Service.Auth
             {
                 try
                 {
-                    if(string.IsNullOrWhiteSpace(item.UniqueId))
+                    if (item.CreateQR) //QR Code가 발급된 경우는 무시.
+                        return;
+
+                    if (string.IsNullOrWhiteSpace(item.UniqueId))
                     {
                         res.SetResult(ErrorStatusCode.Invalid_Error);
                         res.ResultMsg = $"{item.Buyer}에 대한 정보를 찾을 수 없음.";
