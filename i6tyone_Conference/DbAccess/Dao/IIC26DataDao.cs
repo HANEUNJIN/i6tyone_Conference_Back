@@ -21,5 +21,6 @@ namespace i6tyone_Conference.DbAccess.Dao
         public Task<AreaRequestDto> GetAreaAsync(DbSession db);
         public Task<RegistrationRequestDto> GetRegistrationAsync(DbSession db);
         public Task<SendRequestDto> GetSendAsync(DbSession db);
+        public Task<bool> CheckCreateQRAsync(DbSession db, string uniqueId);
     }
 }

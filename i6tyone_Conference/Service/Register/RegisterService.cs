@@ -82,7 +82,7 @@ namespace eGhis_WebService_Core.Service.Auth
             var db = scope.Session;
 
             var result = await _repo.IC26DataDao.GenerateRegisterQRCodeAsync(db);
-            if (result is null)
+            if (result is null || !result.Any())
             {
                 res.SetResult(ErrorStatusCode.Authentication_Failed);
                 return res;
@@ -92,31 +92,36 @@ namespace eGhis_WebService_Core.Service.Auth
             string downloadPath = Path.Combine(userProfile, "Downloads");
             string savePath = Path.Combine(downloadPath, ConferenceName, Today);
 
-            if (!Directory.Exists(savePath))
-                Directory.CreateDirectory(savePath);
+            Directory.CreateDirectory(savePath);
 
             var stopwatch = Stopwatch.StartNew();
-            var successBag = new ConcurrentBag<bool>();
+            int successCount = 0;
 
-            Parallel.ForEach(result, item =>
+            var tasks = result.Select(async item =>
             {
                 try
                 {
-                    if (item.CreateQR) //QR Code가 발급된 경우는 무시.
+                    if (item.CreateQR)
                         return;
 
                     if (string.IsNullOrWhiteSpace(item.UniqueId))
                     {
-                        res.SetResult(ErrorStatusCode.Invalid_Error);
-                        res.ResultMsg = $"{item.Buyer}에 대한 정보를 찾을 수 없음.";
+                        File.AppendAllText(Path.Combine(savePath, "error.log"), $"{item.Buyer}: UniqueId 없음\n");
                         return;
                     }
 
-                    var fileName = $"{item.No}_{item.Buyer}_{item.Phone}";
-                    var fullPath = Path.Combine(savePath, fileName + ".jpg");
+                    var safeBuyer = string.Join("_", item.Buyer.Split(Path.GetInvalidFileNameChars()));
+                    var safePhone = string.Join("_", item.Phone.Split(Path.GetInvalidFileNameChars()));
+                    var fileName = $"{item.No}_{safeBuyer}_{safePhone}.jpg";
+                    var fullPath = Path.Combine(savePath, fileName);
+
+                    // QR 생성
                     _qrCode.GenerateQRCodePngFile(item.UniqueId, fullPath);
 
-                    successBag.Add(true);
+                    Interlocked.Increment(ref successCount);
+
+                    // QR 생성 여부 업데이트
+                    await _repo.IC26DataDao.CheckCreateQRAsync(db, item.UniqueId);
                 }
                 catch (Exception ex)
                 {
@@ -124,13 +129,14 @@ namespace eGhis_WebService_Core.Service.Auth
                 }
             });
 
+            await Task.WhenAll(tasks);
+
             stopwatch.Stop();
-            string Message = $"QR {successBag.Count}건 생성 완료!";
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = new QRCodeResponseDto
             {
-                successMsg = Message,
+                successMsg = $"QR {successCount}건 생성 완료!",
                 qrGenTime = (int)stopwatch.Elapsed.TotalSeconds,
                 folderPath = savePath,
             };
@@ -163,18 +169,22 @@ namespace eGhis_WebService_Core.Service.Auth
             string downloadPath = Path.Combine(userProfile, "Downloads");
             string savePath = Path.Combine(downloadPath, ConferenceName, Today);
 
-            if (!Directory.Exists(savePath))
-                Directory.CreateDirectory(savePath);
+            Directory.CreateDirectory(savePath);
 
-            var fileName = $"{result.No}_{result.Buyer}_{result.Phone}";
-            var fullPath = Path.Combine(savePath, fileName + ".jpg");
+            var safeBuyer = string.Join("_", result.Buyer.Split(Path.GetInvalidFileNameChars()));
+            var safePhone = string.Join("_", result.Phone.Split(Path.GetInvalidFileNameChars()));
+            var fileName = $"{result.No}_{safeBuyer}_{safePhone}.jpg";
+            var fullPath = Path.Combine(savePath, fileName);
+
+            // QR 생성
             _qrCode.GenerateQRCodePngFile(result.UniqueId, fullPath);
 
-            string Message = $"{result.Buyer} QRCode 생성 완료!";
+            // QR 생성 여부 업데이트
+            await _repo.IC26DataDao.CheckCreateQRAsync(db, result.UniqueId);
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = new QRCodeResponseDto {
-                successMsg = Message,
+                successMsg = $"{result.Buyer} QRCode 생성 완료!",
                 folderPath = savePath,
             };
             return res;
