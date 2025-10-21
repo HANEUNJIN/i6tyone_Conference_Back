@@ -109,6 +109,9 @@ namespace i6tyone_Conference.DbAccess.Dao
                                   WHERE 1=1
                                 ";
 
+                if (req.day != 0)
+                    query += "      AND IC26_Day = @day";
+
                 if (!string.IsNullOrWhiteSpace(req.buyer))
                     query += "      AND IC26_Buyer = @Buyer";
 
@@ -117,6 +120,9 @@ namespace i6tyone_Conference.DbAccess.Dao
 
                 if (!string.IsNullOrWhiteSpace(req.church))
                     query += "      AND IC26_Church LIKE CONCAT(@Church, '%')";
+
+                if(!string.IsNullOrWhiteSpace(req.area))
+                    query += "      AND IC26_Area = @area";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query, req);
                 return result.ToList();
