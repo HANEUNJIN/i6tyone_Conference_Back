@@ -89,9 +89,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-            string savePath = Path.Combine(downloadPath, ConferenceName, Today);
-
+            string savePath = Path.Combine(Path.GetTempPath(), ConferenceName, Today);
             Directory.CreateDirectory(savePath);
 
             var stopwatch = Stopwatch.StartNew();
@@ -165,9 +163,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-            string savePath = Path.Combine(downloadPath, ConferenceName, Today);
-
+            string savePath = Path.Combine(Path.GetTempPath(), ConferenceName, Today);
             Directory.CreateDirectory(savePath);
 
             var safeBuyer = string.Join("_", result.Buyer.Split(Path.GetInvalidFileNameChars()));
