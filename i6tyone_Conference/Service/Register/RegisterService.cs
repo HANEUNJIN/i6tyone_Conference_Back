@@ -89,8 +89,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string downloadPath = Path.Combine(userProfile, "Downloads");
+            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
             string savePath = Path.Combine(downloadPath, ConferenceName, Today);
 
             Directory.CreateDirectory(savePath);
@@ -166,8 +165,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string downloadPath = Path.Combine(userProfile, "Downloads");
+            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
             string savePath = Path.Combine(downloadPath, ConferenceName, Today);
 
             Directory.CreateDirectory(savePath);
