@@ -54,19 +54,20 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            DateTime today = DateTime.Now.Date;
-            DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
+            //Todo: 테스트로 인한 비활성화
+            //DateTime today = DateTime.Now.Date;
+            //DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
 
-            if (validDates.Contains(today))
-            {
-                var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
-                if (!isCheckIn)
-                {
-                    res.SetResult(ErrorStatusCode.Invalid_Error);
-                    res.ResultMsg = "현장 입장 등록 실패";
-                    return res;
-                }
-            }
+            //if (validDates.Contains(today))
+            //{
+            //    var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
+            //    if (!isCheckIn)
+            //    {
+            //        res.SetResult(ErrorStatusCode.Invalid_Error);
+            //        res.ResultMsg = "현장 입장 등록 실패";
+            //        return res;
+            //    }
+            //}
             var result = new RegisterAddResponseDto() { successCount = data };
 
             res.SetResult(ErrorStatusCode.Success);
@@ -219,15 +220,16 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            DateTime today = DateTime.Now.Date;
-            DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
+            //Todo: 테스트로 인한 비활성화
+            //DateTime today = DateTime.Now.Date;
+            //DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
 
-            if (!validDates.Contains(today))
-            {
-                res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "현장 입장 등록 기간이 아닙니다.";
-                return res;
-            }
+            //if (!validDates.Contains(today))
+            //{
+            //    res.SetResult(ErrorStatusCode.Invalid_Error);
+            //    res.ResultMsg = "현장 입장 등록 기간이 아닙니다.";
+            //    return res;
+            //}
 
             if (string.IsNullOrWhiteSpace(uniqueId))
             {
