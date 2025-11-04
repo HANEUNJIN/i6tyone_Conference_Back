@@ -88,7 +88,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                  SELECT IC26_No AS No,
-                                        IC26_Option AS Option,
+                                        IC26_Option AS [Option],
                                         IC26_Day AS Day,
                                         IC26_Buyer AS Buyer,
                                         IC26_Attender AS Attender,
@@ -140,7 +140,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                  SELECT IC26_No AS No,
-                                        IC26_Option AS Option,
+                                        IC26_Option AS [Option],
                                         IC26_Day AS Day,
                                         IC26_Buyer AS Buyer,
                                         IC26_Attender AS Attender,
@@ -176,7 +176,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                  SELECT IC26_No AS No,
-                                        IC26_Option AS Option,
+                                        IC26_Option AS [Option],
                                         IC26_Day AS Day,
                                         IC26_Buyer AS Buyer,
                                         IC26_Attender AS Attender,
@@ -231,7 +231,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                SELECT IC26_Option AS Option,
+                                SELECT IC26_Option AS [Option],
                                        IC26_Day AS Day,
                                        IC26_Buyer AS Buyer,
                                        IC26_Count AS Count,
