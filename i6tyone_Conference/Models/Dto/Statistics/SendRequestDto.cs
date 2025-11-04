@@ -13,12 +13,12 @@
         public int QRCreated { get; set; }
 
         /// <summary>
-        /// SMS 전송 건수
+        /// SMS 미전송 건수
         /// </summary>
         public int SMSNotSent { get; set; }
 
         /// <summary>
-        /// SMS 미전송 건수
+        /// SMS 전송 건수
         /// </summary>
         public int SMSSent { get; set; }
     }
