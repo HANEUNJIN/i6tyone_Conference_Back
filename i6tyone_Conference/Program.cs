@@ -9,13 +9,10 @@ using eGhis_WebService_Core.Repositories;
 using eGhis_WebService_Core.Swagger;
 using FluentValidation;
 using i6tyone_Conference.Infrastructure.Utils;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
-using System.Text;
 // using Elastic.Apm.NetCoreAll; // ← Elastic APM 쓰면 주석 해제
 
 namespace eGhis_WebService_Core
@@ -210,7 +207,7 @@ namespace eGhis_WebService_Core
             services.AddAuthorization();
 
             // ── Repository/Service/AutoMapper
-            services.AddScoped<IDbConnectionFactory, MysqlConnectionFactory>();
+            services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
             services.AddScoped<ISqlRepository, SqlRepository>();
             services.AddScoped<JwtUtil>();
             services.AddScoped<QRCodeUtil>();
