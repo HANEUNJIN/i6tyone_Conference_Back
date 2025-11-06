@@ -39,6 +39,20 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
+        /// 컨퍼런스 등록 삭제
+        /// </summary>
+        /// <param name="uniqueId">QR Code 발급 키</param>
+        /// <returns>컨퍼런스 참가 신청 정보를 삭제합니다.</returns>
+        [HttpPost("delete")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> DeleteRegister(string uniqueId)
+        {
+            var res = await _registerService.DeleteRegisterAsync(uniqueId);
+            return Ok(res);
+        }
+
+        /// <summary>
         /// 전체 등록자 QR 코드 일괄 발급
         /// </summary>
         /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
