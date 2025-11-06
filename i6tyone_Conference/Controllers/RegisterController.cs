@@ -3,8 +3,8 @@ using eGhis_WebService_Core.Infrastructure.Attributes;
 using eGhis_WebService_Core.Models.Common;
 using eGhis_WebService_Core.Models.Dto.Auth;
 using eGhis_WebService_Core.Service.Auth;
-using i6tyone_Conference.Models.Dto.Register;
 using i6tyone_Conference.Models.Dto.Auth;
+using i6tyone_Conference.Models.Dto.Register;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 
@@ -106,6 +106,20 @@ namespace eGhis_WebService_Core.Controllers
         public async Task<ActionResult<GenericResponse<CheckInResponseDto>>> CheckAttendance(string uniqueId)
         {
             var res = await _registerService.CheckAttendanceAsync(uniqueId);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// FTP 정보 조회
+        /// </summary>
+        /// <returns></returns>
+        /// <returns>응답 정보<see cref="FtpInfoResponseDto"/></returns>
+        [HttpGet("ftp-info")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<FtpInfoResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<FtpInfoResponseDto>>> GetFtpInfo()
+        {
+            var res = await _registerService.GetFtpInfoAsync();
             return Ok(res);
         }
     }

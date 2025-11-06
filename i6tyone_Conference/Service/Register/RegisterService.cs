@@ -18,16 +18,18 @@ namespace eGhis_WebService_Core.Service.Auth
         private readonly ISqlRepository _repo;
         private readonly IMapper _mapper;
         private readonly QRCodeUtil _qrCode;
+        private readonly FtpUtil _ftp;
 
         private readonly string ConferenceName = "2026 Solus CHRISTUS QRCode";
         private readonly string Today = DateTime.Now.ToString("yyyy-MM-dd");
 
-        public RegisterService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper, QRCodeUtil qrCode)
+        public RegisterService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper, QRCodeUtil qrCode, FtpUtil ftp)
         {
             _connFactory = connFactory;
             _repo = repo;
             _mapper = mapper;
             _qrCode = qrCode;
+            _ftp = ftp;
         }
 
         public async Task<GenericResponse<RegisterAddResponseDto>> GenerateRegisterAsync(RegisterRequestDto req, CancellationToken cancellationToken = default)
@@ -273,6 +275,21 @@ namespace eGhis_WebService_Core.Service.Auth
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = mappedInfo;
+            return res;
+        }
+
+        public async Task<GenericResponse<FtpInfoResponseDto>> GetFtpInfoAsync()
+        {
+            var res = new GenericResponse<FtpInfoResponseDto>();
+
+            var result = new FtpInfoResponseDto() { 
+                url = _ftp.Url,
+                user = _ftp.User,
+                password = _ftp.Password,
+            };
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = result;
             return res;
         }
     }

@@ -9,6 +9,7 @@ using eGhis_WebService_Core.Repositories;
 using eGhis_WebService_Core.Swagger;
 using FluentValidation;
 using i6tyone_Conference.Infrastructure.Utils;
+using i6tyone_Conference.Models.Config;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -133,6 +134,7 @@ namespace eGhis_WebService_Core
             });
 
             services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
+            services.Configure<FtpSettings>(config.GetSection("FtpConfig"));
 
             // ── CORS
             services.AddCors(options =>
@@ -211,6 +213,7 @@ namespace eGhis_WebService_Core
             services.AddScoped<ISqlRepository, SqlRepository>();
             services.AddScoped<JwtUtil>();
             services.AddScoped<QRCodeUtil>();
+            services.AddScoped<FtpUtil>();
 
             // DAO/Service 일괄 등록
             services.AddDaos(typeof(Program).Assembly);
