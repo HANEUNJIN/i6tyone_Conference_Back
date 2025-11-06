@@ -22,16 +22,30 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 출석여부 일괄 초기화
+        /// 출석여부 일괄 초기화 (폐기 예정)
         /// </summary>
         /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
-        /// <returns>출석여부 '0'으로 일괄 초기화합니다.(추후 폐기 예정)</returns>
+        /// <returns>출석여부 '0'으로 일괄 초기화합니다.</returns>
         [HttpPost("attend-clear")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> ClearAttend()
         {
             var res = await _managementService.ClearAttendAsync();
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// QR 생성여부 일괄 초기화 (폐기 예정)
+        /// </summary>
+        /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
+        /// <returns>QR 생성여부 '0'으로 일괄 초기화합니다.</returns>
+        [HttpPost("createqr-clear")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> ClearCreateQR()
+        {
+            var res = await _managementService.ClearCreateQRAsync();
             return Ok(res);
         }
     }

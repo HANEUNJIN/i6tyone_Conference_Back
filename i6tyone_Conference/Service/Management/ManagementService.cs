@@ -46,5 +46,26 @@ namespace i6tyone_Conference.Service.Management
             res.Data = result;
             return res;
         }
+
+        public async Task<GenericResponse<SuccessResponseDto>> ClearCreateQRAsync(CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<SuccessResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            var isClear = await _repo.IC26DataDao.ClearCreateQRAsync(db);
+            if (!isClear)
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                return res;
+            }
+
+            var result = new SuccessResponseDto() { success = isClear };
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = result;
+            return res;
+        }
     }
 }
