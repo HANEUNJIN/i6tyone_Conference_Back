@@ -8,11 +8,6 @@
         public string successMsg { get; set; }
 
         /// <summary>
-        /// QR 생성 소요시간
-        /// </summary>
-        public int qrGenTime { get; set; }
-
-        /// <summary>
         /// QR 생성 위치
         /// </summary>
         public string folderPath { get; set; }
