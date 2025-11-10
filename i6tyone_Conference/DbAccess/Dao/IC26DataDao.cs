@@ -323,8 +323,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     SUM(CASE WHEN IC26_Area = 'G' THEN 1 ELSE 0 END) AS G,
                                     SUM(CASE WHEN IC26_Area = 'H' THEN 1 ELSE 0 END) AS H,
                                     SUM(CASE WHEN IC26_Area = 'I' THEN 1 ELSE 0 END) AS I,
-                                    SUM(CASE WHEN IC26_Area = 'J' THEN 1 ELSE 0 END) AS J,
-                                    SUM(CASE WHEN IC26_Area = 'K' THEN 1 ELSE 0 END) AS K
+                                    SUM(CASE WHEN IC26_Area = 'J' THEN 1 ELSE 0 END) AS J
                                 FROM IC26_Data;
                                 ";
 

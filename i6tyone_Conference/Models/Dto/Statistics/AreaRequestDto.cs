@@ -51,10 +51,5 @@
         /// 좌석 J
         /// </summary>
         public string j { get; set; }
-
-        /// <summary>
-        /// 좌석 K
-        /// </summary>
-        public string k { get; set; }
     }
 }
