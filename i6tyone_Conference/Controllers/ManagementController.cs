@@ -22,7 +22,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 출석여부 일괄 초기화 (폐기 예정)
+        /// 출석여부 일괄 초기화
         /// </summary>
         /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
         /// <returns>출석여부 '0'으로 일괄 초기화합니다.</returns>
@@ -36,7 +36,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// QR 생성여부 일괄 초기화 (폐기 예정)
+        /// QR 생성여부 일괄 초기화
         /// </summary>
         /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
         /// <returns>QR 생성여부 '0'으로 일괄 초기화합니다.</returns>
