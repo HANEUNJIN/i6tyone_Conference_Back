@@ -77,13 +77,14 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
-        public async Task<GenericResponse<SuccessResponseDto>> DeleteRegisterAsync(string uniqueId, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<SuccessResponseDto>> DeleteRegisterAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<SuccessResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
+            var uniqueId = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESDecrypt(uniqueIdKey);
             var data = await _repo.IC26DataDao.DeleteRegisterAsync(db, uniqueId);
             if (!data)
             {
