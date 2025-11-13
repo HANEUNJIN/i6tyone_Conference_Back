@@ -173,11 +173,11 @@ namespace eGhis_WebService_Core
                 {
                     doc.Info.Version = "v1";
                     doc.Info.Title = "i6tyone_Conference API";
-                    doc.Info.Description =
-                                           "ℹ️ API 상세설명\n\r" +
-                                           "https://www.notion.so/28d3d9f986ea805b8034d3a2989a086d?v=2913d9f986ea80cba6b0000c30813ab7&source=copy_link\n\r" +
-                                           "ℹ️ 컨퍼런스 등록부스 개발 관련 소통\n\r" +
-                                           "https://www.notion.so/28c3d9f986ea815cb2c8d1c03c80ac9a?source=copy_link";
+                    //doc.Info.Description =
+                    //                       "ℹ️ API 상세설명\n\r" +
+                    //                       "https://www.notion.so/28d3d9f986ea805b8034d3a2989a086d?v=2913d9f986ea80cba6b0000c30813ab7&source=copy_link\n\r" +
+                    //                       "ℹ️ 컨퍼런스 등록부스 개발 관련 소통\n\r" +
+                    //                       "https://www.notion.so/28c3d9f986ea815cb2c8d1c03c80ac9a?source=copy_link";
 
                     doc.Info.Contact = new OpenApiContact
                     {
