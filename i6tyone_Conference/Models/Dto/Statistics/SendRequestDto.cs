@@ -3,12 +3,12 @@
     public class SendRequestDto
     {
         /// <summary>
-        /// QR 생성 건수
+        /// QR 미생성 건수
         /// </summary>
         public int QRNotCreated { get; set; }
 
         /// <summary>
-        /// QR 미생성 건수
+        /// QR 생성 건수
         /// </summary>
         public int QRCreated { get; set; }
 
