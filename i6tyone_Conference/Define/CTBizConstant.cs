@@ -4,6 +4,7 @@
     {
         public class CryptoKey
         {
+            public const string I6TYONE = "GIMPOFULLGOSPELCELLCHURCHI6TYONE";
             public const string DEFAULT = "1O2s12J9d1IDj2s2";
             public const string MOBILE = "08a0d3a6ec32e85e";
             public const string NAME = "dcc2b29aaa9f271d";

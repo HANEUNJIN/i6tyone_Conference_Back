@@ -97,15 +97,15 @@ namespace eGhis_WebService_Core.Controllers
         /// <summary>
         /// 현장 입장 등록
         /// </summary>
-        /// <param name="uniqueId">QR Code Key</param>
+        /// <param name="uniqueIdKey">QR Code Key</param>
         /// <returns>응답 정보<see cref="CheckInResponseDto"/></returns>
         /// <returns>현장에서 QR Code를 스캔하면 자동으로 출석이 처리됩니다.</returns>
         [HttpPost("check-in")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<CheckInResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<CheckInResponseDto>>> CheckAttendance(string uniqueId)
+        public async Task<ActionResult<GenericResponse<CheckInResponseDto>>> CheckAttendance(string uniqueIdKey)
         {
-            var res = await _registerService.CheckAttendanceAsync(uniqueId);
+            var res = await _registerService.CheckAttendanceAsync(uniqueIdKey);
             return Ok(res);
         }
 

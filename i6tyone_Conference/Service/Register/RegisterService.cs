@@ -8,6 +8,7 @@ using i6tyone_Conference.Infrastructure.Utils;
 using i6tyone_Conference.Models.Dto.Register;
 using i6tyone_Conference.Models.Dto.Auth;
 using System.IO.Compression;
+using eGhis_WebService_Core.Infrastructure.Utils.Crypto;
 
 namespace eGhis_WebService_Core.Service.Auth
 {
@@ -141,7 +142,8 @@ namespace eGhis_WebService_Core.Service.Auth
                     try
                     {
                         // QR 코드 생성
-                        byte[] qrBytes = _qrCode.GenerateQRCodeBytes(item.UniqueId);
+                        var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESEncrypt(item.UniqueId);
+                        byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey);
                         string qrFileName = $"{item.No}_{item.Buyer}_{item.Phone.Replace("-", "")}.jpg";
 
                         // ZIP에 추가
@@ -214,8 +216,9 @@ namespace eGhis_WebService_Core.Service.Auth
 
             await _ftp.CreateFtpDirectoryRecursiveAsync(ftpFolderUrl);
 
-            
-            byte[] qrBytes = _qrCode.GenerateQRCodeBytes(result.UniqueId);
+
+            var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]).AESEncrypt(result.UniqueId);
+            byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey);
 
             // FTP 업로드
             bool uploadSuccess = await _ftp.UploadFileToFtpAsync(qrBytes, ftpFolderUrl, qrCodeFileName);
@@ -259,7 +262,7 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
-        public async Task<GenericResponse<CheckInResponseDto>> CheckAttendanceAsync(string uniqueId, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<CheckInResponseDto>> CheckAttendanceAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<CheckInResponseDto>();
 
@@ -277,12 +280,14 @@ namespace eGhis_WebService_Core.Service.Auth
             //    return res;
             //}
 
-            if (string.IsNullOrWhiteSpace(uniqueId))
+            if (string.IsNullOrWhiteSpace(uniqueIdKey))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
                 res.ResultMsg = "QR Code 발급 키 누락";
                 return res;
             }
+
+            var uniqueId = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESDecrypt(uniqueIdKey);
 
             var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
             if (!isCheckIn)
