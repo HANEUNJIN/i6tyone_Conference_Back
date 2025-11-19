@@ -362,8 +362,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 SELECT
                                     SUM(CASE WHEN IC26_CreateQR = 0 THEN 1 ELSE 0 END) AS QRNotCreated,
                                     SUM(CASE WHEN IC26_CreateQR = 1 THEN 1 ELSE 0 END) AS QRCreated,
-                                    SUM(CASE WHEN IC26_SMS = 0 THEN 1 ELSE 0 END) AS SMSNotSent,
-                                    SUM(CASE WHEN IC26_SMS = 1 THEN 1 ELSE 0 END) AS SMSSent
+                                    SUM(CASE WHEN IC26_SMS = 'N' THEN 1 ELSE 0 END) AS SMSNotSent,
+                                    SUM(CASE WHEN IC26_SMS = 'Y' THEN 1 ELSE 0 END) AS SMSSent
                                 FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 

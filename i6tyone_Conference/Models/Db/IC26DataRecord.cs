@@ -88,7 +88,7 @@
         public bool CreateQR { get; set; }
 
         /// <summary>
-        /// SMS 전송여부 (0:미전송, 1:전송완료)
+        /// SMS 전송여부 (N:미전송, Y:전송완료)
         /// </summary>
         public bool SMS { get; set; }
     }
