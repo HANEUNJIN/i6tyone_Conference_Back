@@ -16,7 +16,7 @@ namespace i6tyone_Conference.DbAccess.Dao
         {
             string query = @"
                             SELECT IFNULL(MAX(IC26_No), 0) + 1
-                              FROM IC26_Data
+                              FROM isaiah61co_conf.dbo.IC26_Data
                             ";
 
             return await db.ExecuteScalarAsync<int>(query);
@@ -27,7 +27,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                INSERT INTO IC26_Data (
+                                INSERT INTO isaiah61co_conf.dbo.IC26_Data (
                                     IC26_No,
                                     IC26_Option,
                                     IC26_Day,
@@ -87,7 +87,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                DELETE FROM IC26_Data
+                                DELETE FROM isaiah61co_conf.dbo.IC26_Data
                                  WHERE IC26_UniqueId = @UniqueId;
                                 ";
 
@@ -123,7 +123,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_Attend AS Attend,
                                         IC26_CreateQR AS CreateQR,
                                         IC26_SMS AS SMS
-                                   FROM IC26_Data
+                                   FROM isaiah61co_conf.dbo.IC26_Data
                                   WHERE 1=1
                                 ";
 
@@ -175,7 +175,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_Attend AS Attend,
                                         IC26_CreateQR AS CreateQR,
                                         IC26_SMS AS SMS
-                                   FROM IC26_Data;
+                                   FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query);
@@ -211,7 +211,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_Attend AS Attend,
                                         IC26_CreateQR AS CreateQR,
                                         IC26_SMS AS SMS
-                                   FROM IC26_Data
+                                   FROM isaiah61co_conf.dbo.IC26_Data
                                   WHERE IC26_Buyer = @Buyer
                                     AND IC26_Phone = @Phone;
                                 ";
@@ -230,7 +230,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                UPDATE IC26_Data
+                                UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_Attend = '1'
                                  WHERE IC26_UniqueId = @UniqueId
                                 ";
@@ -255,7 +255,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        IC26_Count AS Count,
                                        IC26_Area AS Area,
                                        IC26_Attend AS Attend
-                                  FROM IC26_Data
+                                  FROM isaiah61co_conf.dbo.IC26_Data
                                  WHERE IC26_UniqueId = @UniqueId;
                                 ";
 
@@ -275,7 +275,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                 string query = @"
                                 SELECT
                                     SUM(IC26_Count) AS ticket
-                                FROM IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 
                 return await db.QuerySingleAsync<BraceletRequestDto>(query);
@@ -296,7 +296,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     SUM(CASE WHEN IC26_Day IN (1, 4) THEN 1 ELSE 0 END) AS Day1Count,
                                     SUM(CASE WHEN IC26_Day IN (2, 4) THEN 1 ELSE 0 END) AS Day2Count,
                                     SUM(CASE WHEN IC26_Day IN (3, 4) THEN 1 ELSE 0 END) AS Day3Count
-                                FROM IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 
                 return await db.QuerySingleAsync<DateRequestDto>(query);
@@ -324,7 +324,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     SUM(CASE WHEN IC26_Area = 'H' THEN 1 ELSE 0 END) AS H,
                                     SUM(CASE WHEN IC26_Area = 'I' THEN 1 ELSE 0 END) AS I,
                                     SUM(CASE WHEN IC26_Area = 'J' THEN 1 ELSE 0 END) AS J
-                                FROM IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 
                 return await db.QuerySingleAsync<AreaRequestDto>(query);
@@ -342,7 +342,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                 SELECT count(*) AS total_users
-                                  FROM IC26_Data;
+                                  FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 
                 return await db.QuerySingleAsync<RegistrationRequestDto>(query);
@@ -364,7 +364,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     SUM(CASE WHEN IC26_CreateQR = 1 THEN 1 ELSE 0 END) AS QRCreated,
                                     SUM(CASE WHEN IC26_SMS = 0 THEN 1 ELSE 0 END) AS SMSNotSent,
                                     SUM(CASE WHEN IC26_SMS = 1 THEN 1 ELSE 0 END) AS SMSSent
-                                FROM IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 
                 return await db.QuerySingleAsync<SendRequestDto>(query);
@@ -381,7 +381,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                UPDATE IC26_Data
+                                UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_CreateQR = '1'
                                  WHERE IC26_UniqueId = @UniqueId
                                 ";
@@ -400,7 +400,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                UPDATE IC26_Data
+                                UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_Attend = '0'
                                  WHERE IC26_Attend = '1'
                                 ";
@@ -419,7 +419,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                UPDATE IC26_Data
+                                UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_CreateQR = '0'
                                  WHERE IC26_CreateQR = '1'
                                 ";
