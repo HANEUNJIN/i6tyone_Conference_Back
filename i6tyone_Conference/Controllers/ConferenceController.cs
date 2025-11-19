@@ -2,7 +2,7 @@
 using eGhis_WebService_Core.Infrastructure.Attributes;
 using eGhis_WebService_Core.Models.Common;
 using i6tyone_Conference.Infrastructure.Utils;
-using i6tyone_Conference.Models.Dto.Register;
+using i6tyone_Conference.Models.Dto.Conference;
 using i6tyone_Conference.Service.Conference;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;

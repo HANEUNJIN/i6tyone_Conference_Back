@@ -1,7 +1,7 @@
 ﻿using eGhis_WebService_Core.Define;
 using eGhis_WebService_Core.Models.Common;
 using i6tyone_Conference.Infrastructure.Utils;
-using i6tyone_Conference.Models.Dto.Register;
+using i6tyone_Conference.Models.Dto.Conference;
 
 namespace i6tyone_Conference.Service.Conference
 {

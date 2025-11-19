@@ -1,6 +1,6 @@
 ﻿using i6tyone_Conference.Infrastructure.Utils;
 
-namespace i6tyone_Conference.Models.Dto.Register
+namespace i6tyone_Conference.Models.Dto.Conference
 {
     public class KeyValueResponseDto
     {
