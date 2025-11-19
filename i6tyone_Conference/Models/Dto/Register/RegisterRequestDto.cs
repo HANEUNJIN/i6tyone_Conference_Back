@@ -28,7 +28,7 @@
         public string phone { get; set; }
 
         /// <summary>
-        /// 성별 (0: 남성 / 1: 여성)
+        /// 성별 (M: 남성 / F: 여성)
         /// </summary>
         public string gender { get; set; }
 
