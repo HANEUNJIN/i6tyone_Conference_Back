@@ -231,7 +231,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                 UPDATE isaiah61co_conf.dbo.IC26_Data
-                                   SET IC26_Attend = '1'
+                                   SET IC26_Attend = 'Y'
                                  WHERE IC26_UniqueId = @UniqueId
                                 ";
 
@@ -401,8 +401,8 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                 UPDATE isaiah61co_conf.dbo.IC26_Data
-                                   SET IC26_Attend = '0'
-                                 WHERE IC26_Attend = '1'
+                                   SET IC26_Attend = 'N'
+                                 WHERE IC26_Attend = 'Y'
                                 ";
 
                 return await db.ExecuteAsync(query) > 0;
