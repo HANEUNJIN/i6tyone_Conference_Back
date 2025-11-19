@@ -318,9 +318,9 @@ namespace eGhis_WebService_Core.Service.Auth
             var res = new GenericResponse<FtpInfoResponseDto>();
 
             var result = new FtpInfoResponseDto() { 
-                url = _ftp.Url,
+                host = _ftp.Url,
                 user = _ftp.User,
-                password = _ftp.Password,
+                passWord = _ftp.Password,
             };
 
             res.SetResult(ErrorStatusCode.Success);
