@@ -68,12 +68,12 @@
         public string memo { get; set; }
 
         /// <summary>
-        /// 출석여부 (N: 미등록, F: 등록)
+        /// 출석여부 (N: 미등록, Y: 등록)
         /// </summary>
         public bool attend { get; set; }
 
         /// <summary>
-        /// QR 생성여부 (0: 미생성, 1: 생성)
+        /// QR 생성여부 (N: 미생성, Y: 생성)
         /// </summary>
         public bool createQR { get; set; }
 
