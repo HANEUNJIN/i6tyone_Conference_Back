@@ -47,8 +47,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            int seq = await _repo.IC26DataDao.GetSeqAsync(db);
-            var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, seq, uniqueId);
+            var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);
             if (data < 0)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);

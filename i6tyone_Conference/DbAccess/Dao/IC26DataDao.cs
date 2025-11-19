@@ -22,13 +22,12 @@ namespace i6tyone_Conference.DbAccess.Dao
             return await db.ExecuteScalarAsync<int>(query);
         }
 
-        public async Task<int> GenerateRegisterAsync(DbSession db, RegisterRequestDto req, int seq, string iC26UniqueId)
+        public async Task<int> GenerateRegisterAsync(DbSession db, RegisterRequestDto req, string iC26UniqueId)
         {
             try
             {
                 string query = @"
                                 INSERT INTO isaiah61co_conf.dbo.IC26_Data (
-                                    IC26_No,
                                     IC26_Option,
                                     IC26_Day,
                                     IC26_Buyer,
@@ -48,7 +47,6 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     IC26_SMS
                                 )
                                 VALUES (
-                                    @nextNo,
                                     @Option,
                                     @Day,
                                     @Buyer,
@@ -70,7 +68,6 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 ";
 
                 var parameters = new DynamicParameters(req);
-                parameters.Add("@nextNo", seq);
                 parameters.Add("@UniqueId", iC26UniqueId);
 
                 return await db.ExecuteAsync(query, parameters);
