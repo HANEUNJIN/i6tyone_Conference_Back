@@ -28,8 +28,8 @@
         public string area { get; set; }
 
         /// <summary>
-        /// 출석여부 (N: 미등록, F: 등록)
+        /// 출석여부 (N: 미등록, Y: 등록)
         /// </summary>
-        public bool attend { get; set; }
+        public string attend { get; set; }
     }
 }
