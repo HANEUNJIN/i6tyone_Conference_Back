@@ -70,16 +70,16 @@
         /// <summary>
         /// 출석여부 (N: 미등록, Y: 등록)
         /// </summary>
-        public bool attend { get; set; }
+        public string attend { get; set; }
 
         /// <summary>
         /// QR 생성여부 (N: 미생성, Y: 생성)
         /// </summary>
-        public bool createQR { get; set; }
+        public string createQR { get; set; }
 
         /// <summary>
         /// SMS 전송여부 (N:미전송, Y:전송완료)
         /// </summary>
-        public bool sms { get; set; }
+        public string sms { get; set; }
     }
 }

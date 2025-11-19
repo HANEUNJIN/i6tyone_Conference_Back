@@ -118,7 +118,7 @@ namespace eGhis_WebService_Core.Service.Auth
             }
 
             // QR 코드 생성이 필요한 항목만 필터링
-            var itemsToProcess = result.Where(x => !x.CreateQR).ToList();
+            var itemsToProcess = result.Where(x => x.CreateQR != "Y").ToList();
             int skipCount = result.Count - itemsToProcess.Count;
 
             if (!itemsToProcess.Any())
