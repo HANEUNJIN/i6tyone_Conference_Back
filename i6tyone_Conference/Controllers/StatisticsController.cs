@@ -77,7 +77,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// QR/SMS 전송별 통계
+        /// 전송별 통계
         /// </summary>
         /// <returns>응답 정보<see cref="SendRequestDto"/></returns>
         /// <returns></returns>
