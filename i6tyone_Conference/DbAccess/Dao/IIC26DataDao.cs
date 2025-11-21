@@ -25,5 +25,6 @@ namespace i6tyone_Conference.DbAccess.Dao
         public Task<bool> CheckCreateQRAsync(DbSession db, string uniqueId);
         public Task<bool> ClearAttendAsync(DbSession db);
         public Task<bool> ClearCreateQRAsync(DbSession db);
+        public Task<bool> ClearSmsAsync(DbSession db);
     }
 }

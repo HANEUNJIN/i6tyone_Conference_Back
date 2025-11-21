@@ -48,5 +48,19 @@ namespace i6tyone_Conference.Controllers
             var res = await _managementService.ClearCreateQRAsync();
             return Ok(res);
         }
+
+        /// <summary>
+        /// SMS 전송여부 일괄 초기화
+        /// </summary>
+        /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
+        /// <returns>QR 생성여부 '0'으로 일괄 초기화합니다.</returns>
+        [HttpPost("sms-clear")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> ClearSms()
+        {
+            var res = await _managementService.ClearSmsAsync();
+            return Ok(res);
+        }
     }
 }

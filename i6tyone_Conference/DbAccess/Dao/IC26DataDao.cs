@@ -429,5 +429,24 @@ namespace i6tyone_Conference.DbAccess.Dao
                 throw;
             }
         }
+
+        public async Task<bool> ClearSmsAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                UPDATE isaiah61co_conf.dbo.IC26_Data
+                                   SET IC26_SMS = 'N'
+                                 WHERE IC26_SMS = 'Y'
+                                ";
+
+                return await db.ExecuteAsync(query) > 0;
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.DB_Update_Error, $"[DB UPDATE ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

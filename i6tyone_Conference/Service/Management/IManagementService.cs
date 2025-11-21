@@ -8,5 +8,6 @@ namespace i6tyone_Conference.Service.Management
     {
         public Task<GenericResponse<SuccessResponseDto>> ClearAttendAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<SuccessResponseDto>> ClearCreateQRAsync(CancellationToken cancellationToken = default);
+        public Task<GenericResponse<SuccessResponseDto>> ClearSmsAsync(CancellationToken cancellationToken = default);
     }
 }
