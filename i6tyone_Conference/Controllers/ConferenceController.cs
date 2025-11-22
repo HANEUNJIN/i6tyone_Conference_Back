@@ -49,5 +49,19 @@ namespace i6tyone_Conference.Controllers
             var res = await _conferenceService.GetOptionListAsync();
             return Ok(res);
         }
+
+        /// <summary>
+        /// 좌석구역(Area) 목록 조회
+        /// </summary>
+        /// <returns></returns>
+        /// <returns>응답 정보<see cref="StringKeyValue"/></returns>
+        [HttpGet("areas")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<KeyValueResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<KeyValueResponseDto>>> GetAreaList()
+        {
+            var res = await _conferenceService.GetAreaListAsync();
+            return Ok(res);
+        }
     }
 }

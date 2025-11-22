@@ -8,5 +8,6 @@ namespace i6tyone_Conference.Service.Conference
     {
         public Task<GenericResponse<KeyValueResponseDto>> GetDayListAsync();
         public Task<GenericResponse<KeyValueResponseDto>> GetOptionListAsync();
+        public Task<GenericResponse<KeyValueResponseDto>> GetAreaListAsync();
     }
 }
