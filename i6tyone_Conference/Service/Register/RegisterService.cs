@@ -300,6 +300,13 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
+            var aes = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]);
+
+            foreach (var item in data)
+            {
+                item.UniqueId = aes.AESEncrypt(item.UniqueId);
+            }
+
             var mappedList = _mapper.Map<List<RegisterInfo>>(data);
             var result = new RegisterResponseDto() { list = mappedList };
 

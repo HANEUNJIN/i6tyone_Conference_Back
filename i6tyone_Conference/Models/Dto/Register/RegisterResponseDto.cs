@@ -8,6 +8,11 @@
     public class RegisterInfo
     {
         /// <summary>
+        /// QR Code 발급 키
+        /// </summary>
+        public string uniqueId { get; set; }
+
+        /// <summary>
         /// 순번
         /// </summary>
         public int no { get; set; }
