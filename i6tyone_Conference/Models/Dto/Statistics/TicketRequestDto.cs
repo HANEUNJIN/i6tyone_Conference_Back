@@ -1,6 +1,6 @@
 ﻿namespace i6tyone_Conference.Models.Dto.Statistics
 {
-    public class BraceletRequestDto
+    public class TicketRequestDto
     {
         /// <summary>
         /// 티켓 구매 수량

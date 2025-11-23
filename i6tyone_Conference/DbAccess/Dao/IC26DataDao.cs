@@ -310,7 +310,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<BraceletRequestDto> GetBraceletAsync(DbSession db)
+        public async Task<TicketRequestDto> GetTicketAsync(DbSession db)
         {
             try
             {
@@ -320,7 +320,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 FROM isaiah61co_conf.dbo.IC26_Data;
                                 ";
 
-                return await db.QuerySingleAsync<BraceletRequestDto>(query);
+                return await db.QuerySingleAsync<TicketRequestDto>(query);
             }
             catch (Exception ex)
             {

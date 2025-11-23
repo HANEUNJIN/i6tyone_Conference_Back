@@ -20,14 +20,14 @@ namespace i6tyone_Conference.Service.Statistics
             _mapper = mapper;
         }
 
-        public async Task<GenericResponse<BraceletRequestDto>> GetBraceletAsync(CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<TicketRequestDto>> GetTicketAsync(CancellationToken cancellationToken = default)
         {
-            var res = new GenericResponse<BraceletRequestDto>();
+            var res = new GenericResponse<TicketRequestDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            var result = await _repo.IC26DataDao.GetBraceletAsync(db);
+            var result = await _repo.IC26DataDao.GetTicketAsync(db);
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;

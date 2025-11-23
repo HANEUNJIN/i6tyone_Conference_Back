@@ -37,14 +37,14 @@ namespace i6tyone_Conference.Controllers
         /// <summary>
         /// 티켓 구매 수량 통계
         /// </summary>
-        /// <returns>응답 정보<see cref="BraceletRequestDto"/></returns>
+        /// <returns>응답 정보<see cref="TicketRequestDto"/></returns>
         /// <returns></returns>
         [HttpGet("ticket")]
         [AllowAnonymousToken]
-        [SwaggerResponse(200, typeof(GenericResponse<BraceletRequestDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<BraceletRequestDto>>> GetBracelet()
+        [SwaggerResponse(200, typeof(GenericResponse<TicketRequestDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<TicketRequestDto>>> GetTicket()
         {
-            var res = await _statisticsService.GetBraceletAsync();
+            var res = await _statisticsService.GetTicketAsync();
             return Ok(res);
         }
 
