@@ -2,6 +2,7 @@
 using eGhis_WebService_Core.Infrastructure.Db;
 using eGhis_WebService_Core.Models.Common;
 using eGhis_WebService_Core.Repositories;
+using i6tyone_Conference.Models.Dto.Management;
 using i6tyone_Conference.Models.Dto.Register;
 
 namespace i6tyone_Conference.Service.Management
@@ -17,9 +18,9 @@ namespace i6tyone_Conference.Service.Management
             _repo = repo;
         }
 
-        public async Task<GenericResponse<SuccessResponseDto>> ClearAttendAsync(CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<attendResponseDto>> ClearAttendAsync(CancellationToken cancellationToken = default)
         {
-            var res = new GenericResponse<SuccessResponseDto>();
+            var res = new GenericResponse<attendResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
@@ -31,7 +32,7 @@ namespace i6tyone_Conference.Service.Management
                 return res;
             }
 
-            var result = new SuccessResponseDto() { success = isSuccess };
+            var result = new attendResponseDto() { success = isSuccess };
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;
