@@ -1,12 +1,8 @@
-﻿using AutoMapper;
-using eGhis_WebService_Core.Define;
+﻿using eGhis_WebService_Core.Define;
 using eGhis_WebService_Core.Infrastructure.Db;
 using eGhis_WebService_Core.Models.Common;
 using eGhis_WebService_Core.Repositories;
-using i6tyone_Conference.Infrastructure.Utils;
-using i6tyone_Conference.Models.Dto.Auth;
 using i6tyone_Conference.Models.Dto.Register;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace i6tyone_Conference.Service.Management
 {
@@ -14,16 +10,11 @@ namespace i6tyone_Conference.Service.Management
     {
         private readonly IDbConnectionFactory _connFactory;
         private readonly ISqlRepository _repo;
-        private readonly IMapper _mapper;
 
-        private readonly string ConferenceName = "2026 Solus CHRISTUS QRCode";
-        private readonly string Today = DateTime.Now.ToString("yyyy-MM-dd");
-
-        public ManagementService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper)
+        public ManagementService(IDbConnectionFactory connFactory, ISqlRepository repo)
         {
             _connFactory = connFactory;
             _repo = repo;
-            _mapper = mapper;
         }
 
         public async Task<GenericResponse<SuccessResponseDto>> ClearAttendAsync(CancellationToken cancellationToken = default)
@@ -33,14 +24,14 @@ namespace i6tyone_Conference.Service.Management
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            var isClear = await _repo.IC26DataDao.ClearAttendAsync(db);
-            if (!isClear)
+            var isSuccess = await _repo.IC26DataDao.ClearAttendAsync(db);
+            if (!isSuccess)
             {
-                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.SetResult(ErrorStatusCode.DB_Update_Error);
                 return res;
             }
 
-            var result = new SuccessResponseDto() { success = isClear };
+            var result = new SuccessResponseDto() { success = isSuccess };
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;
@@ -54,14 +45,14 @@ namespace i6tyone_Conference.Service.Management
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            var isClear = await _repo.IC26DataDao.ClearCreateQRAsync(db);
-            if (!isClear)
+            var isSuccess = await _repo.IC26DataDao.ClearCreateQRAsync(db);
+            if (!isSuccess)
             {
-                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.SetResult(ErrorStatusCode.DB_Update_Error);
                 return res;
             }
 
-            var result = new SuccessResponseDto() { success = isClear };
+            var result = new SuccessResponseDto() { success = isSuccess };
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;
@@ -75,14 +66,14 @@ namespace i6tyone_Conference.Service.Management
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            var isClear = await _repo.IC26DataDao.ClearSmsAsync(db);
-            if (!isClear)
+            var isSuccess = await _repo.IC26DataDao.ClearSmsAsync(db);
+            if (!isSuccess)
             {
-                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.SetResult(ErrorStatusCode.DB_Update_Error);
                 return res;
             }
 
-            var result = new SuccessResponseDto() { success = isClear };
+            var result = new SuccessResponseDto() { success = isSuccess };
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;

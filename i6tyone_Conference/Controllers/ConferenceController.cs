@@ -22,9 +22,8 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 신청일(Day) 목록 조회
+        /// 신청일 목록 조회
         /// </summary>
-        /// <returns></returns>
         /// <returns>응답 정보<see cref="KeyValueResponseDto"/></returns>
         [HttpGet("days")]
         [AllowAnonymousToken]
@@ -36,9 +35,8 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 티켓구분(Option) 목록 조회
+        /// 티켓구분 목록 조회
         /// </summary>
-        /// <returns></returns>
         /// <returns>응답 정보<see cref="KeyValueResponseDto"/></returns>
         [HttpGet("options")]
         [AllowAnonymousToken]
@@ -50,9 +48,8 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 좌석구역(Area) 목록 조회
+        /// 좌석구역 목록 조회
         /// </summary>
-        /// <returns></returns>
         /// <returns>응답 정보<see cref="KeyValueResponseDto"/></returns>
         [HttpGet("areas")]
         [AllowAnonymousToken]

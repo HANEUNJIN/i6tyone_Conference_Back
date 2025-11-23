@@ -25,7 +25,6 @@ namespace i6tyone_Conference.Controllers
         /// 출석여부 일괄 초기화
         /// </summary>
         /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
-        /// <returns>출석여부 '0'으로 일괄 초기화합니다.</returns>
         [HttpPost("attend-clear")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
@@ -39,7 +38,6 @@ namespace i6tyone_Conference.Controllers
         /// QR 생성여부 일괄 초기화
         /// </summary>
         /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
-        /// <returns>QR 생성여부 '0'으로 일괄 초기화합니다.</returns>
         [HttpPost("createqr-clear")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
@@ -53,7 +51,6 @@ namespace i6tyone_Conference.Controllers
         /// SMS 전송여부 일괄 초기화
         /// </summary>
         /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
-        /// <returns>QR 생성여부 '0'으로 일괄 초기화합니다.</returns>
         [HttpPost("sms-clear")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
