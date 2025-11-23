@@ -1,7 +1,6 @@
 ﻿using eGhis_WebService_Core.Controllers.Base;
 using eGhis_WebService_Core.Infrastructure.Attributes;
 using eGhis_WebService_Core.Models.Common;
-using i6tyone_Conference.Infrastructure.Utils;
 using i6tyone_Conference.Models.Dto.Conference;
 using i6tyone_Conference.Service.Conference;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +25,7 @@ namespace i6tyone_Conference.Controllers
         /// 신청일(Day) 목록 조회
         /// </summary>
         /// <returns></returns>
-        /// <returns>응답 정보<see cref="StringKeyValue"/></returns>
+        /// <returns>응답 정보<see cref="KeyValueResponseDto"/></returns>
         [HttpGet("days")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<KeyValueResponseDto>), Description = "정상 처리되었습니다.")]
@@ -40,7 +39,7 @@ namespace i6tyone_Conference.Controllers
         /// 티켓구분(Option) 목록 조회
         /// </summary>
         /// <returns></returns>
-        /// <returns>응답 정보<see cref="StringKeyValue"/></returns>
+        /// <returns>응답 정보<see cref="KeyValueResponseDto"/></returns>
         [HttpGet("options")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<KeyValueResponseDto>), Description = "정상 처리되었습니다.")]
@@ -54,7 +53,7 @@ namespace i6tyone_Conference.Controllers
         /// 좌석구역(Area) 목록 조회
         /// </summary>
         /// <returns></returns>
-        /// <returns>응답 정보<see cref="StringKeyValue"/></returns>
+        /// <returns>응답 정보<see cref="KeyValueResponseDto"/></returns>
         [HttpGet("areas")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<KeyValueResponseDto>), Description = "정상 처리되었습니다.")]
