@@ -28,7 +28,6 @@ namespace eGhis_WebService_Core.Controllers
         /// </summary>
         /// <returns>요청 정보<see cref="RegisterRequestDto"/></returns>
         /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
-        /// <returns>컨퍼런스 참가 신청 정보를 등록합니다.</returns>
         [HttpPost("sign-up")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<RegisterAddResponseDto>), Description = "정상 처리되었습니다.")]
@@ -43,7 +42,6 @@ namespace eGhis_WebService_Core.Controllers
         /// </summary>
         /// <returns>요청 정보<see cref="RegisterUpdateRequestDto"/></returns>
         /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
-        /// <returns>컨퍼런스 참가 신청 정보를 수정합니다.</returns>
         [HttpPost("update")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
@@ -57,7 +55,7 @@ namespace eGhis_WebService_Core.Controllers
         /// 컨퍼런스 등록 삭제
         /// </summary>
         /// <param name="uniqueIdKey">QR Code 발급 키</param>
-        /// <returns>컨퍼런스 참가 신청 정보를 삭제합니다.</returns>
+        /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
         [HttpPost("delete")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
@@ -71,7 +69,6 @@ namespace eGhis_WebService_Core.Controllers
         /// 전체 등록자 QR 코드 일괄 발급
         /// </summary>
         /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
-        /// <returns>등록자 목록 정보를 기반으로 각 참가자의 QR 코드를 생성하여 PNG 파일 형태로 일괄 생성 및 다운로드합니다.</returns>
         [HttpPost("qrcode")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<QRCodeResponseDto>), Description = "정상 처리되었습니다.")]
@@ -85,7 +82,6 @@ namespace eGhis_WebService_Core.Controllers
         /// 특정 등록자 QR 코드 발급/재발급
         /// </summary>
         /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
-        /// <returns></returns>
         [HttpPost("qrcode-single")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<QRCodeResponseDto>), Description = "정상 처리되었습니다.")]
@@ -99,7 +95,6 @@ namespace eGhis_WebService_Core.Controllers
         /// 등록자 조회
         /// </summary>
         /// <returns>응답 정보<see cref="RegisterResponseDto"/></returns>
-        /// <returns>등록자의 정보를 조회합니다.</returns>
         [HttpPost("list")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<RegisterResponseDto>), Description = "정상 처리되었습니다.")]
@@ -114,7 +109,6 @@ namespace eGhis_WebService_Core.Controllers
         /// </summary>
         /// <param name="uniqueIdKey">QR Code Key</param>
         /// <returns>응답 정보<see cref="CheckInResponseDto"/></returns>
-        /// <returns>현장에서 QR Code를 스캔하면 자동으로 출석이 처리됩니다.</returns>
         [HttpPost("check-in")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<CheckInResponseDto>), Description = "정상 처리되었습니다.")]
@@ -127,7 +121,6 @@ namespace eGhis_WebService_Core.Controllers
         /// <summary>
         /// FTP 정보 조회
         /// </summary>
-        /// <returns></returns>
         /// <returns>응답 정보<see cref="FtpInfoResponseDto"/></returns>
         [HttpGet("ftp-info")]
         [AllowAnonymousToken]
