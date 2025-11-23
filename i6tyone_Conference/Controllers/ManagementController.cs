@@ -38,11 +38,11 @@ namespace i6tyone_Conference.Controllers
         /// <summary>
         /// QR 생성여부 일괄 초기화
         /// </summary>
-        /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
+        /// <returns>응답 정보<see cref="CreateQRResponseDto"/></returns>
         [HttpPost("createqr-clear")]
         [AllowAnonymousToken]
-        [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> ClearCreateQR()
+        [SwaggerResponse(200, typeof(GenericResponse<CreateQRResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<CreateQRResponseDto>>> ClearCreateQR()
         {
             var res = await _managementService.ClearCreateQRAsync();
             return Ok(res);

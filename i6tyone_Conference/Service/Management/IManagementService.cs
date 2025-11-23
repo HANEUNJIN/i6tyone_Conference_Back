@@ -8,7 +8,7 @@ namespace i6tyone_Conference.Service.Management
     public interface IManagementService : IServiceMarker
     {
         public Task<GenericResponse<attendResponseDto>> ClearAttendAsync(CancellationToken cancellationToken = default);
-        public Task<GenericResponse<SuccessResponseDto>> ClearCreateQRAsync(CancellationToken cancellationToken = default);
+        public Task<GenericResponse<CreateQRResponseDto>> ClearCreateQRAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<SuccessResponseDto>> ClearSmsAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -39,9 +39,9 @@ namespace i6tyone_Conference.Service.Management
             return res;
         }
 
-        public async Task<GenericResponse<SuccessResponseDto>> ClearCreateQRAsync(CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<CreateQRResponseDto>> ClearCreateQRAsync(CancellationToken cancellationToken = default)
         {
-            var res = new GenericResponse<SuccessResponseDto>();
+            var res = new GenericResponse<CreateQRResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
@@ -53,7 +53,7 @@ namespace i6tyone_Conference.Service.Management
                 return res;
             }
 
-            var result = new SuccessResponseDto() { success = isSuccess };
+            var result = new CreateQRResponseDto() { success = isSuccess };
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;
