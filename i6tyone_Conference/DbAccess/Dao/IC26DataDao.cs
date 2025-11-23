@@ -79,6 +79,41 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
+        public async Task<bool> UpdateRegisterAsync(DbSession db, RegisterUpdateRequestDto req, string uniqueId)
+        {
+            try
+            {
+                string query = @"
+                                UPDATE isaiah61co_conf.dbo.IC26_Data
+                                   SET
+                                       IC26_Option = @option,
+                                       IC26_Day = @day,
+                                       IC26_Buyer = @buyer,
+                                       IC26_Attender = @attender,
+                                       IC26_Phone = @phone,
+                                       IC26_Gender = @gender,
+                                       IC26_Age = @age,
+                                       IC26_Church = @church,
+                                       IC26_Local = @local,
+                                       IC26_Denom = @denom,
+                                       IC26_Count = @count,
+                                       IC26_Area = @area,
+                                       IC26_Memo = @memo
+                                 WHERE IC26_UniqueId = @uniqueId;
+                                ";
+
+                var parameters = new DynamicParameters(req);
+                parameters.Add("@uniqueId", uniqueId);
+
+                return await db.ExecuteAsync(query, parameters) > 0;
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.DB_Insert_Error, $"[DB INSERT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<bool> DeleteRegisterAsync(DbSession db, string uniqueId)
         {
             try

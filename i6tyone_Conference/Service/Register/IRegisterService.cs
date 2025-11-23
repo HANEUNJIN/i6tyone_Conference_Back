@@ -9,6 +9,7 @@ namespace eGhis_WebService_Core.Service.Auth
     public interface IRegisterService : IServiceMarker
     {
         public Task<GenericResponse<RegisterAddResponseDto>> GenerateRegisterAsync(RegisterRequestDto req, CancellationToken cancellationToken = default);
+        public Task<GenericResponse<SuccessResponseDto>> UpdateRegisterAsync(RegisterUpdateRequestDto req, CancellationToken cancellationToken = default);
         public Task<GenericResponse<SuccessResponseDto>> DeleteRegisterAsync(string uniqueIdKey, CancellationToken cancellationToken = default);
         public Task<GenericResponse<QRCodeResponseDto>> GenerateRegisterQRCodeAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<QRCodeResponseDto>> GenerateRegisterQRCodeSingleAsync(IssuanceRequestDto req, CancellationToken cancellationToken = default);

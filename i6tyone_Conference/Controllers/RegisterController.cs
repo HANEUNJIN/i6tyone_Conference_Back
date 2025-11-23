@@ -39,6 +39,21 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
+        /// 컨퍼런스 등록 수정
+        /// </summary>
+        /// <returns>요청 정보<see cref="RegisterUpdateRequestDto"/></returns>
+        /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
+        /// <returns>컨퍼런스 참가 신청 정보를 수정합니다.</returns>
+        [HttpPost("update")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> UpdateRegister(RegisterUpdateRequestDto req)
+        {
+            var res = await _registerService.UpdateRegisterAsync(req);
+            return Ok(res);
+        }
+
+        /// <summary>
         /// 컨퍼런스 등록 삭제
         /// </summary>
         /// <param name="uniqueIdKey">QR Code 발급 키</param>

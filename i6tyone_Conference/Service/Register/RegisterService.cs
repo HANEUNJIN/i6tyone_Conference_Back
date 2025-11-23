@@ -81,6 +81,42 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
+        public async Task<GenericResponse<SuccessResponseDto>> UpdateRegisterAsync(RegisterUpdateRequestDto req, CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<SuccessResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            if (string.IsNullOrWhiteSpace(req.uniqueIdKey))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "QR Code 발급 키가 누락되었습니다.";
+                return res;
+            }
+
+            var uniqueId = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESDecrypt(req.uniqueIdKey);
+
+            if (!string.IsNullOrWhiteSpace(req.phone))
+            {
+                req.phone = req.phone.Replace("-", "");
+            }
+
+            var data = await _repo.IC26DataDao.UpdateRegisterAsync(db, req, uniqueId);
+            if (!data)
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "등록자 수정 실패";
+                return res;
+            }
+
+            var result = new SuccessResponseDto() { success = data };
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = result;
+            return res;
+        }
+
         public async Task<GenericResponse<SuccessResponseDto>> DeleteRegisterAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<SuccessResponseDto>();
