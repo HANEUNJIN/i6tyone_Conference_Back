@@ -1,7 +1,6 @@
 ﻿using eGhis_WebService_Core.Infrastructure.Common.Interfaces;
 using eGhis_WebService_Core.Models.Common;
 using i6tyone_Conference.Models.Dto.Management;
-using i6tyone_Conference.Models.Dto.Register;
 
 namespace i6tyone_Conference.Service.Management
 {
@@ -9,6 +8,6 @@ namespace i6tyone_Conference.Service.Management
     {
         public Task<GenericResponse<attendResponseDto>> ClearAttendAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<CreateQRResponseDto>> ClearCreateQRAsync(CancellationToken cancellationToken = default);
-        public Task<GenericResponse<SuccessResponseDto>> ClearSmsAsync(CancellationToken cancellationToken = default);
+        public Task<GenericResponse<SmsResponseDto>> ClearSmsAsync(CancellationToken cancellationToken = default);
     }
 }

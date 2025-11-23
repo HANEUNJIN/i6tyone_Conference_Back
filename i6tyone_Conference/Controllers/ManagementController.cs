@@ -2,7 +2,6 @@
 using eGhis_WebService_Core.Infrastructure.Attributes;
 using eGhis_WebService_Core.Models.Common;
 using i6tyone_Conference.Models.Dto.Management;
-using i6tyone_Conference.Models.Dto.Register;
 using i6tyone_Conference.Service.Management;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -51,11 +50,11 @@ namespace i6tyone_Conference.Controllers
         /// <summary>
         /// SMS 전송여부 일괄 초기화
         /// </summary>
-        /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
+        /// <returns>응답 정보<see cref="SmsResponseDto"/></returns>
         [HttpPost("sms-clear")]
         [AllowAnonymousToken]
-        [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> ClearSms()
+        [SwaggerResponse(200, typeof(GenericResponse<SmsResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SmsResponseDto>>> ClearSms()
         {
             var res = await _managementService.ClearSmsAsync();
             return Ok(res);

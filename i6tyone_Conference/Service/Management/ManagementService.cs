@@ -60,9 +60,9 @@ namespace i6tyone_Conference.Service.Management
             return res;
         }
 
-        public async Task<GenericResponse<SuccessResponseDto>> ClearSmsAsync(CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<SmsResponseDto>> ClearSmsAsync(CancellationToken cancellationToken = default)
         {
-            var res = new GenericResponse<SuccessResponseDto>();
+            var res = new GenericResponse<SmsResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
@@ -74,7 +74,7 @@ namespace i6tyone_Conference.Service.Management
                 return res;
             }
 
-            var result = new SuccessResponseDto() { success = isSuccess };
+            var result = new SmsResponseDto() { success = isSuccess };
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;
