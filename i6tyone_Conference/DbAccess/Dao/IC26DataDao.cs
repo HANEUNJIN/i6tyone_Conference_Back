@@ -127,16 +127,19 @@ namespace i6tyone_Conference.DbAccess.Dao
                 if (req.day != 0)
                     query += "      AND IC26_Day = @day";
 
-                if (!string.IsNullOrWhiteSpace(req.buyer))
-                    query += "      AND IC26_Buyer = @Buyer";
+                if (!string.IsNullOrWhiteSpace(req.keyword))
+                {
+                    query += @"
+                                    AND (
+                                           IC26_Buyer LIKE CONCAT(@keyword, '%')
+                                        OR IC26_Attender LIKE CONCAT(@keyword, '%')
+                                        OR IC26_Phone LIKE CONCAT(@keyword, '%')
+                                        OR IC26_Church LIKE CONCAT(@keyword, '%')
+                                        OR IC26_Local LIKE CONCAT(@keyword, '%')
+                                    )";
+                }
 
-                if (!string.IsNullOrWhiteSpace(req.phone))
-                    query += "      AND IC26_Phone = @Phone";
-
-                if (!string.IsNullOrWhiteSpace(req.church))
-                    query += "      AND IC26_Church LIKE CONCAT(@Church, '%')";
-
-                if(!string.IsNullOrWhiteSpace(req.area))
+                if (!string.IsNullOrWhiteSpace(req.area))
                     query += "      AND IC26_Area = @area";
 
                 query += @"

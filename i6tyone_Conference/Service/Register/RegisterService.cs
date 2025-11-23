@@ -252,9 +252,9 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            if (!string.IsNullOrWhiteSpace(req.phone))
+            if (!string.IsNullOrWhiteSpace(req.keyword))
             {
-                req.phone = req.phone.Replace("-", "");
+                req.keyword = req.keyword.Replace("-", "");
             }
 
             var data = await _repo.IC26DataDao.GetRegisterInfoAsync(db, req);

@@ -8,19 +8,9 @@
         public int day { get; set; }
 
         /// <summary>
-        /// 구매자
+        /// 구매자, 참석자, 전화번호, 교회, 교단
         /// </summary>
-        public string buyer {  get; set; }
-
-        /// <summary>
-        /// 전화번호
-        /// </summary>
-        public string phone { get; set; }
-
-        /// <summary>
-        /// 교회
-        /// </summary>
-        public string church { get; set; }
+        public string keyword {  get; set; }
 
         /// <summary>
         /// 좌석구역
