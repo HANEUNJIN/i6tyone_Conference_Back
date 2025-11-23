@@ -18,7 +18,7 @@
         public int option { get; set; }
 
         /// <summary>
-        /// 신청일 (1: Day1 / 2: Day2 / 3: Day3 / 4: ALL)
+        /// 신청일 (0: 전체 / 1: Day1 / 2: Day2 / 3: Day3 / 4: ALL Day)
         /// </summary>
         public int day { get; set; }
 
