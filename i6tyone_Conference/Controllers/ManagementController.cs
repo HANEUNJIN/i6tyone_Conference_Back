@@ -15,10 +15,10 @@ namespace i6tyone_Conference.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IManagementService _managementService;
 
-        public ManagementController(IManagementService managementService, IHttpContextAccessor httpContextAccessor)
+        public ManagementController(IHttpContextAccessor httpContextAccessor, IManagementService managementService)
         {
-            _managementService = managementService;
             _httpContextAccessor = httpContextAccessor;
+            _managementService = managementService;
         }
 
         /// <summary>
