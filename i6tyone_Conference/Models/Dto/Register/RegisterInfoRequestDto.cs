@@ -26,5 +26,15 @@
         /// 좌석구역
         /// </summary>
         public string area { get; set; }
+
+        /// <summary>
+        /// 현재 페이지
+        /// </summary>
+        public int pageNum { get; set; } = 1;
+
+        /// <summary>
+        /// 한 페이지 크기
+        /// </summary>
+        public int pageSize { get; set; } = 20;
     }
 }
