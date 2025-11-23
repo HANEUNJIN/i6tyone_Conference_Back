@@ -92,7 +92,9 @@
         /// </summary>
         public string sms { get; set; }
 
+        /// <summary>
         /// 전체 데이터 수
+        /// </summary>
         public int total { get; set; }
     }
 }
