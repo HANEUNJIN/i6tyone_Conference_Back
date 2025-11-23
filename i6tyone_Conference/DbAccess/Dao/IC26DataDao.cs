@@ -119,7 +119,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                              -- IC26_UniqueId AS UniqueId,
                                 IC26_Attend AS Attend,
                                 IC26_CreateQR AS CreateQR,
-                                IC26_SMS AS SMS
+                                IC26_SMS AS SMS,
+                                COUNT(*) OVER() AS Total
                            FROM isaiah61co_conf.dbo.IC26_Data
                           WHERE 1=1
                         ";

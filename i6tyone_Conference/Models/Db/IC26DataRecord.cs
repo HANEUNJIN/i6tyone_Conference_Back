@@ -91,5 +91,8 @@
         /// SMS 전송여부 (N:미전송, Y:전송완료)
         /// </summary>
         public string SMS { get; set; }
+
+        /// 전체 데이터 수
+        public int Total { get ; set; }
     }
 }
