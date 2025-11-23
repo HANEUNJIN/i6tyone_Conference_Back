@@ -16,7 +16,7 @@ namespace i6tyone_Conference.Service.Conference
                 new StringKeyValue() {key = "1", value = "Day1"},
                 new StringKeyValue() {key = "2", value = "Day2"},
                 new StringKeyValue() {key = "3", value = "Day3"},
-                new StringKeyValue() {key = "4", value = "ALL"},
+                new StringKeyValue() {key = "4", value = "ALL Day"},
             };
 
             var result = new KeyValueResponseDto() { list = list };
