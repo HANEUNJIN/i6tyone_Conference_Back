@@ -1,21 +1,20 @@
-﻿using static MongoDB.Driver.WriteConcern;
-
+﻿
 namespace i6tyone_Conference.Models.Dto.Statistics
 {
     public class DateRequestDto
     {
         /// <summary>
-        /// 01.27 TUE
+        /// 2025-01-27 (화)
         /// </summary>
         public int Day1Count { get; set; }
 
         /// <summary>
-        /// 01.28 WED
+        /// 2025-01-28 (수)
         /// </summary>
         public int Day2Count { get; set; }
 
         /// <summary>
-        /// 01.29 THU
+        /// 2025-01-29 (목)
         /// </summary>
         public int Day3Count { get; set; }
     }
