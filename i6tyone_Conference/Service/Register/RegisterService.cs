@@ -39,6 +39,11 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
+            if (!string.IsNullOrWhiteSpace(req.phone))
+            {
+                req.phone = req.phone.Replace("-", "");
+            }
+
             string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
             if(string.IsNullOrWhiteSpace(uniqueId))
             {
@@ -246,6 +251,11 @@ namespace eGhis_WebService_Core.Service.Auth
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
+
+            if (!string.IsNullOrWhiteSpace(req.phone))
+            {
+                req.phone = req.phone.Replace("-", "");
+            }
 
             var data = await _repo.IC26DataDao.GetRegisterInfoAsync(db, req);
             if (data is null)
