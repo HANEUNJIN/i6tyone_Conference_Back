@@ -52,6 +52,20 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
+        /// 컨퍼런스 등록 폐기
+        /// </summary>
+        /// <param name="uniqueIdKey">QR Code 발급 키</param>
+        /// <returns>응답 정보<see cref="SuccessResponseDto"/></returns>
+        [HttpPost("dispose")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<SuccessResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SuccessResponseDto>>> DisposeRegister(string uniqueIdKey)
+        {
+            var res = await _registerService.DisposeRegisterAsync(uniqueIdKey);
+            return Ok(res);
+        }
+
+        /// <summary>
         /// 컨퍼런스 등록 삭제
         /// </summary>
         /// <param name="uniqueIdKey">QR Code 발급 키</param>
