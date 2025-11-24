@@ -362,7 +362,23 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            var uniqueId = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESDecrypt(uniqueIdKey);
+            string? uniqueId = null;
+
+            try
+            {
+                var aesInstance = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]);
+                uniqueId = aesInstance?.AESDecrypt(uniqueIdKey);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            if (uniqueId is null)
+            {
+                res.SetResult(ErrorStatusCode.Decrypt_Error);
+                res.ResultMsg = "복호화 오류";
+                return res;
+            }
 
             var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
             if (isCheckIn == 0)
