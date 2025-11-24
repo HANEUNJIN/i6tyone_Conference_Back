@@ -381,12 +381,6 @@ namespace eGhis_WebService_Core.Service.Auth
             }
 
             var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
-            if (isCheckIn == 0)
-            {
-                res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "이미 발급된 티켓";
-                return res;
-            }
 
             var registerInfo = await _repo.IC26DataDao.GetRegisterDetailAsync(db, uniqueId);
             if (registerInfo is null)
@@ -395,11 +389,18 @@ namespace eGhis_WebService_Core.Service.Auth
                 res.ResultMsg = "정보를 찾을 수 없음.";
                 return res;
             }
-            
+
             var mappedInfo = _mapper.Map<CheckInResponseDto>(registerInfo);
+            res.Data = mappedInfo;
+
+            if (isCheckIn == 0)
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "이미 발급된 티켓";
+                return res;
+            }
 
             res.SetResult(ErrorStatusCode.Success);
-            res.Data = mappedInfo;
             return res;
         }
 
