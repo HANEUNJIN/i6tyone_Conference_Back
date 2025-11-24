@@ -67,7 +67,7 @@ namespace eGhis_WebService_Core.Service.Auth
             //if (validDates.Contains(today))
             //{
             //    var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
-            //    if (!isCheckIn)
+            //    if (isCheckIn == 0)
             //    {
             //        res.SetResult(ErrorStatusCode.Invalid_Error);
             //        res.ResultMsg = "현장 입장 등록 실패";
