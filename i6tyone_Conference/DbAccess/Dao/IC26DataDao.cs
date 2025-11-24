@@ -167,11 +167,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                 {
                     query += @"
                                     AND (
-                                           IC26_Buyer LIKE CONCAT(@keyword, '%')
-                                        OR IC26_Attender LIKE CONCAT(@keyword, '%')
-                                        OR IC26_Phone LIKE CONCAT(@keyword, '%')
+                                           IC26_Buyer LIKE CONCAT('%', @keyword, '%')
+                                        OR IC26_Attender LIKE CONCAT('%', @keyword, '%')
+                                        OR IC26_Phone LIKE CONCAT('%', @keyword, '%')
                                         OR REPLACE(IC26_Church, ' ', '') LIKE '%' + REPLACE(@keyword, ' ', '') + '%'
-                                        OR IC26_Local LIKE CONCAT(@keyword, '%')
+                                        OR IC26_Local LIKE CONCAT('%', @keyword, '%')
                                     )";
                 }
 
