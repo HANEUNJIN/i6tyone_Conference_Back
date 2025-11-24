@@ -365,10 +365,10 @@ namespace eGhis_WebService_Core.Service.Auth
             var uniqueId = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESDecrypt(uniqueIdKey);
 
             var isCheckIn = await _repo.IC26DataDao.CheckAttendanceAsync(db, uniqueId);
-            if (!isCheckIn)
+            if (isCheckIn == 0)
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "현장 입장 등록 실패";
+                res.ResultMsg = "이미 발급된 티켓";
                 return res;
             }
 

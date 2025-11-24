@@ -291,7 +291,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<bool> CheckAttendanceAsync(DbSession db, string uniqueId)
+        public async Task<int> CheckAttendanceAsync(DbSession db, string uniqueId)
         {
             try
             {
@@ -299,10 +299,12 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_Attend = 'Y'
                                  WHERE IC26_UniqueId = @UniqueId
+                                   AND IC26_Attend = 'N'
                                    AND delYn = 'N';
                                 ";
 
-                return await db.ExecuteAsync(query, new { uniqueId }) > 0;
+                return await db.ExecuteAsync(query, new { uniqueId });
+
             }
             catch (Exception ex)
             {
