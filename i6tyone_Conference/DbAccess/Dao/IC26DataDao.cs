@@ -337,7 +337,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                 string query = @"
                                 SELECT
                                     SUM(IC26_Count) AS ticket
-                                FROM isaiah61co_conf.dbo.IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data
+                               WHERE delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<TicketRequestDto>(query);
@@ -358,7 +359,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     SUM(CASE WHEN IC26_Day IN (1, 4) THEN 1 ELSE 0 END) AS Day1Count,
                                     SUM(CASE WHEN IC26_Day IN (2, 4) THEN 1 ELSE 0 END) AS Day2Count,
                                     SUM(CASE WHEN IC26_Day IN (3, 4) THEN 1 ELSE 0 END) AS Day3Count
-                                FROM isaiah61co_conf.dbo.IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data
+                               WHERE delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<DateRequestDto>(query);
@@ -386,7 +388,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     SUM(CASE WHEN IC26_Area = 'H' THEN 1 ELSE 0 END) AS H,
                                     SUM(CASE WHEN IC26_Area = 'I' THEN 1 ELSE 0 END) AS I,
                                     SUM(CASE WHEN IC26_Area = 'J' THEN 1 ELSE 0 END) AS J
-                                FROM isaiah61co_conf.dbo.IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data
+                               WHERE delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<AreaRequestDto>(query);
@@ -404,7 +407,8 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                 SELECT count(*) AS total_users
-                                  FROM isaiah61co_conf.dbo.IC26_Data;
+                                  FROM isaiah61co_conf.dbo.IC26_Data
+                                 WHERE delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<RegistrationRequestDto>(query);
@@ -428,7 +432,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     SUM(CASE WHEN IC26_SMS = 'Y' THEN 1 ELSE 0 END) AS SMSSent,
                                     SUM(CASE WHEN IC26_Attend = 'Y' THEN 1 ELSE 0 END) AS AttendCount,
                                     SUM(CASE WHEN IC26_Attend = 'Y' THEN 1 ELSE 0 END) AS NotAttendCount
-                                FROM isaiah61co_conf.dbo.IC26_Data;
+                                FROM isaiah61co_conf.dbo.IC26_Data
+                               WHERE delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<SendRequestDto>(query);
