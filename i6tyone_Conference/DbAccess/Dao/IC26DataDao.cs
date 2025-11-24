@@ -41,10 +41,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     IC26_Count,
                                     IC26_Area,
                                     IC26_Memo,
-                                    IC26_UniqueId,
-                                    IC26_Attend,
-                                    IC26_CreateQR,
-                                    IC26_SMS
+                                    IC26_UniqueId
                                 )
                                 VALUES (
                                     @Option,
@@ -60,10 +57,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     @Count,
                                     @Area,
                                     @Memo,
-                                    @UniqueId,
-                                    @Attend,
-                                    @CreateQR,
-                                    @SMS
+                                    @UniqueId
                                 );
                                 ";
 
