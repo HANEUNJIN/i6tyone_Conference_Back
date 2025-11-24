@@ -176,6 +176,9 @@ namespace i6tyone_Conference.DbAccess.Dao
                             AND delYn = 'N'
                         ";
 
+                if (req.option != 0)
+                    query += "      AND IC26_Option = @option";
+
                 if (req.day != 0)
                     query += "      AND IC26_Day = @day";
 

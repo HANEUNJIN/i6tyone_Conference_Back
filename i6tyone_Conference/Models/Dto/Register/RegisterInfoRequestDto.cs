@@ -3,6 +3,11 @@
     public class RegisterInfoRequestDto
     {
         /// <summary>
+        /// 티켓구분 (0: 전체 / 1: 슈퍼얼리 / 2: 얼리 1차 3: 얼리 3차 / 4: 일반 / 5: 원데이)
+        /// </summary>
+        public int option {  get; set; }
+
+        /// <summary>
         /// 신청일 (0: 전체 / 1: Day1 / 2: Day2 / 3: Day3 / 4: ALL Day)
         /// </summary>
         public int day { get; set; }
