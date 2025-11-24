@@ -99,7 +99,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        IC26_Count = @count,
                                        IC26_Area = @area,
                                        IC26_Memo = @memo
-                                 WHERE IC26_UniqueId = @uniqueId;
+                                 WHERE IC26_UniqueId = @uniqueId
+                                   AND delYn = 'N';
                                 ";
 
                 var parameters = new DynamicParameters(req);
@@ -178,6 +179,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 COUNT(*) OVER() AS Total
                            FROM isaiah61co_conf.dbo.IC26_Data
                           WHERE 1=1
+                            AND delYn = 'N'
                         ";
 
                 if (req.day != 0)
@@ -237,7 +239,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_Attend AS Attend,
                                         IC26_CreateQR AS CreateQR,
                                         IC26_SMS AS SMS
-                                   FROM isaiah61co_conf.dbo.IC26_Data;
+                                   FROM isaiah61co_conf.dbo.IC26_Data
+                                    AND delYn = 'N';
                                 ";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query);
@@ -275,7 +278,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_SMS AS SMS
                                    FROM isaiah61co_conf.dbo.IC26_Data
                                   WHERE IC26_Buyer = @Buyer
-                                    AND IC26_Phone = @Phone;
+                                    AND IC26_Phone = @Phone
+                                    AND delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<IC26DataRecord>(query, req);
@@ -295,6 +299,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_Attend = 'Y'
                                  WHERE IC26_UniqueId = @UniqueId
+                                   AND delYn = 'N';
                                 ";
 
                 return await db.ExecuteAsync(query, new { uniqueId }) > 0;
@@ -318,7 +323,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        IC26_Area AS Area,
                                        IC26_Attend AS Attend
                                   FROM isaiah61co_conf.dbo.IC26_Data
-                                 WHERE IC26_UniqueId = @UniqueId;
+                                 WHERE IC26_UniqueId = @UniqueId
+                                   AND delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<IC26DataRecord>(query, new { uniqueId });
@@ -453,6 +459,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_CreateQR = 'Y'
                                  WHERE IC26_UniqueId = @UniqueId
+                                   AND delYn = 'N';
                                 ";
 
                 return await db.ExecuteAsync(query, new { uniqueId }) > 0;
