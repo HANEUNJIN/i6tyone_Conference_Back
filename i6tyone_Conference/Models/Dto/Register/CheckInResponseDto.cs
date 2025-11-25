@@ -13,9 +13,9 @@
         public int option { get; set; }
 
         /// <summary>
-        /// 신청일 (1: Day1 / 2: Day2 / 3: Day3 / 4: ALL Day)
+        /// 교회
         /// </summary>
-        public int day { get; set; }
+        public string church { get; set; }
 
         /// <summary>
         /// 구매수량

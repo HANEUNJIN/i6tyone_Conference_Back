@@ -316,8 +316,8 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                 SELECT IC26_Option AS [Option],
-                                       IC26_Day AS Day,
                                        IC26_Buyer AS Buyer,
+                                       IC26_Church AS church,
                                        IC26_Count AS Count,
                                        IC26_Area AS Area,
                                        IC26_Attend AS Attend
