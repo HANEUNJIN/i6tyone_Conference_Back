@@ -8,6 +8,11 @@
         public string buyer { get; set; }
 
         /// <summary>
+        /// 참석자
+        /// </summary>
+        public string attender { get; set; }
+
+        /// <summary>
         /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 3: 얼리 3차 / 4: 일반 / 5: 원데이)
         /// </summary>
         public int option { get; set; }
