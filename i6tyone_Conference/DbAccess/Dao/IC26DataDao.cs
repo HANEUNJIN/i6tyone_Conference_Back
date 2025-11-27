@@ -176,11 +176,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                             AND delYn = 'N'
                         ";
 
-                if (req.option != 0)
-                    query += "      AND IC26_Option = @option";
+                if (req.option != null && req.option.Any())
+                    query += "      AND IC26_Option IN @option";
 
-                if (req.day != 0)
-                    query += "      AND IC26_Day = @day";
+                if (req.day != null && req.day.Any())
+                    query += "      AND IC26_Day IN @day";
 
                 if (!string.IsNullOrWhiteSpace(req.keyword))
                 {
@@ -194,8 +194,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     )";
                 }
 
-                if (!string.IsNullOrWhiteSpace(req.area))
-                    query += "      AND IC26_Area = @area";
+                if (req.area != null && req.area.Any())
+                    query += "      AND IC26_Area IN @area";
 
                 query += @"
                         ORDER BY IC26_No DESC

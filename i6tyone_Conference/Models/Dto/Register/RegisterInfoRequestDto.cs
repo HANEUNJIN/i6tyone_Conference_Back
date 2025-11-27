@@ -5,12 +5,12 @@
         /// <summary>
         /// 티켓구분 (0: 전체 / 1: 슈퍼얼리 / 2: 얼리 1차 3: 얼리 3차 / 4: 일반 / 5: 원데이)
         /// </summary>
-        public int option {  get; set; }
+        public List<int> option { get; set; } = new();
 
         /// <summary>
         /// 신청일 (0: 전체 / 1: Day1 / 2: Day2 / 3: Day3 / 4: ALL Day)
         /// </summary>
-        public int day { get; set; }
+        public List<int> day { get; set; } = new();
 
         /// <summary>
         /// 구매자, 참석자, 전화번호, 교회, 교단
@@ -20,7 +20,7 @@
         /// <summary>
         /// 좌석구역
         /// </summary>
-        public string area { get; set; }
+        public List<string> area { get; set; } = new();
 
         /// <summary>
         /// 현재 페이지
