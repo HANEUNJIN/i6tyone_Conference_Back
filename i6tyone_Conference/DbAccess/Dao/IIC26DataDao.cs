@@ -15,6 +15,7 @@ namespace i6tyone_Conference.DbAccess.Dao
         public Task<bool> DisposeRegisterAsync(DbSession db, string iC26UniqueId);
         public Task<bool> DeleteRegisterAsync(DbSession db, string iC26UniqueId);
         public Task<List<IC26DataRecord>> GetRegisterInfoAsync(DbSession db, RegisterInfoRequestDto req);
+        public Task<IC26DataRecord> GetRegisterDetailInfoAsync(DbSession db, string uniqueId);
         public Task<List<IC26DataRecord>> GenerateRegisterQRCodeAsync(DbSession db);
         public Task<IC26DataRecord> GenerateRegisterQRCodeSingleAsync(DbSession db, IssuanceRequestDto req);
         public Task<int> CheckAttendanceAsync(DbSession db, string uniqueId);

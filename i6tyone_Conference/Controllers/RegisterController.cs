@@ -119,6 +119,20 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
+        /// 등록자 상세조회
+        /// </summary>
+        /// <param name="uniqueIdKey">QR Code Key</param>
+        /// <returns>응답 정보<see cref="RegisterInfoResponseDto"/></returns>
+        [HttpPost("detail")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<RegisterInfoResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<RegisterInfoResponseDto>>> GetRegisterDetailInfo(string uniqueIdKey)
+        {
+            var res = await _registerService.GetRegisterDetailInfoAsync(uniqueIdKey);
+            return Ok(res);
+        }
+
+        /// <summary>
         /// 현장 입장 등록
         /// </summary>
         /// <param name="uniqueIdKey">QR Code Key</param>

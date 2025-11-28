@@ -337,6 +337,37 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
+        public async Task<GenericResponse<RegisterInfoResponseDto>> GetRegisterDetailInfoAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<RegisterInfoResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            if (string.IsNullOrWhiteSpace(uniqueIdKey))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "QR Code 발급 키 누락";
+                return res;
+            }
+
+            var aes = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]);
+            var uniqueId = aes?.AESDecrypt(uniqueIdKey);
+
+            var data = await _repo.IC26DataDao.GetRegisterDetailInfoAsync(db, uniqueId);
+            if (data is null)
+            {
+                res.SetResult(ErrorStatusCode.Authentication_Failed);
+                return res;
+            }
+
+            var result = _mapper.Map<RegisterInfoResponseDto>(data);
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = result;
+            return res;
+        }
+
         public async Task<GenericResponse<CheckInResponseDto>> CheckAttendanceAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<CheckInResponseDto>();

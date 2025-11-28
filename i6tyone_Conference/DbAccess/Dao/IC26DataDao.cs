@@ -213,6 +213,42 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
+        public async Task<IC26DataRecord> GetRegisterDetailInfoAsync(DbSession db, string uniqueId)
+        {
+            try
+            {
+                string query = @"
+                         SELECT IC26_No AS No,
+                                IC26_Option AS [Option],
+                                IC26_Day AS Day,
+                                IC26_Buyer AS Buyer,
+                                IC26_Attender AS Attender,
+                                IC26_Phone AS Phone,
+                                IC26_Gender AS Gender,
+                                IC26_Age AS Age,
+                                IC26_Church AS Church,
+                                IC26_Local AS Local,
+                                IC26_Denom AS Denom,
+                                IC26_Count AS Count,
+                                IC26_Area AS Area,
+                                IC26_Memo AS Memo,
+                                IC26_Attend AS Attend,
+                                IC26_CreateQR AS CreateQR,
+                                IC26_SMS AS SMS,
+                                COUNT(*) OVER() AS Total
+                           FROM isaiah61co_conf.dbo.IC26_Data
+                          WHERE IC26_UniqueId = @uniqueId;
+                        ";
+
+                return await db.QuerySingleAsync<IC26DataRecord>(query, new { uniqueId });
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<List<IC26DataRecord>> GenerateRegisterQRCodeAsync(DbSession db)
         {
             try
