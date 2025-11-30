@@ -68,6 +68,11 @@
         public string area { get; set; }
 
         /// <summary>
+        /// 출석여부 (N: 미등록, Y: 등록)
+        /// </summary>
+        public string attend { get; set; }
+
+        /// <summary>
         /// 메모
         /// </summary>
         public string memo { get; set; }

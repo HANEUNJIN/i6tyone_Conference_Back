@@ -92,6 +92,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        IC26_Denom = @denom,
                                        IC26_Count = @count,
                                        IC26_Area = @area,
+                                       IC26_Attend = @attend,
                                        IC26_Memo = @memo
                                  WHERE IC26_UniqueId = @uniqueId
                                    AND delYn = 'N';
