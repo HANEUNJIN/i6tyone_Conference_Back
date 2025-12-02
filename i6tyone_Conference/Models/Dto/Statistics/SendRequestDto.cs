@@ -23,13 +23,13 @@
         public int SMSSent { get; set; }
 
         /// <summary>
-        /// 출석 건수
-        /// </summary>
-        public int attendCount { get; set; }
-
-        /// <summary>
         /// 미출석 건수
         /// </summary>
         public int notAttendCount { get; set; }
+
+        /// <summary>
+        /// 출석 건수
+        /// </summary>
+        public int attendCount { get; set; }
     }
 }
