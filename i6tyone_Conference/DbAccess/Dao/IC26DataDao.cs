@@ -191,7 +191,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         OR IC26_Attender LIKE CONCAT('%', @keyword, '%')
                                         OR IC26_Phone LIKE CONCAT('%', @keyword, '%')
                                         OR REPLACE(IC26_Church, ' ', '') LIKE '%' + REPLACE(@keyword, ' ', '') + '%'
-                                        OR IC26_Local LIKE CONCAT('%', @keyword, '%')
+                                        OR IC26_Denom LIKE CONCAT('%', @keyword, '%')
                                     )";
                 }
 
