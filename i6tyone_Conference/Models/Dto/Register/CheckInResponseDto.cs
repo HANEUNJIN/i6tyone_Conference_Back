@@ -13,7 +13,7 @@
         public string attender { get; set; }
 
         /// <summary>
-        /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 3: 얼리 3차 / 4: 일반 / 5: 원데이)
+        /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 3: 얼리 3차 / 4: 일반 / 5: 원데이 / 6: 공식 / 7: 이벤트)
         /// </summary>
         public int option { get; set; }
 
