@@ -34,7 +34,7 @@ namespace i6tyone_Conference.Service.Conference
             {
                 new StringKeyValue() {key = "1", value = "슈퍼얼리"},
                 new StringKeyValue() {key = "2", value = "얼리 1차"},
-                new StringKeyValue() {key = "3", value = "얼리 3차"},
+                new StringKeyValue() {key = "3", value = "얼리 2차"},
                 new StringKeyValue() {key = "4", value = "일반"},
                 new StringKeyValue() {key = "5", value = "원데이"},
                 new StringKeyValue() {key = "6", value = "공식"},
