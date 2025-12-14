@@ -53,6 +53,11 @@
         public string denom { get; set; }
 
         /// <summary>
+        /// 새신자여부 (Y/N)
+        /// </summary>
+        public string newBelieverYn { get; set; }
+
+        /// <summary>
         /// 구매수량
         /// </summary>
         public int count { get; set; }
