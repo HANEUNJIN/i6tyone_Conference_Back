@@ -39,6 +39,7 @@ namespace i6tyone_Conference.Service.Conference
                 new StringKeyValue() {key = "5", value = "원데이"},
                 new StringKeyValue() {key = "6", value = "공식"},
                 new StringKeyValue() {key = "7", value = "이벤트"},
+                new StringKeyValue() {key = "8", value = "현장등록"},
             };
 
             var result = new KeyValueResponseDto() { list = list };
