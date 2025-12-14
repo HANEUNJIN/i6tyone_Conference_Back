@@ -135,6 +135,7 @@ namespace eGhis_WebService_Core
 
             services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
             services.Configure<FtpSettings>(config.GetSection("FtpConfig"));
+            services.Configure<GoggleSettings>(config.GetSection("GoogleSheet"));
 
             // ── CORS
             services.AddCors(options =>
@@ -214,6 +215,7 @@ namespace eGhis_WebService_Core
             services.AddScoped<JwtUtil>();
             services.AddScoped<QRCodeUtil>();
             services.AddScoped<FtpUtil>();
+            services.AddScoped<GoogleUtil>();
 
             // DAO/Service 일괄 등록
             services.AddDaos(typeof(Program).Assembly);
