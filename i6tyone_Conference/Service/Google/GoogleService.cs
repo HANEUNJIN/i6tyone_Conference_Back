@@ -103,16 +103,14 @@ namespace i6tyone_Conference.Service.Google
                     return 2;
                 case "얼리2차":
                     return 3;
-                case "일반":
+                case "공식":
                     return 4;
                 case "원데이":
                     return 5;
-                case "공식":
-                    return 6;
                 case "이벤트":
-                    return 7;
+                    return 6;
                 case "현장등록":
-                    return 9;
+                    return 7;
             }
             return 0;
         }
