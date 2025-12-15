@@ -3,7 +3,7 @@
     public class RegisterInfoResponseDto
     {
         /// <summary>
-        /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 3: 얼리 2차 / 4: 공식 / 5: 원데이 / 6: 이벤트 / 7: 현장등록)
+        /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 / 3: 얼리 2차 / 4: 공식 / 5: 원데이 / 6: 이벤트 / 7: 현장등록)
         /// </summary>
         public int Option { get; set; }
 

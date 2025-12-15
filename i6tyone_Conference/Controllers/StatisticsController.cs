@@ -63,6 +63,19 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
+        /// 티켓 옵션별 요약 통계
+        /// </summary>
+        /// <returns>응답 정보<see cref="TicketOptionRequestDto"/></returns>
+        [HttpGet("ticket-option-summary")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<TicketOptionRequestDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<TicketOptionRequestDto>>> GetTicketOption()
+        {
+            var res = await _statisticsService.GetTicketOptionAsync();
+            return Ok(res);
+        }
+
+        /// <summary>
         /// 좌석별 통계
         /// </summary>
         /// <returns>응답 정보<see cref="AreaRequestDto"/></returns>

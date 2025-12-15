@@ -405,15 +405,58 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                SELECT
-                                    SUM(CASE WHEN IC26_Day IN (1, 4) THEN 1 ELSE 0 END) AS Day1Count,
-                                    SUM(CASE WHEN IC26_Day IN (2, 4) THEN 1 ELSE 0 END) AS Day2Count,
-                                    SUM(CASE WHEN IC26_Day IN (3, 4) THEN 1 ELSE 0 END) AS Day3Count
-                                FROM isaiah61co_conf.dbo.IC26_Data
-                               WHERE delYn = 'N';
+                                 SELECT
+                                     SUM(CASE WHEN IC26_Day = 1 THEN 1 ELSE 0 END) AS Day1Count,
+                                     SUM(CASE WHEN IC26_Day = 2 THEN 1 ELSE 0 END) AS Day2Count,
+                                     SUM(CASE WHEN IC26_Day = 3 THEN 1 ELSE 0 END) AS Day3Count,
+                                     SUM(CASE WHEN IC26_Day = 4 THEN 1 ELSE 0 END) AS AllDayCount
+                                 FROM isaiah61co_conf.dbo.IC26_Data
+                                WHERE delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<DateRequestDto>(query);
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<List<Summary>> GetTicketOptionAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                 SELECT
+                                     CASE 
+                                         WHEN GROUPING(IC26_Option) = 1 THEN 'Total'
+                                         ELSE CAST(IC26_Option AS VARCHAR(20))
+                                     END AS [option],
+                                     SUM(CASE WHEN IC26_Day = 1 THEN 1 ELSE 0 END) AS Day1,
+                                     SUM(CASE WHEN IC26_Day = 2 THEN 1 ELSE 0 END) AS Day2,
+                                     SUM(CASE WHEN IC26_Day = 3 THEN 1 ELSE 0 END) AS Day3,
+                                     SUM(CASE WHEN IC26_Day BETWEEN 1 AND 4 THEN 1 ELSE 0 END) AS [ALL Day],
+                                     COUNT(*) AS Total
+                                 FROM isaiah61co_conf.dbo.IC26_Data
+                                 WHERE delYn = 'N'
+                                 GROUP BY ROLLUP (IC26_Option)
+                                 UNION ALL
+                                 -- Early Total (1,2,3)
+                                 SELECT
+                                     'Early Bird Total' AS IC26_Option,
+                                     SUM(CASE WHEN IC26_Day = 1 THEN 1 ELSE 0 END),
+                                     SUM(CASE WHEN IC26_Day = 2 THEN 1 ELSE 0 END),
+                                     SUM(CASE WHEN IC26_Day = 3 THEN 1 ELSE 0 END),
+                                     SUM(CASE WHEN IC26_Day BETWEEN 1 AND 4 THEN 1 ELSE 0 END),
+                                     COUNT(*)
+                                 FROM isaiah61co_conf.dbo.IC26_Data
+                                 WHERE delYn = 'N'
+                                   AND IC26_Option IN (1,2,3);
+                                ";
+
+                var result = await db.QueryAsync<Summary>(query);
+                return result.ToList();
             }
             catch (Exception ex)
             {

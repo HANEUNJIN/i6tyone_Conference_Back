@@ -22,6 +22,7 @@ namespace i6tyone_Conference.DbAccess.Dao
         public Task<IC26DataRecord> GetRegisterDetailAsync(DbSession db, string iC26UniqueId);
         public Task<TicketRequestDto> GetTicketAsync(DbSession db);
         public Task<DateRequestDto> GetDataAsync(DbSession db);
+        public Task<List<Summary>> GetTicketOptionAsync(DbSession db);
         public Task<AreaRequestDto> GetAreaAsync(DbSession db);
         public Task<RegistrationRequestDto> GetRegistrationAsync(DbSession db);
         public Task<SendRequestDto> GetSendAsync(DbSession db);
