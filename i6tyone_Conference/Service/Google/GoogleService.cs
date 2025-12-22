@@ -105,12 +105,10 @@ namespace i6tyone_Conference.Service.Google
                     return 3;
                 case "공식":
                     return 4;
-                case "원데이":
-                    return 5;
                 case "이벤트":
-                    return 6;
+                    return 5;
                 case "현장등록":
-                    return 7;
+                    return 6;
             }
             return 0;
         }

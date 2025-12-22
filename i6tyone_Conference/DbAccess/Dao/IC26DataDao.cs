@@ -436,9 +436,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                             WHEN 2 THEN '얼리 1차'
                                             WHEN 3 THEN '얼리 2차'
                                             WHEN 4 THEN '공식'
-                                            WHEN 5 THEN '원데이'
-                                            WHEN 6 THEN '이벤트'
-                                            WHEN 7 THEN '현장등록'
+                                            WHEN 5 THEN '이벤트'
+                                            WHEN 6 THEN '현장등록'
                                             ELSE '기타'
                                         END
                                     END AS [option],
@@ -455,9 +454,8 @@ namespace i6tyone_Conference.DbAccess.Dao
 
                                 UNION ALL
 
-                                -- Early Bird Total (Option 1,2,3)
                                 SELECT
-                                    'Early Bird Total' AS [option],
+                                    '얼리버드' AS [option],
 
                                     SUM(CASE WHEN IC26_Day = 1 THEN IC26_Count ELSE 0 END),
                                     SUM(CASE WHEN IC26_Day = 2 THEN IC26_Count ELSE 0 END),
