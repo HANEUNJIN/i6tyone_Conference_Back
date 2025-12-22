@@ -63,7 +63,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 티켓 옵션별 요약 통계
+        /// 티켓구분별·신청일자별 구매 수량 현황
         /// </summary>
         /// <returns>응답 정보<see cref="TicketOptionRequestDto"/></returns>
         [HttpGet("ticket-option-summary")]
