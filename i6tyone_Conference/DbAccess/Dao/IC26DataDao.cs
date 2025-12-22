@@ -431,28 +431,43 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 SELECT
                                     CASE 
                                         WHEN GROUPING(IC26_Option) = 1 THEN 'Total'
-                                        ELSE CAST(IC26_Option AS VARCHAR(20))
+                                        ELSE CASE IC26_Option
+                                            WHEN 1 THEN '슈퍼얼리'
+                                            WHEN 2 THEN '얼리 1차'
+                                            WHEN 3 THEN '얼리 2차'
+                                            WHEN 4 THEN '공식'
+                                            WHEN 5 THEN '원데이'
+                                            WHEN 6 THEN '이벤트'
+                                            WHEN 7 THEN '현장등록'
+                                            ELSE '기타'
+                                        END
                                     END AS [option],
-                                    SUM(CASE WHEN IC26_Day = 1 THEN 1 ELSE 0 END) AS Day1,
-                                    SUM(CASE WHEN IC26_Day = 2 THEN 1 ELSE 0 END) AS Day2,
-                                    SUM(CASE WHEN IC26_Day = 3 THEN 1 ELSE 0 END) AS Day3,
-                                    SUM(CASE WHEN IC26_Day = 4 THEN 1 ELSE 0 END) AS [AllDay],
-                                    COUNT(*) AS Total
+
+                                    SUM(CASE WHEN IC26_Day = 1 THEN IC26_Count ELSE 0 END) AS Day1,
+                                    SUM(CASE WHEN IC26_Day = 2 THEN IC26_Count ELSE 0 END) AS Day2,
+                                    SUM(CASE WHEN IC26_Day = 3 THEN IC26_Count ELSE 0 END) AS Day3,
+                                    SUM(CASE WHEN IC26_Day = 4 THEN IC26_Count ELSE 0 END) AS AllDay,
+
+                                    SUM(IC26_Count) AS Total
                                 FROM isaiah61co_conf.dbo.IC26_Data
                                 WHERE delYn = 'N'
                                 GROUP BY ROLLUP (IC26_Option)
+
                                 UNION ALL
-                                -- Early Total (1,2,3)
+
+                                -- Early Bird Total (Option 1,2,3)
                                 SELECT
-                                    'Early Bird Total' AS IC26_Option,
-                                    SUM(CASE WHEN IC26_Day = 1 THEN 1 ELSE 0 END),
-                                    SUM(CASE WHEN IC26_Day = 2 THEN 1 ELSE 0 END),
-                                    SUM(CASE WHEN IC26_Day = 3 THEN 1 ELSE 0 END),
-                                    SUM(CASE WHEN IC26_Day = 4 THEN 1 ELSE 0 END),
-                                    COUNT(*)
+                                    'Early Bird Total' AS [option],
+
+                                    SUM(CASE WHEN IC26_Day = 1 THEN IC26_Count ELSE 0 END),
+                                    SUM(CASE WHEN IC26_Day = 2 THEN IC26_Count ELSE 0 END),
+                                    SUM(CASE WHEN IC26_Day = 3 THEN IC26_Count ELSE 0 END),
+                                    SUM(CASE WHEN IC26_Day = 4 THEN IC26_Count ELSE 0 END),
+
+                                    SUM(IC26_Count)
                                 FROM isaiah61co_conf.dbo.IC26_Data
                                 WHERE delYn = 'N'
-                                  AND IC26_Option IN (1,2,3);
+                                    AND IC26_Option IN (1,2,3);
                                 ";
 
                 var result = await db.QueryAsync<Summary>(query);
