@@ -107,8 +107,10 @@ namespace i6tyone_Conference.Service.Google
                     return 4;
                 case "이벤트":
                     return 5;
-                case "현장등록":
+                case "현장구매":
                     return 6;
+                case "VIP":
+                    return 7;
             }
             return 0;
         }

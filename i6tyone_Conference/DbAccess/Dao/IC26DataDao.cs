@@ -428,44 +428,38 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                SELECT
-                                    CASE 
-                                        WHEN GROUPING(IC26_Option) = 1 THEN 'Total'
-                                        ELSE CASE IC26_Option
-                                            WHEN 1 THEN '슈퍼얼리'
-                                            WHEN 2 THEN '얼리 1차'
-                                            WHEN 3 THEN '얼리 2차'
-                                            WHEN 4 THEN '공식'
-                                            WHEN 5 THEN '이벤트'
-                                            WHEN 6 THEN '현장등록'
-                                            ELSE '기타'
-                                        END
-                                    END AS [option],
-
-                                    SUM(CASE WHEN IC26_Day = 1 THEN IC26_Count ELSE 0 END) AS Day1,
-                                    SUM(CASE WHEN IC26_Day = 2 THEN IC26_Count ELSE 0 END) AS Day2,
-                                    SUM(CASE WHEN IC26_Day = 3 THEN IC26_Count ELSE 0 END) AS Day3,
-                                    SUM(CASE WHEN IC26_Day = 4 THEN IC26_Count ELSE 0 END) AS AllDay,
-
-                                    SUM(IC26_Count) AS Total
-                                FROM isaiah61co_conf.dbo.IC26_Data
-                                WHERE delYn = 'N'
-                                GROUP BY ROLLUP (IC26_Option)
-
-                                UNION ALL
-
-                                SELECT
-                                    '얼리버드' AS [option],
-
-                                    SUM(CASE WHEN IC26_Day = 1 THEN IC26_Count ELSE 0 END),
-                                    SUM(CASE WHEN IC26_Day = 2 THEN IC26_Count ELSE 0 END),
-                                    SUM(CASE WHEN IC26_Day = 3 THEN IC26_Count ELSE 0 END),
-                                    SUM(CASE WHEN IC26_Day = 4 THEN IC26_Count ELSE 0 END),
-
-                                    SUM(IC26_Count)
-                                FROM isaiah61co_conf.dbo.IC26_Data
-                                WHERE delYn = 'N'
-                                    AND IC26_Option IN (1,2,3);
+                                 SELECT
+                                 CASE
+                                     WHEN IC26_Day IS NULL THEN 'Total'
+                                     WHEN IC26_Day = 1 THEN 'Day1'
+                                     WHEN IC26_Day = 2 THEN 'Day2'
+                                     WHEN IC26_Day = 3 THEN 'Day3'
+                                     WHEN IC26_Day = 4 THEN 'ALLDay'
+                                 END AS [Day],
+                     
+                                 SUM(CASE WHEN IC26_Option = 1 THEN IC26_Count ELSE 0 END) AS [SuperEarly],
+                                 SUM(CASE WHEN IC26_Option = 2 THEN IC26_Count ELSE 0 END) AS [Early1],
+                                 SUM(CASE WHEN IC26_Option = 3 THEN IC26_Count ELSE 0 END) AS [Early2],
+                                 SUM(CASE WHEN IC26_Option IN (1,2,3) THEN IC26_Count ELSE 0 END) AS [EarlyTotal],
+                                 SUM(CASE WHEN IC26_Option = 4 THEN IC26_Count ELSE 0 END) AS [Regular],
+                                 SUM(CASE WHEN IC26_Option = 5 THEN IC26_Count ELSE 0 END) AS [Event],
+                                 SUM(CASE WHEN IC26_Option = 6 THEN IC26_Count ELSE 0 END) AS [Site],
+                                 SUM(CASE WHEN IC26_Option = 7 THEN IC26_Count ELSE 0 END) AS [VIP],
+                                 SUM(IC26_Count) AS [Total]
+                             FROM isaiah61co_conf.dbo.IC26_Data
+                             WHERE delYn = 'N'
+                             GROUP BY GROUPING SETS (
+                                 (IC26_Day),   -- Day별
+                                 ()            -- 전체 Total
+                             )
+                             ORDER BY
+                                 CASE
+                                     WHEN IC26_Day IS NULL THEN 5
+                                     WHEN IC26_Day = 1 THEN 1
+                                     WHEN IC26_Day = 2 THEN 2
+                                     WHEN IC26_Day = 3 THEN 3
+                                     WHEN IC26_Day = 4 THEN 4
+                                 END;
                                 ";
 
                 var result = await db.QueryAsync<Summary>(query);

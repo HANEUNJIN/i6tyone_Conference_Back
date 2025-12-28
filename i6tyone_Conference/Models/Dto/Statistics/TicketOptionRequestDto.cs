@@ -8,29 +8,50 @@
     public class Summary
     {
         /// <summary>
-        /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 / 3: 얼리 2차 / 4: 공식 / 5: 이벤트 / 6: 현장등록)
+        /// 신청일 (Day1 / Day2 / Day3 / ALL Day / Total)
         /// </summary>
-        public string Option { get; set; }
+        public string Day { get; set; }
 
         /// <summary>
-        /// Day1 : 2025-01-27 (화)
+        /// 슈퍼얼리
         /// </summary>
-        public int Day1 { get; set; }
+        public int SuperEarly { get; set; }
 
         /// <summary>
-        /// Day2 : 2025-01-28 (수)
+        /// 얼리 1차
         /// </summary>
-        public int Day2 { get; set; }
+        public int Early1 { get; set; }
 
         /// <summary>
-        /// Day3 : 2025-01-29 (목)
+        /// 얼리 2차
         /// </summary>
-        public int Day3 { get; set; }
+        public int Early2 { get; set; }
 
         /// <summary>
-        /// 전체참석
+        /// 얼리 합계
         /// </summary>
-        public int AllDay { get; set; }
+        public int EarlyTotal { get; set; }
+
+        /// <summary>
+        /// 공식
+        /// </summary>
+        public int Regular { get; set; }
+
+        /// <summary>
+        /// 이벤트
+        /// </summary>
+        public int Event { get; set; }
+
+        /// <summary>
+        /// 현장구매
+        /// </summary>
+        public int Site { get; set; }
+
+
+        /// <summary>
+        /// VIP
+        /// </summary>
+        public int Vip { get; set; }
 
         /// <summary>
         /// 합계
