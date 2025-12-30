@@ -27,7 +27,7 @@ namespace i6tyone_Conference.Controllers
         /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
         [HttpGet("google-sheet")]
         [AllowAnonymousToken]
-        [NonAction]
+        //[NonAction]
         [SwaggerResponse(200, typeof(GenericResponse<RegisterAddResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<RegisterAddResponseDto>>> GetGoogleSheet()
         {
