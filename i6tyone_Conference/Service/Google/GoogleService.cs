@@ -56,7 +56,7 @@ namespace i6tyone_Conference.Service.Google
                         buyer = columns[5],
                         attender = columns[6],
                         phone = columns[7].Replace("-", ""),
-                        gender = columns[8],
+                        gender = ConvertGender(columns[8]),
                         age = ToShortOrZero(columns[9]),
                         church = columns[10],
                         local = columns[11],
@@ -129,6 +129,23 @@ namespace i6tyone_Conference.Service.Google
                     return 4;
             }
             return 0;
+        }
+
+        private string ConvertGender(string gender)
+        {
+            if (string.IsNullOrWhiteSpace(gender))
+                return string.Empty;
+
+            if (new[] { "남성", "남자" }.Contains(gender))
+                return "M";
+
+            if (new[] { "여성", "여자" }.Contains(gender))
+                return "F";
+
+            if (new[] { "남여", "남녀" }.Contains(gender))
+                return "M/F";
+
+            return string.Empty;
         }
     }
 }
