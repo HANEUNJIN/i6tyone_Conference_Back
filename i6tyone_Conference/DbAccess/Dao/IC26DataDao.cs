@@ -42,7 +42,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     IC26_Count,
                                     IC26_Area,
                                     IC26_Memo,
-                                    IC26_UniqueId
+                                    IC26_UniqueId,
+                                    notion_sms_yn
                                 )
                                 VALUES (
                                     @Option,
@@ -59,7 +60,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     @Count,
                                     @Area,
                                     @Memo,
-                                    @UniqueId
+                                    @UniqueId,
+                                    @NotionSmsYn
                                 );
                                 ";
 
