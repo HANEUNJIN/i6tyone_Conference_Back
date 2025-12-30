@@ -51,6 +51,7 @@ namespace i6tyone_Conference.Service.Google
 
                     var req = new RegisterRequestDto()
                     {
+                        area = columns[1],
                         option = ConvertOption(columns[3]),
                         day = ConvertDay(columns[4]),
                         buyer = columns[5],
@@ -62,8 +63,8 @@ namespace i6tyone_Conference.Service.Google
                         local = columns[11],
                         denom = columns[12],
                         count = ToShortOrZero(columns[13]),
-                        area = columns[1],
                         memo = columns[14],
+                        notionSmsYn = columns[15] == "O" ? "Y" : "N",
                     };
 
                     var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);

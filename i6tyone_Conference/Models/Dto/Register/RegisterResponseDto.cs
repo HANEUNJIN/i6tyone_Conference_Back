@@ -106,5 +106,10 @@
         /// 전체 데이터 수
         /// </summary>
         public int total { get; set; }
+
+        /// <summary>
+        /// Notion 링크 발송 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string notionSmsYn { get; set; }
     }
 }

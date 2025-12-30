@@ -86,5 +86,10 @@
         /// SMS 전송여부 (N:미전송, Y:전송완료)
         /// </summary>
         public string SMS { get; set; }
+
+        /// <summary>
+        /// Notion 링크 발송 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string NotionSmsYn { get; set; }
     }
 }
