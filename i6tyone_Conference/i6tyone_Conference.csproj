@@ -23,6 +23,7 @@
 
 	<ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.0.1" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Elastic.Apm.Elasticsearch" Version="1.33.0" />
     <PackageReference Include="Elastic.Apm.EntityFrameworkCore" Version="1.33.0" />

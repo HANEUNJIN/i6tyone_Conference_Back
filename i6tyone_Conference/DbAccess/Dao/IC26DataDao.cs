@@ -222,6 +222,46 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
+        public async Task<List<IC26DataRecord>> GetRegisterListAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                         SELECT IC26_No AS No,
+                                IC26_Option AS [Option],
+                                IC26_Day AS Day,
+                                IC26_Buyer AS Buyer,
+                                IC26_Attender AS Attender,
+                                IC26_Phone AS Phone,
+                                IC26_Gender AS Gender,
+                                IC26_Age AS Age,
+                                IC26_Church AS Church,
+                                IC26_Local AS Local,
+                                IC26_Denom AS Denom,
+                                newBelieverYn AS newBelieverYn,
+                                IC26_Count AS Count,
+                                IC26_Area AS Area,
+                                IC26_Memo AS Memo,
+                                IC26_UniqueId AS UniqueId,
+                                IC26_Attend AS Attend,
+                                IC26_CreateQR AS CreateQR,
+                                IC26_SMS AS SMS,
+                                notion_sms_yn AS NotionSmsYn,
+                                COUNT(*) OVER() AS Total
+                           FROM isaiah61co_conf.dbo.IC26_Data
+                       ORDER BY IC26_No DESC;
+                        ";
+
+                var result = await db.QueryAsync<IC26DataRecord>(query);
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IC26DataRecord> GetRegisterDetailInfoAsync(DbSession db, string uniqueId)
         {
             try

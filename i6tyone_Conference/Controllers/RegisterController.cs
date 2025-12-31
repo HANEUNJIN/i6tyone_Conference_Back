@@ -119,6 +119,17 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
+        /// 등록자 엑셀 다운로드
+        /// </summary>
+        [HttpGet("excel")]
+        [AllowAnonymousToken]
+        public async Task<ActionResult> GetRegisterExcel()
+        {
+            var res = await _registerService.GetRegisterExcelAsync();
+            return File(res.Data.FileBytes, res.Data.ContentType, res.Data.FileName);
+        }
+
+        /// <summary>
         /// 등록자 상세조회
         /// </summary>
         /// <param name="uniqueIdKey">QR Code Key</param>

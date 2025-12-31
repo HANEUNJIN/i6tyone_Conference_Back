@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using eGhis_WebService_Core.Define;
 using eGhis_WebService_Core.Infrastructure.Db;
 using eGhis_WebService_Core.Models.Common;
@@ -337,6 +338,123 @@ namespace eGhis_WebService_Core.Service.Auth
             return res;
         }
 
+        public async Task<GenericResponse<ExcelResponseDto>> GetRegisterExcelAsync(CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<ExcelResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            var list = await _repo.IC26DataDao.GetRegisterListAsync(db);
+            if (list == null || !list.Any())
+            {
+                res.SetResult(ErrorStatusCode.DB_Error);
+                return res;
+            }
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Register");
+
+            var headers = new[]
+            {
+                "순번","티켓구분","신청일","구매자","참석자","전화번호","성별","나이","교회","거주지역",
+                "교단","새신자여부","구매수량","좌석구역","메모", "출석여부","QR 생성여부",
+                "SMS 전송여부","Notion 링크 발송"
+            };
+
+            // 1. 제목 추가 (1행)
+            var titleCell = worksheet.Cell(1, 1);
+            titleCell.Value = $"2026 Solus CHRISTUS CONFERENCE 등록자 명단 ({DateTime.Now:yyyy-MM-dd HH:mm:ss})";
+            titleCell.Style.Font.Bold = true;
+            titleCell.Style.Font.FontSize = 16;  // 원하는 크기 조절 가능
+            titleCell.Style.Font.FontColor = XLColor.White;
+            titleCell.Style.Fill.BackgroundColor = XLColor.FromHtml("#073763");
+            titleCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            titleCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            // 제목을 헤더 열 수만큼 합치기
+            worksheet.Range(1, 1, 1, headers.Length).Merge();
+
+            // 제목 행 높이 설정
+            worksheet.Row(1).Height = 40;
+
+            // 2. 헤더 추가 (2행)
+            for (int i = 0; i < headers.Length; i++)
+            {
+                var cell = worksheet.Cell(2, i + 1);
+                cell.Value = headers[i];
+
+                // 헤더 스타일 적용
+                cell.Style.Fill.BackgroundColor = XLColor.FromHtml("#0B5394");
+                cell.Style.Font.Bold = true;
+                cell.Style.Font.FontColor = XLColor.White;
+                cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                cell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                // 테두리 적용
+                cell.Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                cell.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                cell.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                cell.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+
+                cell.Style.Border.TopBorderColor = XLColor.Black;
+                cell.Style.Border.BottomBorderColor = XLColor.Black;
+                cell.Style.Border.LeftBorderColor = XLColor.Black;
+                cell.Style.Border.RightBorderColor = XLColor.Black;
+            }
+
+            // 데이터
+            var row = 3;
+            foreach (var item in list)
+            {
+                var values = new object[]
+                {
+                    item.No, ConvertOption(item.Option), ConvertDay(item.Day), item.Buyer, item.Attender, item.Phone,
+                    item.Gender, item.Age, item.Church, item.Local, item.Denom, item.newBelieverYn,
+                    item.Count, item.Area, item.Memo, item.Attend, item.CreateQR,
+                    item.SMS, item.NotionSmsYn
+                };
+
+                for (int col = 0; col < values.Length; col++)
+                {
+                    var cell = worksheet.Cell(row, col + 1);
+                    cell.Value = values[col]?.ToString() ?? "";
+
+                    if (values[col] == item.Church || values[col] == item.Local || values[col] == item.Denom || values[col] == item.Memo)
+                        cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    else
+                        cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                }
+
+                row++;
+            }
+
+            worksheet.Row(2).Height = 20;
+            worksheet.SheetView.FreezeRows(1);
+            worksheet.SheetView.FreezeRows(2);
+            worksheet.Columns().AdjustToContents();
+
+            foreach (var column in worksheet.Columns())
+            {
+                if (column.Width < 10)
+                    column.Width = 10;
+            }
+
+            // 메모리 스트림으로 변환
+            using var ms = new MemoryStream();
+            workbook.SaveAs(ms);
+
+            res.Data = new ExcelResponseDto
+            {
+                FileBytes = ms.ToArray(),
+                FileName = $"2026 Solus CHRISTUS_{DateTime.Now:yyyyMMddHHmmss}.xlsx",
+                ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            };
+
+            res.SetResult(ErrorStatusCode.Success);
+            return res;
+        }
+
         public async Task<GenericResponse<RegisterInfoResponseDto>> GetRegisterDetailInfoAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<RegisterInfoResponseDto>();
@@ -449,5 +567,44 @@ namespace eGhis_WebService_Core.Service.Auth
             res.Data = result;
             return res;
         }
+
+        private string ConvertOption(int option)
+        {
+            switch (option)
+            {
+                case 1:
+                    return "슈퍼얼리";
+                case 2:
+                    return "얼리1차";
+                case 3:
+                    return "얼리2차";
+                case 4:
+                    return "공식";
+                case 5:
+                    return "이벤트";
+                case 6:
+                    return "현장구매";
+                case 7:
+                    return "VIP";
+            }
+            return string.Empty;
+        }
+
+        private string ConvertDay(int day)
+        {
+            switch (day)
+            {
+                case 1:
+                    return "[화]";
+                case 2:
+                    return "[수]";
+                case 3:
+                    return "[목]";
+                case 4:
+                    return "3-day";
+            }
+            return string.Empty;
+        }
+
     }
 }
