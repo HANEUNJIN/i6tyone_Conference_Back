@@ -267,6 +267,8 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
+            req.phone = req.phone.Replace("-", "");
+
             var result = await _repo.IC26DataDao.GenerateRegisterQRCodeSingleAsync(db, req);
             if (string.IsNullOrWhiteSpace(result?.UniqueId))
             {
