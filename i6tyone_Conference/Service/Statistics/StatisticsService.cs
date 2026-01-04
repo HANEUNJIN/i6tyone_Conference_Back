@@ -12,6 +12,7 @@ namespace i6tyone_Conference.Service.Statistics
         private readonly IDbConnectionFactory _connFactory;
         private readonly ISqlRepository _repo;
         private readonly IMapper _mapper;
+        private readonly string _adminPassword = "i6tyone2078701858";
 
         public StatisticsService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper)
         {
@@ -48,12 +49,19 @@ namespace i6tyone_Conference.Service.Statistics
             return res;
         }
 
-        public async Task<GenericResponse<TicketOptionRequestDto>> GetTicketOptionAsync(CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<TicketOptionRequestDto>> GetTicketOptionAsync(string adminPassword, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<TicketOptionRequestDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
+
+            if(string.IsNullOrWhiteSpace(adminPassword) || !IsAuthentication(adminPassword))
+            {
+                res.SetResult(ErrorStatusCode.Authentication_Failed);
+                res.ResultMsg = "관리자 비밀번호 인증 실패";
+                return res;
+            }
 
             var data = await _repo.IC26DataDao.GetTicketOptionAsync(db);
             var result = new TicketOptionRequestDto() { list = data };
@@ -104,5 +112,7 @@ namespace i6tyone_Conference.Service.Statistics
             res.Data = result;
             return res;
         }
+
+        private bool IsAuthentication(string adminPassword) => adminPassword == _adminPassword;
     }
 }
