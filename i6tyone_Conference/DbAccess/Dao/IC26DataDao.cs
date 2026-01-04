@@ -447,21 +447,27 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<DateRequestDto> GetDataAsync(DbSession db)
+        public async Task<List<DateInfo>> GetDataAsync(DbSession db)
         {
             try
             {
                 string query = @"
-                                 SELECT
-                                     SUM(CASE WHEN IC26_Day = 1 THEN 1 ELSE 0 END) AS Day1Count,
-                                     SUM(CASE WHEN IC26_Day = 2 THEN 1 ELSE 0 END) AS Day2Count,
-                                     SUM(CASE WHEN IC26_Day = 3 THEN 1 ELSE 0 END) AS Day3Count,
-                                     SUM(CASE WHEN IC26_Day = 4 THEN 1 ELSE 0 END) AS AllDayCount
-                                 FROM isaiah61co_conf.dbo.IC26_Data
-                                WHERE delYn = 'N';
+                                SELECT 
+                                    CASE 
+                                        WHEN GROUPING(IC26_Day) = 1 THEN 'total'
+                                        ELSE CAST(IC26_Day AS VARCHAR(20))
+                                    END AS Day,
+                                    SUM(IC26_Count) AS Total
+                                FROM isaiah61co_conf.dbo.IC26_Data
+                                WHERE delYn = 'N'
+                                GROUP BY ROLLUP (IC26_Day)
+                                ORDER BY 
+                                    CASE WHEN GROUPING(IC26_Day) = 1 THEN 1 ELSE 0 END,
+                                    IC26_Day;
                                 ";
 
-                return await db.QuerySingleAsync<DateRequestDto>(query);
+                var result = await db.QueryAsync<DateInfo>(query);
+                return result.ToList();
             }
             catch (Exception ex)
             {
@@ -553,7 +559,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                SELECT count(*) AS total_users
+                                SELECT sum(IC26_Count) AS total_users
                                   FROM isaiah61co_conf.dbo.IC26_Data
                                  WHERE delYn = 'N';
                                 ";
@@ -567,23 +573,24 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<SendRequestDto> GetSendAsync(DbSession db)
+        public async Task<List<SendInfo>> GetSendAsync(DbSession db)
         {
             try
             {
                 string query = @"
                                 SELECT
-                                    SUM(CASE WHEN IC26_CreateQR = 'N' THEN 1 ELSE 0 END) AS QRNotCreated,
-                                    SUM(CASE WHEN IC26_CreateQR = 'Y' THEN 1 ELSE 0 END) AS QRCreated,
-                                    SUM(CASE WHEN IC26_SMS = 'N' THEN 1 ELSE 0 END) AS SMSNotSent,
-                                    SUM(CASE WHEN IC26_SMS = 'Y' THEN 1 ELSE 0 END) AS SMSSent,
-                                    SUM(CASE WHEN IC26_Attend = 'N' THEN 1 ELSE 0 END) AS NotAttendCount,
-                                    SUM(CASE WHEN IC26_Attend = 'Y' THEN 1 ELSE 0 END) AS AttendCount
-                                FROM isaiah61co_conf.dbo.IC26_Data
-                               WHERE delYn = 'N';
+                                    v.YN,
+                                    SUM(CASE WHEN IC26_Attend = v.YN THEN IC26_Count ELSE 0 END) AS Attend,
+                                    SUM(CASE WHEN IC26_SMS = v.YN THEN IC26_Count ELSE 0 END) AS QRSms,
+                                    SUM(CASE WHEN notion_sms_yn = v.YN THEN IC26_Count ELSE 0 END) AS NotionSms
+                                FROM isaiah61co_conf.dbo.IC26_Data d
+                                CROSS APPLY (VALUES ('Y'), ('N')) v(YN)
+                                WHERE delYn = 'N'
+                                GROUP BY v.YN;
                                 ";
 
-                return await db.QuerySingleAsync<SendRequestDto>(query);
+                var result = await db.QueryAsync<SendInfo>(query);
+                return result.ToList();
             }
             catch (Exception ex)
             {

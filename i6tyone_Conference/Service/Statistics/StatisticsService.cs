@@ -45,7 +45,7 @@ namespace i6tyone_Conference.Service.Statistics
             var result = await _repo.IC26DataDao.GetDataAsync(db);
 
             res.SetResult(ErrorStatusCode.Success);
-            res.Data = result;
+            res.Data = new DateRequestDto() { list = result };
             return res;
         }
 
@@ -109,7 +109,7 @@ namespace i6tyone_Conference.Service.Statistics
             var result = await _repo.IC26DataDao.GetSendAsync(db);
 
             res.SetResult(ErrorStatusCode.Success);
-            res.Data = result;
+            res.Data = new SendRequestDto() { list = result };
             return res;
         }
 

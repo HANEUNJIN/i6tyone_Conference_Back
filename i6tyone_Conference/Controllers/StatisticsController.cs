@@ -27,6 +27,7 @@ namespace i6tyone_Conference.Controllers
         /// <returns></returns>
         [HttpGet("registration")]
         [AllowAnonymousToken]
+        [NonAction]
         [SwaggerResponse(200, typeof(GenericResponse<RegistrationRequestDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<RegistrationRequestDto>>> GetRegistration()
         {
@@ -41,6 +42,7 @@ namespace i6tyone_Conference.Controllers
         /// <returns></returns>
         [HttpGet("ticket")]
         [AllowAnonymousToken]
+        [NonAction]
         [SwaggerResponse(200, typeof(GenericResponse<TicketRequestDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<TicketRequestDto>>> GetTicket()
         {
@@ -49,7 +51,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 날짜별 통계
+        /// 신청일자별 구매 수량 현황
         /// </summary>
         /// <returns>응답 정보<see cref="DateRequestDto"/></returns>
         /// <returns></returns>
@@ -91,7 +93,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 전송별 통계
+        /// 출석·전송별 통계
         /// </summary>
         /// <returns>응답 정보<see cref="SendRequestDto"/></returns>
         /// <returns></returns>
