@@ -3,6 +3,7 @@ using eGhis_WebService_Core.Infrastructure.Attributes;
 using eGhis_WebService_Core.Models.Common;
 using eGhis_WebService_Core.Models.Dto.Auth;
 using eGhis_WebService_Core.Service.Auth;
+using i6tyone_Conference.Models.Dto.Aligo;
 using i6tyone_Conference.Models.Dto.Auth;
 using i6tyone_Conference.Models.Dto.Register;
 using Microsoft.AspNetCore.Mvc;
@@ -80,26 +81,26 @@ namespace eGhis_WebService_Core.Controllers
         }
 
         /// <summary>
-        /// 전체 등록자 QR 코드 일괄 발급
+        /// 전체 등록자 QR·SMS 발송
         /// </summary>
-        /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
+        /// <returns>응답 정보<see cref="SendMassResponseDto"/></returns>
         [HttpPost("qrcode")]
         [AllowAnonymousToken]
-        [SwaggerResponse(200, typeof(GenericResponse<QRCodeResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<QRCodeResponseDto>>> GenerateRegisterQRCode()
+        [SwaggerResponse(200, typeof(GenericResponse<SendMassResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SendMassResponseDto>>> GenerateRegisterQRCode()
         {
             var res = await _registerService.GenerateRegisterQRCodeAsync();
             return Ok(res);
         }
 
         /// <summary>
-        /// 특정 등록자 QR 코드 발급/재발급
+        /// 특정 등록자 QR·SMS 발송
         /// </summary>
-        /// <returns>응답 정보<see cref="QRCodeResponseDto"/></returns>
+        /// <returns>응답 정보<see cref="SendMassResponseDto"/></returns>
         [HttpPost("qrcode-single")]
         [AllowAnonymousToken]
-        [SwaggerResponse(200, typeof(GenericResponse<QRCodeResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<QRCodeResponseDto>>> GenerateRegisterSingleQRCode(IssuanceRequestDto req)
+        [SwaggerResponse(200, typeof(GenericResponse<SendMassResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<SendMassResponseDto>>> GenerateRegisterQRCodeSingle(IssuanceRequestDto req)
         {
             var res = await _registerService.GenerateRegisterQRCodeSingleAsync(req);
             return Ok(res);

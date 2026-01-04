@@ -326,7 +326,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_SMS AS SMS,
                                         notion_sms_yn AS NotionSmsYn
                                    FROM isaiah61co_conf.dbo.IC26_Data
-                                    AND delYn = 'N';
+                                  WHERE delYn = 'N';
                                 ";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query);
@@ -605,7 +605,8 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                 UPDATE isaiah61co_conf.dbo.IC26_Data
-                                   SET IC26_CreateQR = 'Y'
+                                   SET IC26_CreateQR = 'Y',
+                                       IC26_SMS = 'Y'
                                  WHERE IC26_UniqueId = @UniqueId
                                    AND delYn = 'N';
                                 ";

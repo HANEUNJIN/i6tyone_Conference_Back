@@ -2,13 +2,15 @@
 using ClosedXML.Excel;
 using eGhis_WebService_Core.Define;
 using eGhis_WebService_Core.Infrastructure.Db;
+using eGhis_WebService_Core.Infrastructure.Utils;
 using eGhis_WebService_Core.Models.Common;
 using eGhis_WebService_Core.Models.Dto.Auth;
 using eGhis_WebService_Core.Repositories;
 using i6tyone_Conference.Infrastructure.Utils;
 using i6tyone_Conference.Models.Dto.Register;
+using i6tyone_Conference.Models.Dto.Aligo;
 using i6tyone_Conference.Models.Dto.Auth;
-using System.IO.Compression;
+using i6tyone_Conference.Service.Aligo;
 using eGhis_WebService_Core.Infrastructure.Utils.Crypto;
 
 namespace eGhis_WebService_Core.Service.Auth
@@ -20,17 +22,19 @@ namespace eGhis_WebService_Core.Service.Auth
         private readonly IMapper _mapper;
         private readonly QRCodeUtil _qrCode;
         private readonly FtpUtil _ftp;
+        private readonly IAligoMsgService _msgService;
 
         private readonly string ConferenceName = "2026 Solus CHRISTUS QRCode";
         private readonly string Today = DateTime.Now.ToString("yyyy-MM-dd");
 
-        public RegisterService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper, QRCodeUtil qrCode, FtpUtil ftp)
+        public RegisterService(IDbConnectionFactory connFactory, ISqlRepository repo, IMapper mapper, QRCodeUtil qrCode, FtpUtil ftp, IAligoMsgService msgService)
         {
             _connFactory = connFactory;
             _repo = repo;
             _mapper = mapper;
             _qrCode = qrCode;
             _ftp = ftp;
+            _msgService = msgService;
         }
 
         public async Task<GenericResponse<RegisterAddResponseDto>> GenerateRegisterAsync(RegisterRequestDto req, CancellationToken cancellationToken = default)
@@ -63,7 +67,7 @@ namespace eGhis_WebService_Core.Service.Auth
 
             //Todo: 테스트로 인한 비활성화
             //DateTime today = DateTime.Now.Date;
-            //DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
+            //DateTime[] validDates = { new DateTime(2026, 1, 27), new DateTime(2026, 1, 28), new DateTime(2026, 1, 29) };
 
             //if (validDates.Contains(today))
             //{
@@ -165,9 +169,9 @@ namespace eGhis_WebService_Core.Service.Auth
         /// <summary>
         /// 전체 등록자 QR 코드 일괄 발급
         /// </summary>
-        public async Task<GenericResponse<QRCodeResponseDto>> GenerateRegisterQRCodeAsync(CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<SendMassResponseDto>> GenerateRegisterQRCodeAsync(CancellationToken cancellationToken = default)
         {
-            var res = new GenericResponse<QRCodeResponseDto>();
+            var res = new GenericResponse<SendMassResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
@@ -182,8 +186,6 @@ namespace eGhis_WebService_Core.Service.Auth
 
             // QR 코드 생성이 필요한 항목만 필터링
             var itemsToProcess = result.Where(x => x.CreateQR != "Y").ToList();
-            int skipCount = result.Count - itemsToProcess.Count;
-
             if (!itemsToProcess.Any())
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
@@ -191,61 +193,49 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string ftpFolderUrl = $"{_ftp.Url}/{ConferenceName}";
-            await _ftp.CreateFtpDirectoryRecursiveAsync(ftpFolderUrl);
-
             int successCount = 0;
             int failCount = 0;
+            var msgIds = new List<string>();
 
-            // 메모리 스트림을 이용한 ZIP 생성
-            using var zipStream = new MemoryStream();
-            using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+            foreach (var item in itemsToProcess)
             {
-                foreach (var item in itemsToProcess)
+                try
                 {
-                    try
+                    // QR 코드 생성
+                    var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESEncrypt(item.UniqueId);
+                    byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey);
+
+                    var smsInfo = GetSmsInfo(item.Phone, qrBytes);
+
+                    var qrSend = await _msgService.SendSmsAsync(smsInfo);
+                    if (qrSend.ResultMsg != EnumUtil.GetDescription(ErrorStatusCode.Success))
                     {
-                        // QR 코드 생성
-                        var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESEncrypt(item.UniqueId);
-                        byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey);
-                        string qrFileName = $"{item.No}_{item.Buyer}_{item.Phone.Replace("-", "")}.jpg";
-
-                        // ZIP에 추가
-                        var zipEntry = archive.CreateEntry(qrFileName);
-                        using var entryStream = zipEntry.Open();
-                        await entryStream.WriteAsync(qrBytes, cancellationToken);
-
-                        // DB 업데이트
-                        await using var localScope = await _connFactory.OpenSessionAsync(cancellationToken);
-                        var localDb = localScope.Session;
-                        await _repo.IC26DataDao.CheckCreateQRAsync(localDb, item.UniqueId);
-
-                        successCount++;
+                        res.SetResult(qrSend.ResultCd, qrSend.ResultMsg);
+                        return res;
                     }
-                    catch
+
+                    if (!string.IsNullOrEmpty(qrSend.Data?.msgId.ToString()))
                     {
-                        failCount++;
+                        msgIds.Add(qrSend.Data?.msgId.ToString());
                     }
+
+                    await _repo.IC26DataDao.CheckCreateQRAsync(db, item.UniqueId);
+
+                    successCount++;
+                }
+                catch
+                {
+                    failCount++;
                 }
             }
 
-            // ZIP 스트림을 FTP로 업로드
-            zipStream.Position = 0;
-            string zipFileName = $"{Today}.zip";
-            bool uploadSuccess = await _ftp.UploadFileToFtpAsync(zipStream.ToArray(), ftpFolderUrl, zipFileName);
-
-            if (!uploadSuccess)
-            {
-                res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "ZIP 업로드 실패";
-                return res;
-            }
-
             res.SetResult(ErrorStatusCode.Success);
-            res.Data = new QRCodeResponseDto
+            res.Data = new SendMassResponseDto()
             {
-                successMsg = $"QR {successCount}건 QR 코드 생성 완료! 실패 {failCount}건",
-                folderPath = ftpFolderUrl,
+                msgId = string.Join(", ", msgIds),
+                successCnt = successCount,
+                errorCnt = failCount,
+                msgType = "MMS"
             };
             return res;
         }
@@ -253,9 +243,9 @@ namespace eGhis_WebService_Core.Service.Auth
         /// <summary>
         /// 특정 등록자 QR 코드 발급/재발급
         /// </summary>
-        public async Task<GenericResponse<QRCodeResponseDto>> GenerateRegisterQRCodeSingleAsync(IssuanceRequestDto req, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<SendMassResponseDto>> GenerateRegisterQRCodeSingleAsync(IssuanceRequestDto req, CancellationToken cancellationToken = default)
         {
-            var res = new GenericResponse<QRCodeResponseDto>();
+            var res = new GenericResponse<SendMassResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
@@ -277,21 +267,31 @@ namespace eGhis_WebService_Core.Service.Auth
                 return res;
             }
 
-            string qrCodeFileName = $"{result.No}_{result.Buyer}_{result.Phone.Replace("-", "")}.jpg";
-            string ftpFolderUrl = $"{_ftp.Url}/{ConferenceName}";
+            //string qrCodeFileName = $"{result.No}_{result.Buyer}_{result.Phone.Replace("-", "")}.jpg";
+            //string ftpFolderUrl = $"{_ftp.Url}/{ConferenceName}";
 
-            await _ftp.CreateFtpDirectoryRecursiveAsync(ftpFolderUrl);
+            //await _ftp.CreateFtpDirectoryRecursiveAsync(ftpFolderUrl);
 
 
             var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]).AESEncrypt(result.UniqueId);
             byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey);
 
-            // FTP 업로드
-            bool uploadSuccess = await _ftp.UploadFileToFtpAsync(qrBytes, ftpFolderUrl, qrCodeFileName);
-            if (!uploadSuccess)
+            #region FTP 업로드
+            //bool uploadSuccess = await _ftp.UploadFileToFtpAsync(qrBytes, ftpFolderUrl, qrCodeFileName);
+            //if (!uploadSuccess)
+            //{
+            //    res.SetResult(ErrorStatusCode.File_Upload_Fail);
+            //    res.ResultMsg = "FTP 업로드 실패!";
+            //    return res;
+            //}
+            #endregion
+
+            var smsInfo = GetSmsInfo(result.Phone, qrBytes);
+
+            var qrSend = await _msgService.SendSmsAsync(smsInfo);
+            if(qrSend.ResultMsg != EnumUtil.GetDescription(ErrorStatusCode.Success))
             {
-                res.SetResult(ErrorStatusCode.File_Upload_Fail);
-                res.ResultMsg = "FTP 업로드 실패!";
+                res.SetResult(qrSend.ResultCd, qrSend.ResultMsg);
                 return res;
             }
 
@@ -299,10 +299,11 @@ namespace eGhis_WebService_Core.Service.Auth
             await _repo.IC26DataDao.CheckCreateQRAsync(db, result.UniqueId);
 
             res.SetResult(ErrorStatusCode.Success);
-            res.Data = new QRCodeResponseDto {
-                successMsg = $"{result.Buyer} QRCode 생성 완료!",
-                folderPath = ftpFolderUrl,
-            };
+            res.Data = qrSend.Data;
+            //res.Data = new QRCodeResponseDto {
+            //    successMsg = $"{result.Buyer} QRCode 생성 완료!",
+            //    folderPath = ftpFolderUrl,
+            //};
             return res;
         }
 
@@ -497,7 +498,7 @@ namespace eGhis_WebService_Core.Service.Auth
 
             //Todo: 테스트로 인한 비활성화
             //DateTime today = DateTime.Now.Date;
-            //DateTime[] validDates = { new DateTime(2025, 1, 27), new DateTime(2025, 1, 28), new DateTime(2025, 1, 29) };
+            //DateTime[] validDates = { new DateTime(2026, 1, 27), new DateTime(2026, 1, 28), new DateTime(2026, 1, 29) };
 
             //if (!validDates.Contains(today))
             //{
@@ -608,5 +609,20 @@ namespace eGhis_WebService_Core.Service.Auth
             return string.Empty;
         }
 
+        private SendMessageApiRequestDto GetSmsInfo(string phone, byte[] qrBytes)
+        {
+            return new SendMessageApiRequestDto()
+            {
+                receiver = phone.Replace("-", ""),
+                msg = "[테스트용] 2026 Isaiah6tyOne Conference\nSolus CHRISTUS : 예수 그리스도\n\n다가올 2026년, 모든 것의 중심이 되시는\n예수 그리스도를 높이는 아이자야 컨퍼런스에\n예배자 여러분을 초대합니다. ♥\n\n본 QR 코드는 컨퍼런스 입장 전용 티켓 교환권입니다.\n행사 당일 등록 부스에서 QR 코드 스캔 후\n티켓을 수령해 주세요.\n\n※ 본인 전용 코드로 캡처·전달·외부 공유 시 입장이 제한될 수 있습니다.\n\n* 2026.01.27(화) – 01.29(목)\n* 인천삼산월드체육관 (인천 부평구 체육관로 60)\n\n☎ 문의\n* 인스타그램 @isaiah6tyone\n* 카카오채널 @아이자야씩스티원컨퍼런스\n* 본 문자는 회신되지 않습니다.",
+                msgType = "MMS",
+                title = "아이자야씩스티원",
+                destination = "",
+                rDate = "20261231",
+                rTime = "1200",
+                image1 = qrBytes,
+                testModeYn = "Y"
+            };
+        }
     }
 }
