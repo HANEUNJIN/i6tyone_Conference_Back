@@ -67,14 +67,13 @@ namespace i6tyone_Conference.Controllers
         /// <summary>
         /// 티켓구분별·신청일자별 구매 수량 현황
         /// </summary>
-        /// <param name="adminPassword">관리자 비밀번호</param>
         /// <returns>응답 정보<see cref="TicketOptionRequestDto"/></returns>
         [HttpGet("ticket-option-summary")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<TicketOptionRequestDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<TicketOptionRequestDto>>> GetTicketOption(string adminPassword)
+        public async Task<ActionResult<GenericResponse<TicketOptionRequestDto>>> GetTicketOption()
         {
-            var res = await _statisticsService.GetTicketOptionAsync(adminPassword);
+            var res = await _statisticsService.GetTicketOptionAsync();
             return Ok(res);
         }
 
