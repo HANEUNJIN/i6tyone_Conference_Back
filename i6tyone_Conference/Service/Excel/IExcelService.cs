@@ -2,9 +2,9 @@
 using eGhis_WebService_Core.Models.Common;
 using i6tyone_Conference.Models.Dto.Auth;
 
-namespace i6tyone_Conference.Service.Google
+namespace i6tyone_Conference.Service.Excel
 {
-    public interface IGoogleService : IServiceMarker
+    public interface IExcelService : IServiceMarker
     {
         public Task<GenericResponse<RegisterAddResponseDto>> GetGoogleSheetAsync(CancellationToken cancellationToken = default);
     }

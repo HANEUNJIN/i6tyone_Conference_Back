@@ -7,15 +7,15 @@ using eGhis_WebService_Core.Repositories;
 using i6tyone_Conference.Infrastructure.Utils;
 using i6tyone_Conference.Models.Dto.Auth;
 
-namespace i6tyone_Conference.Service.Google
+namespace i6tyone_Conference.Service.Excel
 {
-    public class GoogleService : IGoogleService
+    public class ExcelService : IExcelService
     {
         private readonly IDbConnectionFactory _connFactory;
         private readonly ISqlRepository _repo;
         private readonly GoogleUtil _googleUtil;
 
-        public GoogleService(IDbConnectionFactory connFactory, ISqlRepository repo, GoogleUtil googleUtil)
+        public ExcelService(IDbConnectionFactory connFactory, ISqlRepository repo, GoogleUtil googleUtil)
         {
             _connFactory = connFactory;
             _repo = repo;
