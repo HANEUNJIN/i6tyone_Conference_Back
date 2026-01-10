@@ -37,7 +37,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 이벤터스 CSB 파일 동기화
+        /// 이벤터스 CSV 파일 동기화
         /// </summary>
         /// <returns>요청 정보<see cref="CsvRequestDto"/></returns>
         /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
