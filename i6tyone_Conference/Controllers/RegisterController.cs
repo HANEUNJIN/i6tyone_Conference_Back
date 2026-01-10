@@ -164,6 +164,7 @@ namespace eGhis_WebService_Core.Controllers
         /// <returns>응답 정보<see cref="FtpInfoResponseDto"/></returns>
         [HttpGet("ftp-info")]
         [AllowAnonymousToken]
+        [NonAction]
         [SwaggerResponse(200, typeof(GenericResponse<FtpInfoResponseDto>), Description = "정상 처리되었습니다.")]
         public async Task<ActionResult<GenericResponse<FtpInfoResponseDto>>> GetFtpInfo()
         {
