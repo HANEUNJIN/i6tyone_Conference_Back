@@ -1,4 +1,6 @@
-﻿using eGhis_WebService_Core.Define;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using eGhis_WebService_Core.Define;
 using eGhis_WebService_Core.Infrastructure.Db;
 using eGhis_WebService_Core.Infrastructure.Utils;
 using eGhis_WebService_Core.Models.Common;
@@ -6,6 +8,9 @@ using eGhis_WebService_Core.Models.Dto.Auth;
 using eGhis_WebService_Core.Repositories;
 using i6tyone_Conference.Infrastructure.Utils;
 using i6tyone_Conference.Models.Dto.Auth;
+using i6tyone_Conference.Models.Dto.Excel;
+using System.Globalization;
+using System.Text;
 
 namespace i6tyone_Conference.Service.Excel
 {
@@ -89,6 +94,96 @@ namespace i6tyone_Conference.Service.Excel
             return res;
         }
 
+        public async Task<GenericResponse<RegisterAddResponseDto>> GetEventUsSheetAsync(CsvRequestDto req, CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<RegisterAddResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            if (req.file == null || req.file.Length == 0)
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "업로드된 파일이 없습니다.";
+                return res;
+            }
+
+            int successCount = 0;
+
+            try
+            {
+                using var stream = req.file.OpenReadStream();
+                using var reader = new StreamReader(stream, Encoding.GetEncoding("euc-kr"));
+
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HasHeaderRecord = true,
+                    BadDataFound = null,
+                    TrimOptions = TrimOptions.Trim,
+                    Mode = CsvMode.RFC4180
+                };
+
+                using var csv = new CsvReader(reader, config);
+
+                for (int i = 0; i < 3; i++)
+                    reader.ReadLine();
+
+                csv.Context.RegisterClassMap<CsvRowMap>();
+
+                var rows = csv.GetRecords<CsvRowDto>().ToList();
+
+                foreach (var row in rows)
+                {
+                    if (req.updateYmd >= DateTime.Parse(row.신청일시))
+                        continue;
+
+                    string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+                    var rowReq = new RegisterRequestDto()
+                    {
+                        area = string.Empty,
+                        option = req.option,
+                        day = req.day,
+                        buyer = row.이름,
+                        attender = ToShortOrZero(row.수량) == 1 ? row.이름 : string.Empty,
+                        phone = row.휴대전화번호,
+                        gender = ConvertGender(row.성별),
+                        age = ToShortOrZero(row.나이),
+                        church = row.출석교회,
+                        local = row.지역,
+                        denom = row.교단,
+                        count = ToShortOrZero(row.수량),
+                        memo = string.Empty,
+                        notionSmsYn = "N",
+                        newBelieverYn = "N",
+                        applyYmd = DateTime.Parse(row.신청일시).ToString(),
+                    };
+
+                    var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, rowReq, uniqueId);
+                    if (data < 0)
+                    {
+                        res.SetResult(ErrorStatusCode.Invalid_Error);
+                        res.ResultMsg = $"CSV 데이터 등록 실패";
+                        return res;
+                    }
+
+                    successCount++;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.DB_Insert_Error, $"[CSV DB INSERT ERROR] Failed to process CSV. Reason: {ex.Message}");
+                    
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "CSV 처리 중 오류가 발생했습니다.";
+                return res;
+            }
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = new RegisterAddResponseDto { successCount = successCount };
+            return res;
+        }
+
         private short ToShortOrZero(string value)
         {
             return short.TryParse(value, out var result) ? result : (short)0;
@@ -147,6 +242,35 @@ namespace i6tyone_Conference.Service.Excel
                 return "M/F";
 
             return string.Empty;
+        }
+    }
+
+    public class CsvRowDto
+    {
+        public string 신청일시 { get; set; }
+        public string 이름 { get; set; }
+        public string 성별 { get; set; }
+        public string 휴대전화번호 { get; set; }
+        public string 출석교회 { get; set; }
+        public string 지역 { get; set; }
+        public string 교단 { get; set; }
+        public string 수량 { get; set; }
+        public string 나이 { get; set; }
+    }
+
+    public sealed class CsvRowMap : ClassMap<CsvRowDto>
+    {
+        public CsvRowMap()
+        {
+            Map(m => m.신청일시).Name("신청일시");
+            Map(m => m.이름).Name("이름", "\"이름\"");
+            Map(m => m.성별).Name("성별");
+            Map(m => m.휴대전화번호).Name("휴대전화번호");
+            Map(m => m.출석교회).Name("출석교회");
+            Map(m => m.지역).Name("지역");
+            Map(m => m.교단).Name("교단");
+            Map(m => m.수량).Name("수량");
+            Map(m => m.나이).Name("나이");
         }
     }
 }
