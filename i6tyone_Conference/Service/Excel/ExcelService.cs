@@ -56,20 +56,20 @@ namespace i6tyone_Conference.Service.Excel
 
                     var req = new RegisterRequestDto()
                     {
-                        area = columns[1],
-                        option = ConvertOption(columns[3]),
-                        day = ConvertDay(columns[4]),
-                        buyer = columns[5],
-                        attender = columns[6],
-                        phone = columns[7].Replace("-", ""),
-                        gender = ConvertGender(columns[8]),
-                        age = ToShortOrZero(columns[9]),
-                        church = columns[10],
-                        local = columns[11],
-                        denom = columns[12],
-                        count = ToShortOrZero(columns[13]),
-                        memo = columns[14],
-                        notionSmsYn = columns[15] == "O" ? "Y" : "N",
+                        area = columns[2],
+                        option = ConvertOption(columns[5]),
+                        day = ConvertDay(columns[6]),
+                        buyer = columns[7],
+                        attender = columns[8],
+                        phone = columns[9].Replace("-", ""),
+                        gender = ConvertGender(columns[10]),
+                        age = ToShortOrZero(columns[11]),
+                        church = columns[12],
+                        local = columns[13],
+                        denom = columns[14],
+                        count = ToShortOrZero(columns[15]),
+                        memo = columns[16],
+                        notionSmsYn = columns[17] == "O" ? "Y" : "N",
                     };
 
                     var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);
@@ -232,10 +232,10 @@ namespace i6tyone_Conference.Service.Excel
             if (string.IsNullOrWhiteSpace(gender))
                 return string.Empty;
 
-            if (new[] { "남성", "남자" }.Contains(gender))
+            if (new[] { "남성", "남자", "남" }.Contains(gender))
                 return "M";
 
-            if (new[] { "여성", "여자" }.Contains(gender))
+            if (new[] { "여성", "여자", "여" }.Contains(gender))
                 return "F";
 
             if (new[] { "남여", "남녀" }.Contains(gender))
