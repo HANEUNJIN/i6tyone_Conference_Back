@@ -530,19 +530,23 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                SELECT
-                                    SUM(CASE WHEN IC26_Area = 'A' THEN 1 ELSE 0 END) AS A,
-                                    SUM(CASE WHEN IC26_Area = 'B' THEN 1 ELSE 0 END) AS B,
-                                    SUM(CASE WHEN IC26_Area = 'C' THEN 1 ELSE 0 END) AS C,
-                                    SUM(CASE WHEN IC26_Area = 'D' THEN 1 ELSE 0 END) AS D,
-                                    SUM(CASE WHEN IC26_Area = 'E' THEN 1 ELSE 0 END) AS E,
-                                    SUM(CASE WHEN IC26_Area = 'F' THEN 1 ELSE 0 END) AS F,
-                                    SUM(CASE WHEN IC26_Area = 'G' THEN 1 ELSE 0 END) AS G,
-                                    SUM(CASE WHEN IC26_Area = 'H' THEN 1 ELSE 0 END) AS H,
-                                    SUM(CASE WHEN IC26_Area = 'I' THEN 1 ELSE 0 END) AS I,
-                                    SUM(CASE WHEN IC26_Area = 'J' THEN 1 ELSE 0 END) AS J
-                                FROM isaiah61co_conf.dbo.IC26_Data
-                               WHERE delYn = 'N';
+                                SELECT *
+                                FROM (
+                                    SELECT IC26_Area
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                ) AS src
+                                PIVOT (
+                                    COUNT(IC26_Area)
+                                    FOR IC26_Area IN (
+                                        A1, B1, C1, D1,
+                                        [A2-1], [A2-2], [B2-1], [B2-2],
+                                        [C2-1], [C2-2], [D2-1], [D2-2],
+                                        [E2-1], [E2-2], [F2-1], [F2-2],
+                                        [G2-1], [G2-2],
+                                        [유아&장애]
+                                    )
+                                ) AS pvt;
                                 ";
 
                 return await db.QuerySingleAsync<AreaRequestDto>(query);

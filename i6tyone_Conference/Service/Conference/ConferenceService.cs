@@ -54,16 +54,25 @@ namespace i6tyone_Conference.Service.Conference
 
             var list = new List<StringKeyValue>
             {
-                new StringKeyValue() {key = "A", value = "구역 A"},
-                new StringKeyValue() {key = "B", value = "구역 B"},
-                new StringKeyValue() {key = "C", value = "구역 C"},
-                new StringKeyValue() {key = "D", value = "구역 D"},
-                new StringKeyValue() {key = "E", value = "구역 E"},
-                new StringKeyValue() {key = "F", value = "구역 F"},
-                new StringKeyValue() {key = "G", value = "구역 G"},
-                new StringKeyValue() {key = "H", value = "구역 H"},
-                new StringKeyValue() {key = "I", value = "구역 I"},
-                new StringKeyValue() {key = "J", value = "구역 J"},
+                new StringKeyValue() {key = "A1", value = "A1"},
+                new StringKeyValue() {key = "B1", value = "B1"},
+                new StringKeyValue() {key = "C1", value = "C1"},
+                new StringKeyValue() {key = "D1", value = "D1"},
+                new StringKeyValue() {key = "A2-1", value = "A2-1"},
+                new StringKeyValue() {key = "A2-2", value = "A2-2"},
+                new StringKeyValue() {key = "B2-1", value = "B2-1"},
+                new StringKeyValue() {key = "B2-2", value = "B2-2"},
+                new StringKeyValue() {key = "C2-1", value = "C2-1"},
+                new StringKeyValue() {key = "C2-2", value = "C2-2"},
+                new StringKeyValue() {key = "D2-1", value = "D2-1"},
+                new StringKeyValue() {key = "D2-2", value = "D2-2"},
+                new StringKeyValue() {key = "E2-1", value = "E2-1"},
+                new StringKeyValue() {key = "E2-2", value = "E2-2"},
+                new StringKeyValue() {key = "F2-1", value = "F2-1"},
+                new StringKeyValue() {key = "F2-2", value = "F2-2"},
+                new StringKeyValue() {key = "G2-1", value = "G2-1"},
+                new StringKeyValue() {key = "G2-2", value = "G2-2"},
+                new StringKeyValue() {key = "유아&장애", value = "유아&장애"},
             };
 
             var result = new KeyValueResponseDto() { list = list };
