@@ -484,10 +484,10 @@ namespace i6tyone_Conference.DbAccess.Dao
                                  SELECT
                                  CASE
                                      WHEN IC26_Day IS NULL THEN 'Total'
-                                     WHEN IC26_Day = 1 THEN 'Day1'
-                                     WHEN IC26_Day = 2 THEN 'Day2'
-                                     WHEN IC26_Day = 3 THEN 'Day3'
-                                     WHEN IC26_Day = 4 THEN 'ALLDay'
+                                     WHEN IC26_Day = 1 THEN '화'
+                                     WHEN IC26_Day = 2 THEN '수'
+                                     WHEN IC26_Day = 3 THEN '목'
+                                     WHEN IC26_Day = 4 THEN '3-day'
                                  END AS [Day],
                      
                                  SUM(CASE WHEN IC26_Option = 1 THEN IC26_Count ELSE 0 END) AS [SuperEarly],

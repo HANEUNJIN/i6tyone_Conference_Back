@@ -8,7 +8,7 @@
     public class Summary
     {
         /// <summary>
-        /// 신청일 (Day1 / Day2 / Day3 / ALL Day / Total)
+        /// 신청일 (1: 화 / 2: 수 / 3: 목 / 4: 3-day)
         /// </summary>
         public string Day { get; set; }
 

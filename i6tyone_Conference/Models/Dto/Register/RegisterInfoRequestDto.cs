@@ -8,7 +8,7 @@
         public List<int> option { get; set; } = new();
 
         /// <summary>
-        /// 신청일 (1: Day1 / 2: Day2 / 3: Day3 / 4: ALL Day)
+        /// 신청일 (1: 화 / 2: 수 / 3: 목 / 4: 3-day)
         /// </summary>
         public List<int> day { get; set; } = new();
 

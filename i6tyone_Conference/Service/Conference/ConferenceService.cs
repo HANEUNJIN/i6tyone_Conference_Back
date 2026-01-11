@@ -13,10 +13,10 @@ namespace i6tyone_Conference.Service.Conference
 
             var list = new List<StringKeyValue>
             {
-                new StringKeyValue() {key = "1", value = "Day1"},
-                new StringKeyValue() {key = "2", value = "Day2"},
-                new StringKeyValue() {key = "3", value = "Day3"},
-                new StringKeyValue() {key = "4", value = "ALL Day"},
+                new StringKeyValue() {key = "1", value = "화"},
+                new StringKeyValue() {key = "2", value = "수"},
+                new StringKeyValue() {key = "3", value = "목"},
+                new StringKeyValue() {key = "4", value = "3-day"},
             };
 
             var result = new KeyValueResponseDto() { list = list };
