@@ -203,7 +203,8 @@ namespace eGhis_WebService_Core.Service.Auth
                 {
                     // QR 코드 생성
                     var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESEncrypt(item.UniqueId);
-                    byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey);
+                    string title = $"{ConvertOption(item.Option)} / {ConvertDay(item.Day)} / {item.Buyer} / {item.Count}";
+                    byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey, title);
 
                     var smsInfo = GetSmsInfo(item.Phone, qrBytes);
 
@@ -213,7 +214,7 @@ namespace eGhis_WebService_Core.Service.Auth
                         res.SetResult(qrSend.ResultCd, qrSend.ResultMsg);
                         return res;
                     }
-
+                        
                     if (!string.IsNullOrEmpty(qrSend.Data?.msgId.ToString()))
                     {
                         msgIds.Add(qrSend.Data?.msgId.ToString());
@@ -274,7 +275,8 @@ namespace eGhis_WebService_Core.Service.Auth
 
 
             var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]).AESEncrypt(result.UniqueId);
-            byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey);
+            string title = $"{ConvertOption(result.Option)} / {ConvertDay(result.Day)} / {result.Buyer} / {result.Count}";
+            byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey, title);
 
             #region FTP 업로드
             //bool uploadSuccess = await _ftp.UploadFileToFtpAsync(qrBytes, ftpFolderUrl, qrCodeFileName);
