@@ -203,7 +203,7 @@ namespace eGhis_WebService_Core.Service.Auth
                 {
                     // QR 코드 생성
                     var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESEncrypt(item.UniqueId);
-                    string title = $"{ConvertOption(item.Option)} / {ConvertDay(item.Day)} / {item.Buyer} / {item.Count}";
+                    string title = $"{ConvertOption(item.Option)} / {ConvertDay(item.Day)} / {item.Buyer} / {item.Count} / {item.Area}";
                     byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey, title);
 
                     var smsInfo = GetSmsInfo(item.Phone, qrBytes);
@@ -275,7 +275,7 @@ namespace eGhis_WebService_Core.Service.Auth
 
 
             var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]).AESEncrypt(result.UniqueId);
-            string title = $"{ConvertOption(result.Option)} / {ConvertDay(result.Day)} / {result.Buyer} / {result.Count}";
+            string title = $"{ConvertOption(result.Option)} / {ConvertDay(result.Day)} / {result.Buyer} / {result.Count} / {result.Area}";
             byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey, title);
 
             #region FTP 업로드
