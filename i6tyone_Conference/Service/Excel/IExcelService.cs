@@ -8,6 +8,7 @@ namespace i6tyone_Conference.Service.Excel
     public interface IExcelService : IServiceMarker
     {
         public Task<GenericResponse<RegisterAddResponseDto>> GetGoogleSheetAsync(CancellationToken cancellationToken = default);
+        public Task<GenericResponse<RegisterAddResponseDto>> GetOnSiteGoogleSheetAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<RegisterAddResponseDto>> GetEventUsSheetAsync(CsvRequestDto req, CancellationToken cancellationToken = default);
     }
 }

@@ -19,12 +19,14 @@ namespace i6tyone_Conference.Service.Excel
         private readonly IDbConnectionFactory _connFactory;
         private readonly ISqlRepository _repo;
         private readonly GoogleUtil _googleUtil;
+        private readonly OnSiteGoogleUtil _onSiteGoogleUtil;
 
-        public ExcelService(IDbConnectionFactory connFactory, ISqlRepository repo, GoogleUtil googleUtil)
+        public ExcelService(IDbConnectionFactory connFactory, ISqlRepository repo, GoogleUtil googleUtil, OnSiteGoogleUtil onSiteGoogleUtil)
         {
             _connFactory = connFactory;
             _repo = repo;
             _googleUtil = googleUtil;
+            _onSiteGoogleUtil = onSiteGoogleUtil;
         }
 
         public async Task<GenericResponse<RegisterAddResponseDto>> GetGoogleSheetAsync(CancellationToken cancellationToken = default)
@@ -76,7 +78,76 @@ namespace i6tyone_Conference.Service.Excel
                     if (data < 0)
                     {
                         res.SetResult(ErrorStatusCode.Invalid_Error);
-                        res.ResultMsg = "컨퍼런스 참가 등록 실패";
+                        res.ResultMsg = "'2026 Solus CHRISTUS' 연동 중 오류 발생.";
+                        return res;
+                    }
+
+                    successCount++;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.DB_Insert_Error, $"[Google Sheet DB INSERT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = new RegisterAddResponseDto() { successCount = successCount };
+            return res;
+        }
+
+        public async Task<GenericResponse<RegisterAddResponseDto>> GetOnSiteGoogleSheetAsync(CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<RegisterAddResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            int successCount = 0;
+
+            try
+            {
+                using var client = new HttpClient();
+                string csvData = await client.GetStringAsync(_onSiteGoogleUtil.CsvUrl, cancellationToken);
+
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HasHeaderRecord = true,
+                    BadDataFound = null,
+                    DetectDelimiter = false,
+                    Delimiter = ","
+                };
+
+                using var reader = new StringReader(csvData);
+                using var csv = new CsvReader(reader, config);
+
+                var records = csv.GetRecords<OnSiteCsvRow>().ToList();
+
+                foreach (var row in records)
+                {
+                    string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+                    var req = new RegisterRequestDto()
+                    {
+                        option = 6,
+                        day = ConvertDay(row.참석날짜),
+                        buyer = row.성함,
+                        attender = row.성함,
+                        phone = row.연락처?.Replace("-", ""),
+                        gender = ConvertGender(row.성별),
+                        age = ToShortOrZero(row.나이),
+                        church = row.출석교회,
+                        local = row.거주지역,
+                        denom = row.교단,
+                        count = ToShortOrZero(row.구매수량),
+                        applyYmd = ConvertDateTime(row.타임스탬프)
+                    };
+
+                    var data = await _repo.IC26DataDao.OnSiteGenerateRegisterAsync(db, req, uniqueId);
+                    if (data < 0)
+                    {
+                        res.SetResult(ErrorStatusCode.Invalid_Error);
+                        res.ResultMsg = "'26 conf. 현장 등록(응답)' 연동 중 오류 발생.";
                         return res;
                     }
 
@@ -173,7 +244,7 @@ namespace i6tyone_Conference.Service.Excel
             catch (Exception ex)
             {
                 CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.DB_Insert_Error, $"[CSV DB INSERT ERROR] Failed to process CSV. Reason: {ex.Message}");
-                    
+
                 res.SetResult(ErrorStatusCode.Invalid_Error);
                 res.ResultMsg = "CSV 처리 중 오류가 발생했습니다.";
                 return res;
@@ -216,10 +287,13 @@ namespace i6tyone_Conference.Service.Excel
             switch (day)
             {
                 case "[화]":
+                case "1/27 (화)":
                     return 1;
                 case "[수]":
+                case "1/28 (수)":
                     return 2;
                 case "[목]":
+                case "1/29 (목)":
                     return 3;
                 case "3-day":
                     return 4;
@@ -240,6 +314,14 @@ namespace i6tyone_Conference.Service.Excel
 
             if (new[] { "남여", "남녀" }.Contains(gender))
                 return "M/F";
+
+            return string.Empty;
+        }
+
+        private string ConvertDateTime(string dateTime)
+        {
+            if (DateTime.TryParse(dateTime, new CultureInfo("ko-KR"), DateTimeStyles.None, out DateTime dt))
+                return dt.ToString("yyyy-MM-dd HH:mm:ss");
 
             return string.Empty;
         }
@@ -272,5 +354,19 @@ namespace i6tyone_Conference.Service.Excel
             Map(m => m.수량).Name("수량");
             Map(m => m.나이).Name("나이");
         }
+    }
+
+    public class OnSiteCsvRow
+    {
+        public string 타임스탬프 { get; set; }
+        public string 참석날짜 { get; set; }
+        public string 성함 { get; set; }
+        public string 연락처 { get; set; }
+        public string 성별 { get; set; }
+        public string 나이 { get; set; }
+        public string 출석교회 { get; set; }
+        public string 거주지역 { get; set; }
+        public string 교단 { get; set; }
+        public string 구매수량 { get; set; }
     }
 }

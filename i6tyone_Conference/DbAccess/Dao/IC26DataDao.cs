@@ -77,6 +77,63 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
+        public async Task<int> OnSiteGenerateRegisterAsync(DbSession db, RegisterRequestDto req, string iC26UniqueId)
+        {
+            try
+            {
+                string query = @"
+                                INSERT INTO isaiah61co_conf.dbo.IC26_OnSiteData (
+                                    IC26_Option,
+                                    IC26_Day,
+                                    IC26_Buyer,
+                                    IC26_Attender,
+                                    IC26_Phone,
+                                    IC26_Gender,
+                                    IC26_Age,
+                                    IC26_Church,
+                                    IC26_Local,
+                                    IC26_Denom,
+                                    newBelieverYn,
+                                    IC26_Count,
+                                    IC26_Area,
+                                    IC26_Memo,
+                                    IC26_UniqueId,
+                                    notion_sms_yn,
+                                    applyYmd
+                                )
+                                VALUES (
+                                    @Option,
+                                    @Day,
+                                    @Buyer,
+                                    @Attender,
+                                    @Phone,
+                                    @Gender,
+                                    @Age,
+                                    @Church,
+                                    @Local,
+                                    @Denom,
+                                    'N',
+                                    @Count,
+                                    '',
+                                    '',
+                                    @UniqueId,
+                                    'N',
+                                    @applyYmd
+                                );
+                                ";
+
+                var parameters = new DynamicParameters(req);
+                parameters.Add("@UniqueId", iC26UniqueId);
+
+                return await db.ExecuteAsync(query, parameters);
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.DB_Insert_Error, $"[DB INSERT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateRegisterAsync(DbSession db, RegisterUpdateRequestDto req, string uniqueId)
         {
             try

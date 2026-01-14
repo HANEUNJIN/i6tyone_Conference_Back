@@ -136,6 +136,7 @@ namespace eGhis_WebService_Core
             services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
             services.Configure<FtpSettings>(config.GetSection("FtpConfig"));
             services.Configure<GoggleSettings>(config.GetSection("GoogleSheet"));
+            services.Configure<OnSiteGoogleSettings>(config.GetSection("OnSiteGoogleSheet"));
             services.Configure<AligoMsgSettings>(config.GetSection("AligoMessage"));
 
             // ── CORS
@@ -217,6 +218,7 @@ namespace eGhis_WebService_Core
             services.AddScoped<QRCodeUtil>();
             services.AddScoped<FtpUtil>();
             services.AddScoped<GoogleUtil>();
+            services.AddScoped<OnSiteGoogleUtil>();
             services.AddScoped<AligoMsgUtil>();
 
             // DAO/Service 일괄 등록

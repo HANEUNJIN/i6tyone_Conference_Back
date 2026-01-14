@@ -23,7 +23,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// Google Sheet 동기화
+        /// Google Sheet 연동
         /// </summary>
         /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
         [HttpGet("google-sheet")]
@@ -37,7 +37,21 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 이벤터스 CSV 파일 동기화
+        /// 현장등록 Google Sheet 연동
+        /// </summary>
+        /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
+        [HttpGet("onsite-google-sheet")]
+        [AllowAnonymousToken]
+        //[NonAction]
+        [SwaggerResponse(200, typeof(GenericResponse<RegisterAddResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<RegisterAddResponseDto>>> GetOnSiteGoogleSheet()
+        {
+            var res = await _excelService.GetOnSiteGoogleSheetAsync();
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// 이벤터스 CSV 파일 연동
         /// </summary>
         /// <returns>요청 정보<see cref="CsvRequestDto"/></returns>
         /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
