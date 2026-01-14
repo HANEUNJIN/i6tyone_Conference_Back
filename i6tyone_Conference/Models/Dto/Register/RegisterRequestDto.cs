@@ -1,19 +1,25 @@
-﻿namespace eGhis_WebService_Core.Models.Dto.Auth
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace eGhis_WebService_Core.Models.Dto.Auth
 {
     public class RegisterRequestDto
     {
+        /// <summary>
         /// 티켓구분 (1: 슈퍼얼리 / 2: 얼리 1차 / 3: 얼리 2차 / 4: 공식 / 5: 이벤트 / 6: 현장구매 / 7: VIP)
         /// </summary>
+        [Required]
         public int option { get; set; }
 
         /// <summary>
         /// 신청일 (1: 화 / 2: 수 / 3: 목 / 4: 3-day)
         /// </summary>
+        [Required]
         public int day { get; set; }
 
         /// <summary>
         /// 구매자
         /// </summary>
+        [Required]
         public string buyer { get; set; }
 
         /// <summary>
@@ -24,6 +30,7 @@
         /// <summary>
         /// 전화번호
         /// </summary>
+        [Required]
         public string phone { get; set; }
 
         /// <summary>
@@ -59,6 +66,7 @@
         /// <summary>
         /// 구매수량
         /// </summary>
+        [Required]
         public int count { get; set; }
 
         /// <summary>
