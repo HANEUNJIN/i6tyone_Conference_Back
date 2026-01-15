@@ -288,6 +288,74 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
+        public async Task<List<IC26DataRecord>> GetOnSiteRegisterInfoAsync(DbSession db, RegisterInfoRequestDto req)
+        {
+            try
+            {
+                string query = @"
+                         SELECT IC26_No AS No,
+                                IC26_Option AS [Option],
+                                IC26_Day AS Day,
+                                IC26_Buyer AS Buyer,
+                                IC26_Attender AS Attender,
+                                IC26_Phone AS Phone,
+                                IC26_Gender AS Gender,
+                                IC26_Age AS Age,
+                                IC26_Church AS Church,
+                                IC26_Local AS Local,
+                                IC26_Denom AS Denom,
+                                newBelieverYn AS newBelieverYn,
+                                IC26_Count AS Count,
+                                IC26_Area AS Area,
+                                IC26_Memo AS Memo,
+                                IC26_UniqueId AS UniqueId,
+                                IC26_Attend AS Attend,
+                                IC26_CreateQR AS CreateQR,
+                                IC26_SMS AS SMS,
+                                notion_sms_yn AS NotionSmsYn,
+                                COUNT(*) OVER() AS Total
+                           FROM isaiah61co_conf.dbo.IC26_OnSiteData
+                          WHERE 1=1
+                            AND payYn = 'N'
+                        ";
+
+                if (req.option != null && req.option.Any())
+                    query += "      AND IC26_Option IN @option";
+
+                if (req.day != null && req.day.Any())
+                    query += "      AND IC26_Day IN @day";
+
+                if (!string.IsNullOrWhiteSpace(req.keyword))
+                {
+                    query += @"
+                                    AND (
+                                           IC26_Buyer LIKE CONCAT('%', @keyword, '%')
+                                        OR IC26_Attender LIKE CONCAT('%', @keyword, '%')
+                                        OR IC26_Phone LIKE CONCAT('%', @keyword, '%')
+                                        OR REPLACE(IC26_Church, ' ', '') LIKE '%' + REPLACE(@keyword, ' ', '') + '%'
+                                        OR IC26_Denom LIKE CONCAT('%', @keyword, '%')
+                                    )";
+                }
+
+                if (req.area != null && req.area.Any())
+                    query += "      AND IC26_Area IN @area";
+
+                query += @"
+                        ORDER BY IC26_No DESC
+                        OFFSET (@pageNum - 1) * @pageSize ROWS
+                        FETCH NEXT @pageSize ROWS ONLY;
+                    ";
+
+                var result = await db.QueryAsync<IC26DataRecord>(query, req);
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<List<IC26DataRecord>> GetRegisterListAsync(DbSession db)
         {
             try
