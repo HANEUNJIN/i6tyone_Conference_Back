@@ -87,6 +87,6 @@ namespace eGhis_WebService_Core.Models.Dto.Auth
         /// <summary>
         /// 등록일자
         /// </summary>
-        public string applyYmd { get; set; }
+        public string applyYmd { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }

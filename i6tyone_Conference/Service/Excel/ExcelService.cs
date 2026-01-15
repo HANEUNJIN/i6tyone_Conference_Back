@@ -71,8 +71,7 @@ namespace i6tyone_Conference.Service.Excel
                         denom = columns[14],
                         count = ToShortOrZero(columns[15]),
                         memo = columns[16],
-                        notionSmsYn = columns[17] == "O" ? "Y" : "N",
-                        applyYmd = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        notionSmsYn = columns[17] == "O" ? "Y" : "N"
                     };
 
                     var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);
