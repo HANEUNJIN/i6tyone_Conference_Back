@@ -3,6 +3,7 @@ using eGhis_WebService_Core.Infrastructure.Attributes;
 using eGhis_WebService_Core.Models.Common;
 using eGhis_WebService_Core.Service.Auth;
 using i6tyone_Conference.Models.Dto.Auth;
+using i6tyone_Conference.Models.Dto.OnSite;
 using i6tyone_Conference.Models.Dto.Register;
 using i6tyone_Conference.Service.OnSiteRegister;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,20 @@ namespace i6tyone_Conference.Controllers
         public async Task<ActionResult<GenericResponse<RegisterResponseDto>>> GetOnSiteRegisterInfo(RegisterInfoRequestDto req)
         {
             var res = await _onSiteRegisterService.GetOnSiteRegisterInfoAsync(req);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// 현장등록자 결제완료
+        /// </summary>
+        /// <param name="uniqueId">QR Code 발급 키</param>
+        /// <returns>응답 정보<see cref="PayResponseDto"/></returns>
+        [HttpPost("payments/complete")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<PayResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<PayResponseDto>>> CompletePayment(string uniqueId)
+        {
+            var res = await _onSiteRegisterService.CompletePaymentAsync(uniqueId);
             return Ok(res);
         }
     }

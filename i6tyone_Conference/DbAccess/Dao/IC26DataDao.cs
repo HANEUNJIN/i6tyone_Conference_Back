@@ -836,5 +836,24 @@ namespace i6tyone_Conference.DbAccess.Dao
                 throw;
             }
         }
+
+        public async Task<bool> CompletePaymentAsync(string uniqueId, DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                UPDATE isaiah61co_conf.dbo.IC26_OnSiteData
+                                   SET payYn = 'Y'
+                                 WHERE IC26_UniqueId = @uniqueId
+                                ";
+
+                return await db.ExecuteAsync(query, new { uniqueId }) > 0;
+            }
+            catch (Exception ex)
+            {
+                CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.DB_Update_Error, $"[DB UPDATE ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

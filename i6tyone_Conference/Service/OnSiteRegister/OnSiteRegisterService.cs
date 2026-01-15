@@ -5,6 +5,7 @@ using eGhis_WebService_Core.Infrastructure.Utils.Crypto;
 using eGhis_WebService_Core.Models.Common;
 using eGhis_WebService_Core.Repositories;
 using i6tyone_Conference.Models.Dto.Auth;
+using i6tyone_Conference.Models.Dto.OnSite;
 using i6tyone_Conference.Models.Dto.Register;
 
 namespace i6tyone_Conference.Service.OnSiteRegister
@@ -50,6 +51,34 @@ namespace i6tyone_Conference.Service.OnSiteRegister
 
             var mappedList = _mapper.Map<List<RegisterInfo>>(data);
             var result = new RegisterResponseDto() { list = mappedList };
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = result;
+            return res;
+        }
+
+        public async Task<GenericResponse<PayResponseDto>> CompletePaymentAsync(string uniqueId, CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<PayResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            if (string.IsNullOrWhiteSpace(uniqueId))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "QR Code 발급 키 누락";
+                return res;
+            }
+
+            var isSuccess = await _repo.IC26DataDao.CompletePaymentAsync(uniqueId, db);
+            if (!isSuccess)
+            {
+                res.SetResult(ErrorStatusCode.DB_Update_Error);
+                return res;
+            }
+
+            var result = new PayResponseDto() { success = isSuccess };
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = result;
