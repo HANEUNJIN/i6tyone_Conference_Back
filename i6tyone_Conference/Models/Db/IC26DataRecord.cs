@@ -113,6 +113,11 @@
         public string NotionSmsYn { get; set; }
 
         /// <summary>
+        /// 등록일자
+        /// </summary>
+        public string ApplyYmd { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        /// <summary>
         /// 구역배정문자 1차 (N:미전송, Y:전송완료)
         /// </summary>
         public string Sms01 { get; set; }

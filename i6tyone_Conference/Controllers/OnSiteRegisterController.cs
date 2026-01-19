@@ -38,7 +38,21 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// 현장등록자 결제완료
+        /// 현장등록자 상세조회
+        /// </summary>
+        /// <param name="uniqueId">QR Code Key</param>
+        /// <returns>응답 정보<see cref="RegisterInfoResponseDto"/></returns>
+        [HttpPost("onsite-detail")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<RegisterInfoResponseDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<RegisterInfoResponseDto>>> GetOnSiteRegisterDetailInfo(string uniqueId)
+        {
+            var res = await _onSiteRegisterService.GetOnSiteRegisterDetailInfoAsync(uniqueId);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// 현장등록자 결제완료 및 연동
         /// </summary>
         /// <param name="uniqueId">QR Code 발급 키</param>
         /// <returns>응답 정보<see cref="PayResponseDto"/></returns>
