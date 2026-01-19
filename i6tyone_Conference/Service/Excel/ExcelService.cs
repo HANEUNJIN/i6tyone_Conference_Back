@@ -43,37 +43,45 @@ namespace i6tyone_Conference.Service.Excel
                 using var client = new HttpClient();
                 string csvData = await client.GetStringAsync(_googleUtil.CsvUrl, cancellationToken);
 
-                var rows = csvData.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray();
-                if (rows.Length < 4)
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
-                    res.SetResult(ErrorStatusCode.Invalid_Error);
-                    res.ResultMsg = "구글 시트 데이터가 올바르지 않습니다.";
-                    return res;
-                }
+                    HasHeaderRecord = true, // 헤더 존재
+                    BadDataFound = null, // 잘못된 데이터 무시
+                    DetectDelimiter = false,
+                    Delimiter = ","
+                };
 
-                for (int i = 3; i < rows.Length; i++)
+                using var reader = new StringReader(csvData);
+                using var csv = new CsvReader(reader, config);
+
+                for (int i = 0; i < 2; i++)
+                    reader.ReadLine();
+
+                var records = csv.GetRecords<GoogleCsvRow>().ToList();
+
+                foreach (var row in records)
                 {
-                    string[] columns = rows[i].Split(',');
                     string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
 
                     var req = new RegisterRequestDto()
                     {
-                        area = columns[2],
-                        option = ConvertOption(columns[5]),
-                        day = ConvertDay(columns[6]),
-                        buyer = columns[7],
-                        attender = columns[8],
-                        phone = columns[9].Replace("-", ""),
-                        gender = ConvertGender(columns[10]),
-                        age = ToShortOrZero(columns[11]),
-                        church = columns[12],
-                        local = columns[13],
-                        denom = columns[14],
-                        count = ToShortOrZero(columns[15]),
-                        memo = columns[16],
-                        notionSmsYn = columns[17] == "O" ? "Y" : "N",
-                        sms02 = columns[18] == "O" ? "Y" : "N",
-                        sms03 = columns[19] == "O" ? "Y" : "N",
+                        area = row.Area,
+                        option = ConvertOption(row.Option),
+                        day = ConvertDay(row.Day),
+                        buyer = row.Buyer,
+                        attender = row.Attender,
+                        phone = row.Phone?.Replace("-", ""),
+                        gender = ConvertGender(row.Gender),
+                        age = ToShortOrZero(row.Age),
+                        church = row.Church,
+                        local = row.Local,
+                        denom = row.Denom,
+                        count = ToShortOrZero(row.Count),
+                        memo = row.Memo,
+                        notionSmsYn = row.NotionSmsYn == "O" ? "Y" : "N",
+                        newBelieverYn = "",
+                        sms02 = row.Sms02 == "O" ? "Y" : "N",
+                        sms03 = row.Sms03 == "O" ? "Y" : "N"
                     };
 
                     var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);
@@ -228,7 +236,7 @@ namespace i6tyone_Conference.Service.Excel
                         count = ToShortOrZero(row.수량),
                         memo = string.Empty,
                         notionSmsYn = "N",
-                        newBelieverYn = "N",
+                        newBelieverYn = "",
                         applyYmd = DateTime.Parse(row.신청일시).ToString(),
                     };
 
