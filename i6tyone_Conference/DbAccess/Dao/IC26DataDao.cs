@@ -34,7 +34,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     IC26_Memo,
                                     IC26_UniqueId,
                                     notion_sms_yn,
-                                    applyYmd
+                                    applyYmd,
+                                    sms01,
+                                    sms02,
+                                    sms03,
+                                    sms04
                                 )
                                 VALUES (
                                     @Option,
@@ -53,7 +57,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     @Memo,
                                     @UniqueId,
                                     @NotionSmsYn,
-                                    @ApplyYmd
+                                    @ApplyYmd,
+                                    'N',
+                                    @sms02,
+                                    @sms03,
+                                    'N'
                                 );
                                 ";
 
@@ -148,7 +156,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        IC26_Area = @area,
                                        IC26_Attend = @attend,
                                        IC26_Memo = @memo,
-                                       notion_sms_yn = @notionSmsYn
+                                       notion_sms_yn = @notionSmsYn,
+                                       sms01 = @sms01,
+                                       sms02 = @sms02,
+                                       sms03 = @sms03,
+                                       sms04 = @sms04
                                  WHERE IC26_UniqueId = @uniqueId
                                    AND delYn = 'N';
                                 ";
@@ -228,6 +240,10 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 IC26_CreateQR AS CreateQR,
                                 IC26_SMS AS SMS,
                                 notion_sms_yn AS NotionSmsYn,
+                                sms01 AS sms01,
+                                sms02 AS sms02,
+                                sms03 AS sms03,
+                                sms04 AS sms04,
                                 COUNT(*) OVER() AS Total
                            FROM isaiah61co_conf.dbo.IC26_Data
                           WHERE 1=1
@@ -296,6 +312,10 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 IC26_CreateQR AS CreateQR,
                                 IC26_SMS AS SMS,
                                 notion_sms_yn AS NotionSmsYn,
+                                sms01 AS sms01,
+                                sms02 AS sms02,
+                                sms03 AS sms03,
+                                sms04 AS sms04,
                                 COUNT(*) OVER() AS Total
                            FROM isaiah61co_conf.dbo.IC26_Data
                        ORDER BY IC26_No DESC;
@@ -335,6 +355,10 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 IC26_CreateQR AS CreateQR,
                                 IC26_SMS AS SMS,
                                 notion_sms_yn AS NotionSmsYn,
+                                sms01 AS sms01,
+                                sms02 AS sms02,
+                                sms03 AS sms03,
+                                sms04 AS sms04,
                                 COUNT(*) OVER() AS Total
                            FROM isaiah61co_conf.dbo.IC26_Data
                           WHERE IC26_UniqueId = @uniqueId;
@@ -373,7 +397,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_Attend AS Attend,
                                         IC26_CreateQR AS CreateQR,
                                         IC26_SMS AS SMS,
-                                        notion_sms_yn AS NotionSmsYn
+                                        notion_sms_yn AS NotionSmsYn,
+                                        sms01 AS sms01,
+                                        sms02 AS sms02,
+                                        sms03 AS sms03,
+                                        sms04 AS sms04
                                    FROM isaiah61co_conf.dbo.IC26_Data
                                   WHERE delYn = 'N';
                                 ";
@@ -412,7 +440,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         IC26_Attend AS Attend,
                                         IC26_CreateQR AS CreateQR,
                                         IC26_SMS AS SMS,
-                                        notion_sms_yn AS NotionSmsYn
+                                        notion_sms_yn AS NotionSmsYn,
+                                        sms01 AS sms01,
+                                        sms02 AS sms02,
+                                        sms03 AS sms03,
+                                        sms04 AS sms04
                                    FROM isaiah61co_conf.dbo.IC26_Data
                                   WHERE IC26_Buyer = @Buyer
                                     AND IC26_Phone = @Phone

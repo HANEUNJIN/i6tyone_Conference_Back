@@ -106,5 +106,25 @@
         /// Notion 링크 발송 (N:미전송, Y:전송완료)
         /// </summary>
         public string NotionSmsYn { get; set; }
+
+        /// <summary>
+        /// 구역배정문자 1차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string Sms01 { get; set; }
+
+        /// <summary>
+        /// 구역배정문자 2차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string Sms02 { get; set; }
+
+        /// <summary>
+        /// 구역배정문자 3차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string Sms03 { get; set; }
+
+        /// <summary>
+        /// 구역배정문자 4차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string Sms04 { get; set; }
     }
 }

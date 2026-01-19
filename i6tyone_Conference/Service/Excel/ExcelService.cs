@@ -71,7 +71,9 @@ namespace i6tyone_Conference.Service.Excel
                         denom = columns[14],
                         count = ToShortOrZero(columns[15]),
                         memo = columns[16],
-                        notionSmsYn = columns[17] == "O" ? "Y" : "N"
+                        notionSmsYn = columns[17] == "O" ? "Y" : "N",
+                        sms02 = columns[18] == "O" ? "Y" : "N",
+                        sms03 = columns[19] == "O" ? "Y" : "N",
                     };
 
                     var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);

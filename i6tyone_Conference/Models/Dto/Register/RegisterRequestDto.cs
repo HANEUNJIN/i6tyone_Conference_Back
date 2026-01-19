@@ -88,5 +88,25 @@ namespace eGhis_WebService_Core.Models.Dto.Auth
         /// 등록일자
         /// </summary>
         public string applyYmd { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        /// <summary>
+        /// 구역배정문자 1차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string sms01 { get; set; } = "N";
+
+        /// <summary>
+        /// 구역배정문자 2차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string sms02 { get; set; } = "N";
+
+        /// <summary>
+        /// 구역배정문자 3차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string sms03 { get; set; } = "N";
+
+        /// <summary>
+        /// 구역배정문자 4차 (N:미전송, Y:전송완료)
+        /// </summary>
+        public string sms04 { get; set; } = "N";
     }
 }
