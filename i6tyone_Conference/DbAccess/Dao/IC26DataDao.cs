@@ -612,27 +612,27 @@ namespace i6tyone_Conference.DbAccess.Dao
             {
                 string query = @"
                                 SELECT
-                                    SUM(CASE WHEN IC26_Area = 'A1' THEN 1 ELSE 0 END) AS A1,
-                                    SUM(CASE WHEN IC26_Area = 'B1' THEN 1 ELSE 0 END) AS B1,
-                                    SUM(CASE WHEN IC26_Area = 'C1' THEN 1 ELSE 0 END) AS C1,
-                                    SUM(CASE WHEN IC26_Area = 'D1' THEN 1 ELSE 0 END) AS D1,
-                                    SUM(CASE WHEN IC26_Area = 'A2-1' THEN 1 ELSE 0 END) AS A2_1,
-                                    SUM(CASE WHEN IC26_Area = 'A2-2' THEN 1 ELSE 0 END) AS A2_2,
-                                    SUM(CASE WHEN IC26_Area = 'B2-1' THEN 1 ELSE 0 END) AS B2_1,
-                                    SUM(CASE WHEN IC26_Area = 'B2-2' THEN 1 ELSE 0 END) AS B2_2,
-                                    SUM(CASE WHEN IC26_Area = 'C2-1' THEN 1 ELSE 0 END) AS C2_1,
-                                    SUM(CASE WHEN IC26_Area = 'C2-2' THEN 1 ELSE 0 END) AS C2_2,
-                                    SUM(CASE WHEN IC26_Area = 'D2-1' THEN 1 ELSE 0 END) AS D2_1,
-                                    SUM(CASE WHEN IC26_Area = 'D2-2' THEN 1 ELSE 0 END) AS D2_2,
-                                    SUM(CASE WHEN IC26_Area = 'E2-1' THEN 1 ELSE 0 END) AS E2_1,
-                                    SUM(CASE WHEN IC26_Area = 'E2-2' THEN 1 ELSE 0 END) AS E2_2,
-                                    SUM(CASE WHEN IC26_Area = 'F2-1' THEN 1 ELSE 0 END) AS F2_1,
-                                    SUM(CASE WHEN IC26_Area = 'F2-2' THEN 1 ELSE 0 END) AS F2_2,
-                                    SUM(CASE WHEN IC26_Area = 'G2-1' THEN 1 ELSE 0 END) AS G2_1,
-                                    SUM(CASE WHEN IC26_Area = 'G2-2' THEN 1 ELSE 0 END) AS G2_2,
-                                    SUM(CASE WHEN IC26_Area = '유아&장애' THEN 1 ELSE 0 END) AS 유아_장애
-                                FROM isaiah61co_conf.dbo.IC26_Data
-                               WHERE delYn = 'N';
+                                       SUM(CASE WHEN IC26_Area = 'A1' THEN IC26_count ELSE 0 END) AS A1,
+                                       SUM(CASE WHEN IC26_Area = 'B1' THEN IC26_count ELSE 0 END) AS B1,
+                                       SUM(CASE WHEN IC26_Area = 'C1' THEN IC26_count ELSE 0 END) AS C1,
+                                       SUM(CASE WHEN IC26_Area = 'D1' THEN IC26_count ELSE 0 END) AS D1,
+                                       SUM(CASE WHEN IC26_Area = 'A2-1' THEN IC26_count ELSE 0 END) AS A2_1,
+                                       SUM(CASE WHEN IC26_Area = 'A2-2' THEN IC26_count ELSE 0 END) AS A2_2,
+                                       SUM(CASE WHEN IC26_Area = 'B2-1' THEN IC26_count ELSE 0 END) AS B2_1,
+                                       SUM(CASE WHEN IC26_Area = 'B2-2' THEN IC26_count ELSE 0 END) AS B2_2,
+                                       SUM(CASE WHEN IC26_Area = 'C2-1' THEN IC26_count ELSE 0 END) AS C2_1,
+                                       SUM(CASE WHEN IC26_Area = 'C2-2' THEN IC26_count ELSE 0 END) AS C2_2,
+                                       SUM(CASE WHEN IC26_Area = 'D2-1' THEN IC26_count ELSE 0 END) AS D2_1,
+                                       SUM(CASE WHEN IC26_Area = 'D2-2' THEN IC26_count ELSE 0 END) AS D2_2,
+                                       SUM(CASE WHEN IC26_Area = 'E2-1' THEN IC26_count ELSE 0 END) AS E2_1,
+                                       SUM(CASE WHEN IC26_Area = 'E2-2' THEN IC26_count ELSE 0 END) AS E2_2,
+                                       SUM(CASE WHEN IC26_Area = 'F2-1' THEN IC26_count ELSE 0 END) AS F2_1,
+                                       SUM(CASE WHEN IC26_Area = 'F2-2' THEN IC26_count ELSE 0 END) AS F2_2,
+                                       SUM(CASE WHEN IC26_Area = 'G2-1' THEN IC26_count ELSE 0 END) AS G2_1,
+                                       SUM(CASE WHEN IC26_Area = 'G2-2' THEN IC26_count ELSE 0 END) AS G2_2,
+                                       SUM(CASE WHEN IC26_Area = '유아&장애' THEN IC26_count ELSE 0 END) AS 유아_장애
+                                  FROM isaiah61co_conf.dbo.IC26_Data
+                                 WHERE delYn = 'N';
                                 ";
 
                 return await db.QuerySingleAsync<AreaRequestDto>(query);
