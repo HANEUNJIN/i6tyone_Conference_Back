@@ -630,7 +630,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        SUM(CASE WHEN IC26_Area = 'F2-2' THEN IC26_count ELSE 0 END) AS F2_2,
                                        SUM(CASE WHEN IC26_Area = 'G2-1' THEN IC26_count ELSE 0 END) AS G2_1,
                                        SUM(CASE WHEN IC26_Area = 'G2-2' THEN IC26_count ELSE 0 END) AS G2_2,
-                                       SUM(CASE WHEN IC26_Area = '유아&장애' THEN IC26_count ELSE 0 END) AS 유아_장애
+                                       SUM(CASE WHEN IC26_Area = '유아&장애' THEN IC26_count ELSE 0 END) AS 유아_장애,
+                                       SUM(CASE WHEN IC26_Area = '' THEN IC26_count ELSE 0 END) AS 미지정
                                   FROM isaiah61co_conf.dbo.IC26_Data
                                  WHERE delYn = 'N';
                                 ";
