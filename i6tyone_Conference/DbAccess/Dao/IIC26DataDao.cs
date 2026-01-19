@@ -9,7 +9,6 @@ namespace i6tyone_Conference.DbAccess.Dao
 {
     public interface IIC26DataDao : IDaoMarker
     {
-        public Task<int> GetSeqAsync(DbSession db);
         public Task<int> GenerateRegisterAsync(DbSession db, RegisterRequestDto req, string iC26UniqueId);
         public Task<int> OnSiteGenerateRegisterAsync(DbSession db, RegisterRequestDto req, string iC26UniqueId);
         public Task<bool> UpdateRegisterAsync(DbSession db, RegisterUpdateRequestDto req, string uniqueId);

@@ -12,16 +12,6 @@ namespace i6tyone_Conference.DbAccess.Dao
 {
     public class IC26DataDao : IIC26DataDao
     {
-        public async Task<int> GetSeqAsync(DbSession db)
-        {
-            string query = @"
-                            SELECT IFNULL(MAX(IC26_No), 0) + 1
-                              FROM isaiah61co_conf.dbo.IC26_Data
-                            ";
-
-            return await db.ExecuteScalarAsync<int>(query);
-        }
-
         public async Task<int> GenerateRegisterAsync(DbSession db, RegisterRequestDto req, string iC26UniqueId)
         {
             try
