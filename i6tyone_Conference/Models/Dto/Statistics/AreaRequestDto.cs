@@ -98,5 +98,10 @@ namespace i6tyone_Conference.Models.Dto.Statistics
         /// 구역 유아&amp;장애
         /// </summary>
         public string 유아_장애 { get; set; }
+
+        /// <summary>
+        /// 미지정
+        /// </summary>
+        public string 미지정 { get; set; }
     }
 }
