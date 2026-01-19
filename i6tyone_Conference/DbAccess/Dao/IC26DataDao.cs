@@ -244,7 +244,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 sms02 AS sms02,
                                 sms03 AS sms03,
                                 sms04 AS sms04,
-                                COUNT(*) OVER() AS Total
+                                COUNT(*) OVER() AS Total,
+                                SUM(IC26_Count) OVER() AS countTotal
                            FROM isaiah61co_conf.dbo.IC26_Data
                           WHERE 1=1
                             AND delYn = 'N'
