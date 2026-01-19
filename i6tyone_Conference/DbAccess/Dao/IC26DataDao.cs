@@ -615,7 +615,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        SUM(CASE WHEN IC26_Area = 'A1' THEN IC26_count ELSE 0 END) AS A1,
                                        SUM(CASE WHEN IC26_Area = 'B1' THEN IC26_count ELSE 0 END) AS B1,
                                        SUM(CASE WHEN IC26_Area = 'C1' THEN IC26_count ELSE 0 END) AS C1,
-                                       SUM(CASE WHEN IC26_Area = 'D1' THEN IC26_count ELSE 0 END) AS D1,
+                                       SUM(CASE WHEN IC26_Area = 'D1' THEN IC26_count ELSE 0 END) + 200 AS D1,
                                        SUM(CASE WHEN IC26_Area = 'A2-1' THEN IC26_count ELSE 0 END) AS A2_1,
                                        SUM(CASE WHEN IC26_Area = 'A2-2' THEN IC26_count ELSE 0 END) AS A2_2,
                                        SUM(CASE WHEN IC26_Area = 'B2-1' THEN IC26_count ELSE 0 END) AS B2_1,
