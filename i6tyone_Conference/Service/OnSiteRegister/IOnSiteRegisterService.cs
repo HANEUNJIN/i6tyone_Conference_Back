@@ -9,7 +9,7 @@ namespace i6tyone_Conference.Service.OnSiteRegister
     public interface IOnSiteRegisterService : IServiceMarker
     {
         public Task<GenericResponse<RegisterResponseDto>> GetOnSiteRegisterInfoAsync(RegisterInfoRequestDto req, CancellationToken cancellationToken = default);
-        public Task<GenericResponse<RegisterInfoResponseDto>> GetOnSiteRegisterDetailInfoAsync(string uniqueId, CancellationToken cancellationToken = default);
-        public Task<GenericResponse<PayResponseDto>> CompletePaymentAsync(string uniqueId, CancellationToken cancellationToken = default);
+        public Task<GenericResponse<RegisterInfoResponseDto>> GetOnSiteRegisterDetailInfoAsync(string uniqueIdKey, CancellationToken cancellationToken = default);
+        public Task<GenericResponse<PayResponseDto>> CompletePaymentAsync(string uniqueIdKey, CancellationToken cancellationToken = default);
     }
 }

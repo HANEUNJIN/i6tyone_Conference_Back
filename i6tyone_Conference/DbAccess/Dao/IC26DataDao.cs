@@ -313,10 +313,11 @@ namespace i6tyone_Conference.DbAccess.Dao
                                 IC26_CreateQR AS CreateQR,
                                 IC26_SMS AS SMS,
                                 notion_sms_yn AS NotionSmsYn,
+                                payYn AS payYn,
                                 COUNT(*) OVER() AS Total
                            FROM isaiah61co_conf.dbo.IC26_OnSiteData
                           WHERE 1=1
-                            AND payYn = 'N'
+                            AND delYn = 'N'
                         ";
 
                 if (req.option != null && req.option.Any())

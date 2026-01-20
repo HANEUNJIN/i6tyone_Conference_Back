@@ -58,21 +58,24 @@ namespace i6tyone_Conference.Service.OnSiteRegister
             return res;
         }
 
-        public async Task<GenericResponse<RegisterInfoResponseDto>> GetOnSiteRegisterDetailInfoAsync(string uniqueId, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<RegisterInfoResponseDto>> GetOnSiteRegisterDetailInfoAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<RegisterInfoResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            if (string.IsNullOrWhiteSpace(uniqueId))
+            if (string.IsNullOrWhiteSpace(uniqueIdKey))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
                 res.ResultMsg = "QR Code 발급 키 누락";
                 return res;
             }
 
-            var data = await _repo.IC26DataDao.GetOnSiteRegisterDetailInfoAsync(db, uniqueId);
+            var aes = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]);
+            var uniqueId = aes?.AESDecrypt(uniqueIdKey);
+
+            var data = await _repo.IC26DataDao.GetOnSiteRegisterDetailInfoAsync(db, uniqueIdKey);
             if (data is null)
             {
                 res.SetResult(ErrorStatusCode.Authentication_Failed);
@@ -86,19 +89,22 @@ namespace i6tyone_Conference.Service.OnSiteRegister
             return res;
         }
 
-        public async Task<GenericResponse<PayResponseDto>> CompletePaymentAsync(string uniqueId, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<PayResponseDto>> CompletePaymentAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<PayResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            if (string.IsNullOrWhiteSpace(uniqueId))
+            if (string.IsNullOrWhiteSpace(uniqueIdKey))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
                 res.ResultMsg = "QR Code 발급 키 누락";
                 return res;
             }
+
+            var aes = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]);
+            var uniqueId = aes?.AESDecrypt(uniqueIdKey);
 
             var isSuccess = await _repo.IC26DataDao.CompletePaymentAsync(uniqueId, db);
             if (!isSuccess)

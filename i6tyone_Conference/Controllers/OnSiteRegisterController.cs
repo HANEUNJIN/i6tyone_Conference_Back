@@ -40,28 +40,28 @@ namespace i6tyone_Conference.Controllers
         /// <summary>
         /// 현장등록자 상세조회
         /// </summary>
-        /// <param name="uniqueId">QR Code Key</param>
+        /// <param name="uniqueIdKey">QR Code Key</param>
         /// <returns>응답 정보<see cref="RegisterInfoResponseDto"/></returns>
         [HttpPost("onsite-detail")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<RegisterInfoResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<RegisterInfoResponseDto>>> GetOnSiteRegisterDetailInfo(string uniqueId)
+        public async Task<ActionResult<GenericResponse<RegisterInfoResponseDto>>> GetOnSiteRegisterDetailInfo(string uniqueIdKey)
         {
-            var res = await _onSiteRegisterService.GetOnSiteRegisterDetailInfoAsync(uniqueId);
+            var res = await _onSiteRegisterService.GetOnSiteRegisterDetailInfoAsync(uniqueIdKey);
             return Ok(res);
         }
 
         /// <summary>
         /// 현장등록자 결제완료 및 연동
         /// </summary>
-        /// <param name="uniqueId">QR Code 발급 키</param>
+        /// <param name="uniqueIdKey">QR Code 발급 키</param>
         /// <returns>응답 정보<see cref="PayResponseDto"/></returns>
         [HttpPost("payments/complete")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<PayResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<PayResponseDto>>> CompletePayment(string uniqueId)
+        public async Task<ActionResult<GenericResponse<PayResponseDto>>> CompletePayment(string uniqueIdKey)
         {
-            var res = await _onSiteRegisterService.CompletePaymentAsync(uniqueId);
+            var res = await _onSiteRegisterService.CompletePaymentAsync(uniqueIdKey);
             return Ok(res);
         }
     }

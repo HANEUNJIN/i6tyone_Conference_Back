@@ -136,5 +136,10 @@
         /// 구역배정문자 4차 (N:미전송, Y:전송완료)
         /// </summary>
         public string Sms04 { get; set; }
+
+        /// <summary>
+        /// 결제확인여부 (N:미결제, Y:결제완료)
+        /// </summary>
+        public string PayYn { get; set; }
     }
 }
