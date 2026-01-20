@@ -18,6 +18,11 @@
         public int option { get; set; }
 
         /// <summary>
+        /// 신청일 (1: 화 / 2: 수 / 3: 목 / 4: 3-day)
+        /// </summary>
+        public int day { get; set; }
+
+        /// <summary>
         /// 교회
         /// </summary>
         public string church { get; set; }
