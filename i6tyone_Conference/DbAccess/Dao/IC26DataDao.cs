@@ -752,6 +752,53 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
+        public async Task<List<AreaSeatStatsInfo>> GetAreaSeatStatsAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                WITH DaySum AS (
+                                    SELECT
+                                        IC26_Area,
+                                        IC26_Day,
+                                        SUM(IC26_Count) AS Count
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                    GROUP BY IC26_Area, IC26_Day
+                                )
+                                SELECT
+                                    A.*,
+                                    D.IC26_Day AS Day,
+                                    D.Count,
+
+                                    CASE
+                                        WHEN D.IC26_Day = 4 THEN D.Count
+                                        ELSE D.Count + ISNULL(D4.Count, 0)
+                                    END AS TotalCount,
+
+                                    CASE
+                                        WHEN D.IC26_Day = 4 THEN A.AvailableCount - D.Count
+                                        ELSE A.AvailableCount - (D.Count + ISNULL(D4.Count, 0))
+                                    END AS Remain
+                                FROM isaiah61co_conf.dbo.IC26_Area A
+                                LEFT JOIN DaySum D
+                                    ON A.Area = D.IC26_Area
+                                LEFT JOIN DaySum D4
+                                    ON D4.IC26_Area = D.IC26_Area
+                                    AND D4.IC26_Day = 4
+                                ORDER BY A.Area, D.IC26_Day;
+                                ";
+
+                var result = await db.QueryAsync<AreaSeatStatsInfo>(query);
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<RegistrationRequestDto> GetRegistrationAsync(DbSession db)
         {
             try
