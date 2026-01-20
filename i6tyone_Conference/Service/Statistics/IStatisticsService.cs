@@ -11,6 +11,7 @@ namespace i6tyone_Conference.Service.Statistics
         public Task<GenericResponse<DateRequestDto>> GetDataAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<TicketOptionRequestDto>> GetTicketOptionAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<AreaRequestDto>> GetAreaAsync(CancellationToken cancellationToken = default);
+        public Task<GenericResponse<AreaSeatStatsRequestDto>> GetAreaSeatStatsAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<SendRequestDto>> GetSendAsync(CancellationToken cancellationToken = default);
     }
 }

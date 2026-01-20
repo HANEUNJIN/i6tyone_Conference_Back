@@ -77,6 +77,20 @@ namespace i6tyone_Conference.Service.Statistics
             return res;
         }
 
+        public async Task<GenericResponse<AreaSeatStatsRequestDto>> GetAreaSeatStatsAsync(CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<AreaSeatStatsRequestDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            var result = await _repo.IC26DataDao.GetAreaSeatStatsAsync(db);
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = new AreaSeatStatsRequestDto() { list = result };
+            return res;
+        }
+
         public async Task<GenericResponse<RegistrationRequestDto>> GetRegistrationAsync(CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<RegistrationRequestDto>();

@@ -92,6 +92,20 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
+        /// 남은 좌석별 통계
+        /// </summary>
+        /// <returns>응답 정보<see cref="AreaSeatStatsRequestDto"/></returns>
+        /// <returns></returns>
+        [HttpGet("area/remaining")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<AreaSeatStatsRequestDto>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<AreaSeatStatsRequestDto>>> GetAreaSeatStats()
+        {
+            var res = await _statisticsService.GetAreaSeatStatsAsync();
+            return Ok(res);
+        }
+
+        /// <summary>
         /// 출석·전송별 통계
         /// </summary>
         /// <returns>응답 정보<see cref="SendRequestDto"/></returns>
