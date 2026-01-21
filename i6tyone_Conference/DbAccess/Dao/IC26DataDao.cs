@@ -853,14 +853,14 @@ namespace i6tyone_Conference.DbAccess.Dao
                 string query = @"
                                 SELECT 
                                     IC26_Day AS Day,
-                                    CAST(applyYmd AS date) AS dateYmd,
+                                    CONVERT(char(10), CAST(applyYmd AS date), 23) AS dateYmd,
                                     SUM(IC26_Count) AS totalCount
                                 FROM isaiah61co_conf.dbo.IC26_Data
                                 WHERE applyYmd >= '20260121'
-                                    AND applyYmd < '20260129'
-                                    AND delYn = 'N'
+                                  AND applyYmd < '20260129'
+                                  AND delYn = 'N'
                                 GROUP BY 
-                                    CAST(applyYmd AS date),
+                                    CONVERT(char(10), CAST(applyYmd AS date), 23),
                                     IC26_Day
                                 ORDER BY dateYmd, IC26_Day;
                                 ";
