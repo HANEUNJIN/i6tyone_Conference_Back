@@ -118,5 +118,19 @@ namespace i6tyone_Conference.Service.Statistics
             res.Data = new SendRequestDto() { list = result };
             return res;
         }
+
+        public async Task<GenericResponse<DayRequestDto>> GetDayAsync(CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<DayRequestDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            var result = await _repo.IC26DataDao.GetDayAsync(db);
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = new DayRequestDto() { list = result };
+            return res;
+        }
     }
 }

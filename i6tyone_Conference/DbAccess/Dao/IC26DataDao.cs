@@ -846,6 +846,35 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
+        public async Task<List<DayInfo>> GetDayAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                SELECT 
+                                    IC26_Day AS Day,
+                                    CAST(applyYmd AS date) AS dateYmd,
+                                    SUM(IC26_Count) AS totalCount
+                                FROM isaiah61co_conf.dbo.IC26_Data
+                                WHERE applyYmd >= '20260121'
+                                    AND applyYmd < '20260129'
+                                    AND delYn = 'N'
+                                GROUP BY 
+                                    CAST(applyYmd AS date),
+                                    IC26_Day
+                                ORDER BY dateYmd, IC26_Day;
+                                ";
+
+                var result = await db.QueryAsync<DayInfo>(query);
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<bool> CheckCreateQRAsync(DbSession db, string uniqueId)
         {
             try
