@@ -61,7 +61,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     'N',
                                     @sms02,
                                     @sms03,
-                                    'N'
+                                    @sms04
                                 );
                                 ";
 

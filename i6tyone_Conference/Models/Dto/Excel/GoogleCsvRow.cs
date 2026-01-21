@@ -51,5 +51,8 @@ namespace i6tyone_Conference.Models.Dto.Excel
 
         [Name("구역배정문자 3차")]
         public string Sms03 { get; set; }
+
+        [Name("구역배정문자 4차")]
+        public string Sms04 { get; set; }
     }
 }

@@ -81,7 +81,8 @@ namespace i6tyone_Conference.Service.Excel
                         notionSmsYn = row.NotionSmsYn == "O" ? "Y" : "N",
                         newBelieverYn = "",
                         sms02 = row.Sms02 == "O" ? "Y" : "N",
-                        sms03 = row.Sms03 == "O" ? "Y" : "N"
+                        sms03 = row.Sms03 == "O" ? "Y" : "N",
+                        sms04 = row.Sms04 == "O" ? "Y" : "N"
                     };
 
                     var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);
