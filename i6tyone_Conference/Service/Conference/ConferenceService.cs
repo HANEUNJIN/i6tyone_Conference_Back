@@ -73,6 +73,7 @@ namespace i6tyone_Conference.Service.Conference
                 new StringKeyValue() {key = "G2-1", value = "G2-1"},
                 new StringKeyValue() {key = "G2-2", value = "G2-2"},
                 new StringKeyValue() {key = "유아&장애", value = "유아&장애"},
+                new StringKeyValue() {key = "STAFF", value = "STAFF"},
                 new StringKeyValue() {key = "", value = "미지정"},
             };
 

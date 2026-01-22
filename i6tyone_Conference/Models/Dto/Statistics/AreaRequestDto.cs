@@ -103,5 +103,10 @@ namespace i6tyone_Conference.Models.Dto.Statistics
         /// 미지정
         /// </summary>
         public string 미지정 { get; set; }
+
+        /// <summary>
+        /// STAFF
+        /// </summary>
+        public string STAFF { get; set; }
     }
 }
