@@ -209,18 +209,18 @@ namespace eGhis_WebService_Core.Service.Auth
                     var smsInfo = GetSmsInfo(item.Phone, qrBytes);
 
                     var qrSend = await _msgService.SendSmsAsync(smsInfo);
-                    if (qrSend.ResultMsg != EnumUtil.GetDescription(ErrorStatusCode.Success))
+                    string messageId = qrSend.Data.msgId;
+                    if (qrSend.ResultCd != EnumUtil.GetDisplayName(ErrorStatusCode.Success) || string.IsNullOrWhiteSpace(messageId))
                     {
-                        res.SetResult(qrSend.ResultCd, qrSend.ResultMsg);
-                        return res;
+                        //res.SetResult(qrSend.ResultCd, qrSend.ResultMsg);
+                        //return res;
+                        failCount++;
+                        continue;
                     }
                         
-                    if (!string.IsNullOrEmpty(qrSend.Data?.msgId.ToString()))
-                    {
-                        msgIds.Add(qrSend.Data?.msgId.ToString());
-                    }
+                    msgIds.Add(messageId);
 
-                    await _repo.IC26DataDao.CheckCreateQRAsync(db, item.UniqueId);
+                    await _repo.IC26DataDao.CheckCreateQRAsync(db, item.UniqueId, messageId);
 
                     successCount++;
                 }
@@ -291,14 +291,15 @@ namespace eGhis_WebService_Core.Service.Auth
             var smsInfo = GetSmsInfo(result.Phone, qrBytes);
 
             var qrSend = await _msgService.SendSmsAsync(smsInfo);
-            if(qrSend.ResultMsg != EnumUtil.GetDescription(ErrorStatusCode.Success))
+            string messageId = qrSend.Data.msgId;
+            if (qrSend.ResultCd != EnumUtil.GetDisplayName(ErrorStatusCode.Success) || string.IsNullOrWhiteSpace(messageId))
             {
                 res.SetResult(qrSend.ResultCd, qrSend.ResultMsg);
                 return res;
             }
 
             // QR 생성 여부 업데이트
-            await _repo.IC26DataDao.CheckCreateQRAsync(db, result.UniqueId);
+            await _repo.IC26DataDao.CheckCreateQRAsync(db, result.UniqueId, messageId);
 
             res.SetResult(ErrorStatusCode.Success);
             res.Data = qrSend.Data;
@@ -624,8 +625,8 @@ namespace eGhis_WebService_Core.Service.Auth
                 msgType = "MMS",
                 title = "아이자야씩스티원",
                 destination = "",
-                rDate = "20261231",
-                rTime = "1200",
+                rDate = "",
+                rTime = "",
                 image1 = qrBytes,
                 testModeYn = "Y"
             };

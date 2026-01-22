@@ -31,7 +31,7 @@ namespace i6tyone_Conference.DbAccess.Dao
         public Task<List<AreaSeatStatsInfo>> GetAreaSeatStatsAsync(DbSession db);
         public Task<List<SendInfo>> GetSendAsync(DbSession db);
         public Task<List<DayInfo>> GetDayAsync(DbSession db);
-        public Task<bool> CheckCreateQRAsync(DbSession db, string uniqueId);
+        public Task<bool> CheckCreateQRAsync(DbSession db, string uniqueId, string messageId);
         public Task<bool> ClearAttendAsync(DbSession db);
         public Task<bool> ClearCreateQRAsync(DbSession db);
         public Task<bool> ClearSmsAsync(DbSession db);

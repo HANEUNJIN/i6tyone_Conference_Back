@@ -518,7 +518,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         sms03 AS sms03,
                                         sms04 AS sms04
                                    FROM isaiah61co_conf.dbo.IC26_Data
-                                  WHERE delYn = 'N';
+                                  WHERE delYn = 'N'
+                                    AND IC26_Area != 'STAFF';
                                 ";
 
                 var result = await db.QueryAsync<IC26DataRecord>(query);
@@ -563,7 +564,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                    FROM isaiah61co_conf.dbo.IC26_Data
                                   WHERE IC26_Buyer = @Buyer
                                     AND IC26_Phone = @Phone
-                                    AND delYn = 'N';
+                                    AND delYn = 'N'
+                                    AND IC26_Area != 'STAFF';
                                 ";
 
                 return await db.QuerySingleAsync<IC26DataRecord>(query, req);
@@ -883,19 +885,20 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<bool> CheckCreateQRAsync(DbSession db, string uniqueId)
+        public async Task<bool> CheckCreateQRAsync(DbSession db, string uniqueId, string messageId)
         {
             try
             {
                 string query = @"
                                 UPDATE isaiah61co_conf.dbo.IC26_Data
                                    SET IC26_CreateQR = 'Y',
-                                       IC26_SMS = 'Y'
-                                 WHERE IC26_UniqueId = @UniqueId
+                                       IC26_SMS = 'Y',
+                                       messageId = @messageId
+                                 WHERE IC26_UniqueId = @uniqueId
                                    AND delYn = 'N';
                                 ";
 
-                return await db.ExecuteAsync(query, new { uniqueId }) > 0;
+                return await db.ExecuteAsync(query, new { uniqueId, messageId }) > 0;
             }
             catch (Exception ex)
             {
