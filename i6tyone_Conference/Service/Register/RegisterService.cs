@@ -264,7 +264,7 @@ namespace eGhis_WebService_Core.Service.Auth
             if (string.IsNullOrWhiteSpace(result?.UniqueId))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = $"{result?.Buyer}에 대한 정보를 찾을 수 없음.";
+                res.ResultMsg = $"{req.buyer}에 대한 정보를 찾을 수 없음.";
                 return res;
             }
 

@@ -568,7 +568,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     AND IC26_Area != 'STAFF';
                                 ";
 
-                return await db.QuerySingleAsync<IC26DataRecord>(query, req);
+                return await db.QuerySingleOrDefaultAsync<IC26DataRecord>(query, req);
             }
             catch (Exception ex)
             {
