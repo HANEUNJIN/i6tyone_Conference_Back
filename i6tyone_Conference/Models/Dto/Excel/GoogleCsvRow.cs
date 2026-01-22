@@ -46,13 +46,13 @@ namespace i6tyone_Conference.Models.Dto.Excel
         [Name("노션링크 발송")]
         public string NotionSmsYn { get; set; }
 
-        [Name("구역배정문자 2차")]
+        [Name("구역문자 2차")]
         public string Sms02 { get; set; }
 
-        [Name("구역배정문자 3차")]
+        [Name("구역문자 3차")]
         public string Sms03 { get; set; }
 
-        [Name("구역배정문자 4차")]
+        [Name("구역문자 4차")]
         public string Sms04 { get; set; }
     }
 }

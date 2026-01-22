@@ -57,43 +57,51 @@ namespace i6tyone_Conference.Service.Excel
                 for (int i = 0; i < 2; i++)
                     reader.ReadLine();
 
-                var records = csv.GetRecords<GoogleCsvRow>().ToList();
-
-                foreach (var row in records)
+                try
                 {
-                    string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
-
-                    var req = new RegisterRequestDto()
+                    var records = csv.GetRecords<GoogleCsvRow>().ToList();
+                        
+                    foreach (var row in records)
                     {
-                        area = row.Area,
-                        option = ConvertOption(row.Option),
-                        day = ConvertDay(row.Day),
-                        buyer = row.Buyer,
-                        attender = row.Attender,
-                        phone = row.Phone?.Replace("-", ""),
-                        gender = ConvertGender(row.Gender),
-                        age = ToShortOrZero(row.Age),
-                        church = row.Church,
-                        local = row.Local,
-                        denom = row.Denom,
-                        count = ToShortOrZero(row.Count),
-                        memo = row.Memo,
-                        notionSmsYn = row.NotionSmsYn == "O" ? "Y" : "N",
-                        newBelieverYn = "",
-                        sms02 = row.Sms02 == "O" ? "Y" : "N",
-                        sms03 = row.Sms03 == "O" ? "Y" : "N",
-                        sms04 = row.Sms04 == "O" ? "Y" : "N"
-                    };
+                        string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
 
-                    var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);
-                    if (data < 0)
-                    {
-                        res.SetResult(ErrorStatusCode.Invalid_Error);
-                        res.ResultMsg = "'2026 Solus CHRISTUS' 연동 중 오류 발생.";
-                        return res;
+                        var req = new RegisterRequestDto()
+                        {
+                            area = row.Area,
+                            option = ConvertOption(row.Option),
+                            day = ConvertDay(row.Day),
+                            buyer = row.Buyer,
+                            attender = row.Attender,
+                            phone = row.Phone?.Replace("-", ""),
+                            gender = ConvertGender(row.Gender),
+                            age = ToShortOrZero(row.Age),
+                            church = row.Church,
+                            local = row.Local,
+                            denom = row.Denom,
+                            count = ToShortOrZero(row.Count),
+                            memo = row.Memo,
+                            notionSmsYn = row.NotionSmsYn == "O" ? "Y" : "N",
+                            newBelieverYn = "",
+                            sms02 = row.Sms02 == "O" ? "Y" : "N",
+                            sms03 = row.Sms03 == "O" ? "Y" : "N",
+                            sms04 = row.Sms04 == "O" ? "Y" : "N"
+                        };
+
+                        var data = await _repo.IC26DataDao.GenerateRegisterAsync(db, req, uniqueId);
+                        if (data < 0)
+                        {
+                            res.SetResult(ErrorStatusCode.Invalid_Error);
+                            res.ResultMsg = "'2026 Solus CHRISTUS' 연동 중 오류 발생.";
+                            return res;
+                        }
+
+                        successCount++;
                     }
-
-                    successCount++;
+                }
+                catch (Exception)
+                {
+                    res.SetResult("", "이벤터스 연동 엑셀 컬럼이 올바르지 않습니다.");
+                    return res;
                 }
             }
             catch (Exception ex)

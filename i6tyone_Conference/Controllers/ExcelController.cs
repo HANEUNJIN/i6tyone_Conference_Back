@@ -23,7 +23,7 @@ namespace i6tyone_Conference.Controllers
         }
 
         /// <summary>
-        /// Google Sheet 연동
+        /// 이벤터스 Google Sheet 연동
         /// </summary>
         /// <returns>응답 정보<see cref="RegisterAddResponseDto"/></returns>
         [HttpGet("google-sheet")]
