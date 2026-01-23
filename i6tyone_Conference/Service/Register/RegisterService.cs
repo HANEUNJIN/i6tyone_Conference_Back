@@ -614,7 +614,7 @@ namespace eGhis_WebService_Core.Service.Auth
 
         private SendMessageApiRequestDto GetSmsInfo(string phone, byte[] qrBytes)
         {
-            var today = DateTime.Now;
+            var today = DateTime.Today;
             var startYmd = new DateTime(2026, 1, 27);
             int diff = (startYmd - today).Days;
 
