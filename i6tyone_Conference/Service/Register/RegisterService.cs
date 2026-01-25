@@ -254,11 +254,14 @@ namespace eGhis_WebService_Core.Service.Auth
             if (string.IsNullOrWhiteSpace(uniqueIdKey))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = "해당 정보를 찾을 수 없음.";
+                res.ResultMsg = "QR Code 발급 키 누락";
                 return res;
             }
 
-            var result = await _repo.IC26DataDao.GenerateRegisterQRCodeSingleAsync(db, uniqueIdKey);
+            var aes = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]);
+            var uniqueId = aes?.AESDecrypt(uniqueIdKey);
+
+            var result = await _repo.IC26DataDao.GenerateRegisterQRCodeSingleAsync(db, uniqueId);
             if (string.IsNullOrWhiteSpace(result?.UniqueId))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
