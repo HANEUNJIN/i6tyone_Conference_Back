@@ -532,7 +532,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             }
         }
 
-        public async Task<IC26DataRecord> GenerateRegisterQRCodeSingleAsync(DbSession db, IssuanceRequestDto req)
+        public async Task<IC26DataRecord> GenerateRegisterQRCodeSingleAsync(DbSession db, string uniqueId)
         {
             try
             {
@@ -562,13 +562,12 @@ namespace i6tyone_Conference.DbAccess.Dao
                                         sms03 AS sms03,
                                         sms04 AS sms04
                                    FROM isaiah61co_conf.dbo.IC26_Data
-                                  WHERE IC26_Buyer = @Buyer
-                                    AND IC26_Phone = @Phone
+                                  WHERE IC26_UniqueId = @uniqueId
                                     AND delYn = 'N'
                                     AND IC26_Area != 'STAFF';
                                 ";
 
-                return await db.QuerySingleOrDefaultAsync<IC26DataRecord>(query, req);
+                return await db.QuerySingleOrDefaultAsync<IC26DataRecord>(query, new { uniqueId });
             }
             catch (Exception ex)
             {

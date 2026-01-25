@@ -14,7 +14,7 @@ namespace eGhis_WebService_Core.Service.Auth
         public Task<GenericResponse<SuccessResponseDto>> DisposeRegisterAsync(string uniqueIdKey, CancellationToken cancellationToken = default);
         public Task<GenericResponse<SuccessResponseDto>> DeleteRegisterAsync(string uniqueIdKey, CancellationToken cancellationToken = default);
         public Task<GenericResponse<SendMassResponseDto>> GenerateRegisterQRCodeAsync(CancellationToken cancellationToken = default);
-        public Task<GenericResponse<SendMassResponseDto>> GenerateRegisterQRCodeSingleAsync(IssuanceRequestDto req, CancellationToken cancellationToken = default);
+        public Task<GenericResponse<SendMassResponseDto>> GenerateRegisterQRCodeSingleAsync(string uniqueIdKey, CancellationToken cancellationToken = default);
         public Task<GenericResponse<RegisterResponseDto>> GetRegisterInfoAsync(RegisterInfoRequestDto req, CancellationToken cancellationToken = default);
         public Task<GenericResponse<ExcelResponseDto>> GetRegisterExcelAsync(CancellationToken cancellationToken = default);
         public Task<GenericResponse<RegisterInfoResponseDto>> GetRegisterDetailInfoAsync(string uniqueIdKey, CancellationToken cancellationToken = default);

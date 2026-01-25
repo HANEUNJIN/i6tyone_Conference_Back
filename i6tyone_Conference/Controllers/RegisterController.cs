@@ -96,13 +96,14 @@ namespace eGhis_WebService_Core.Controllers
         /// <summary>
         /// 특정 등록자 QR·SMS 발송
         /// </summary>
+        /// <param name="uniqueIdKey">QR Code 발급 키</param>
         /// <returns>응답 정보<see cref="SendMassResponseDto"/></returns>
         [HttpPost("qrcode-single")]
         [AllowAnonymousToken]
         [SwaggerResponse(200, typeof(GenericResponse<SendMassResponseDto>), Description = "정상 처리되었습니다.")]
-        public async Task<ActionResult<GenericResponse<SendMassResponseDto>>> GenerateRegisterQRCodeSingle(IssuanceRequestDto req)
+        public async Task<ActionResult<GenericResponse<SendMassResponseDto>>> GenerateRegisterQRCodeSingle(string uniqueIdKey)
         {
-            var res = await _registerService.GenerateRegisterQRCodeSingleAsync(req);
+            var res = await _registerService.GenerateRegisterQRCodeSingleAsync(uniqueIdKey);
             return Ok(res);
         }
 

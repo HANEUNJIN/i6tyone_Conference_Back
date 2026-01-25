@@ -244,27 +244,25 @@ namespace eGhis_WebService_Core.Service.Auth
         /// <summary>
         /// 특정 등록자 QR 코드 발급/재발급
         /// </summary>
-        public async Task<GenericResponse<SendMassResponseDto>> GenerateRegisterQRCodeSingleAsync(IssuanceRequestDto req, CancellationToken cancellationToken = default)
+        public async Task<GenericResponse<SendMassResponseDto>> GenerateRegisterQRCodeSingleAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
         {
             var res = new GenericResponse<SendMassResponseDto>();
 
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
-            if (string.IsNullOrWhiteSpace(req.buyer) && string.IsNullOrWhiteSpace(req.phone))
+            if (string.IsNullOrWhiteSpace(uniqueIdKey))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = $"{req.buyer ?? "알 수 없는 사용자"}에 대한 정보를 찾을 수 없음.";
+                res.ResultMsg = "해당 정보를 찾을 수 없음.";
                 return res;
             }
 
-            req.phone = req.phone.Replace("-", "");
-
-            var result = await _repo.IC26DataDao.GenerateRegisterQRCodeSingleAsync(db, req);
+            var result = await _repo.IC26DataDao.GenerateRegisterQRCodeSingleAsync(db, uniqueIdKey);
             if (string.IsNullOrWhiteSpace(result?.UniqueId))
             {
                 res.SetResult(ErrorStatusCode.Invalid_Error);
-                res.ResultMsg = $"{req.buyer}에 대한 정보를 찾을 수 없음.";
+                res.ResultMsg = "해당 정보를 찾을 수 없음.";
                 return res;
             }
 
@@ -274,9 +272,9 @@ namespace eGhis_WebService_Core.Service.Auth
             //await _ftp.CreateFtpDirectoryRecursiveAsync(ftpFolderUrl);
 
 
-            var uniqueIdKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]).AESEncrypt(result.UniqueId);
+            var uniqueIdEncryptKey = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16]).AESEncrypt(result.UniqueId);
             string title = $"{ConvertOption(result.Option)} / {ConvertDay(result.Day)} / {result.Buyer} / {result.Count} / {result.Area}";
-            byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdKey, title);
+            byte[] qrBytes = _qrCode.GenerateQRCodeBytes(uniqueIdEncryptKey, title);
 
             #region FTP 업로드
             //bool uploadSuccess = await _ftp.UploadFileToFtpAsync(qrBytes, ftpFolderUrl, qrCodeFileName);
