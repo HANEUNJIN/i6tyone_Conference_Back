@@ -600,6 +600,8 @@ namespace eGhis_WebService_Core.Service.Auth
                     return "현장구매";
                 case 7:
                     return "VIP";
+                case 8:
+                    return "새신자";
             }
             return string.Empty;
         }

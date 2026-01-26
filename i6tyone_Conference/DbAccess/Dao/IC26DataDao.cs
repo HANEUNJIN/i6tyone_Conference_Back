@@ -696,6 +696,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                  SUM(CASE WHEN IC26_Option = 5 THEN IC26_Count ELSE 0 END) AS [Event],
                                  SUM(CASE WHEN IC26_Option = 6 THEN IC26_Count ELSE 0 END) AS [Site],
                                  SUM(CASE WHEN IC26_Option = 7 THEN IC26_Count ELSE 0 END) AS [VIP],
+                                 SUM(CASE WHEN IC26_Option = 8 THEN IC26_Count ELSE 0 END) AS [NewBeliever],
                                  SUM(IC26_Count) AS [Total]
                              FROM isaiah61co_conf.dbo.IC26_Data
                              WHERE delYn = 'N'

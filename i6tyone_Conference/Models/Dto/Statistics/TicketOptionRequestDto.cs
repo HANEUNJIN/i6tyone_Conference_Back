@@ -54,6 +54,11 @@
         public int Vip { get; set; }
 
         /// <summary>
+        /// 새신자
+        /// </summary>
+        public int NewBeliever { get; set; }
+
+        /// <summary>
         /// 합계
         /// </summary>
         public int Total { get; set; }

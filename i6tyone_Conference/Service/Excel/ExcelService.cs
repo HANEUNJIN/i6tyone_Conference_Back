@@ -309,6 +309,8 @@ namespace i6tyone_Conference.Service.Excel
                     return 6;
                 case "VIP":
                     return 7;
+                case "새신자":
+                    return 8;
             }
             return 0;
         }
