@@ -129,6 +129,13 @@ namespace eGhis_WebService_Core.Service.Auth
             await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
             var db = scope.Session;
 
+            if (string.IsNullOrWhiteSpace(uniqueIdKey))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "QR Code 발급 키 누락";
+                return res;
+
+            }
             var uniqueId = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESDecrypt(uniqueIdKey);
             var data = await _repo.IC26DataDao.DisposeRegisterAsync(db, uniqueId);
             if (!data)

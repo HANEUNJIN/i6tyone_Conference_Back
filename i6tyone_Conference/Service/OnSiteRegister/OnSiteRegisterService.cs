@@ -154,5 +154,34 @@ namespace i6tyone_Conference.Service.OnSiteRegister
             res.Data = result;
             return res;
         }
+
+        public async Task<GenericResponse<SuccessResponseDto>> DisposeOnSiteRegisterAsync(string uniqueIdKey, CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<SuccessResponseDto>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            if (string.IsNullOrWhiteSpace(uniqueIdKey))
+            {
+                res.SetResult(ErrorStatusCode.Invalid_Error);
+                res.ResultMsg = "QR Code 발급 키 누락";
+                return res;
+            }
+
+            var uniqueId = CryptoUtil.CreateAESInstance(CTBizConstant.CryptoKey.I6TYONE, new byte[16])?.AESDecrypt(uniqueIdKey);
+            var data = await _repo.IC26DataDao.DisposeOnSiteRegisterAsync(db, uniqueId);
+            if (!data)
+            {
+                res.SetResult(ErrorStatusCode.Authentication_Failed);
+                return res;
+            }
+
+            var result = new SuccessResponseDto() { success = data };
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = result;
+            return res;
+        }
     }
 }
