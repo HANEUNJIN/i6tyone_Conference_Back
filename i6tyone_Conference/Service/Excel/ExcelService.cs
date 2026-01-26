@@ -91,7 +91,7 @@ namespace i6tyone_Conference.Service.Excel
                         if (data < 0)
                         {
                             res.SetResult(ErrorStatusCode.Invalid_Error);
-                            res.ResultMsg = "'2026 Solus CHRISTUS' 연동 중 오류 발생.";
+                            res.ResultMsg = "'2026 Solus CHRISTUS 이벤터스 연동용.xlsx' 연동 중 오류 발생.";
                             return res;
                         }
 
@@ -140,37 +140,49 @@ namespace i6tyone_Conference.Service.Excel
                 using var reader = new StringReader(csvData);
                 using var csv = new CsvReader(reader, config);
 
-                var records = csv.GetRecords<OnSiteCsvRow>().ToList();
+                for (int i = 0; i < 2; i++)
+                    reader.ReadLine();
 
-                foreach (var row in records)
+                try
                 {
-                    string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
+                    var records = csv.GetRecords<OnSiteGoogleCsvRow>().ToList();
 
-                    var req = new RegisterRequestDto()
+                    foreach (var row in records)
                     {
-                        option = 6,
-                        day = ConvertDay(row.참석날짜),
-                        buyer = row.성함,
-                        attender = row.성함,
-                        phone = row.연락처?.Replace("-", ""),
-                        gender = ConvertGender(row.성별),
-                        age = ToShortOrZero(row.나이),
-                        church = row.출석교회,
-                        local = row.거주지역,
-                        denom = row.교단,
-                        count = ToShortOrZero(row.구매수량),
-                        applyYmd = ConvertDateTime(row.타임스탬프)
-                    };
+                        string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
 
-                    var data = await _repo.IC26DataDao.OnSiteGenerateRegisterAsync(db, req, uniqueId);
-                    if (data < 0)
-                    {
-                        res.SetResult(ErrorStatusCode.Invalid_Error);
-                        res.ResultMsg = "'26 conf. 현장 등록(응답)' 연동 중 오류 발생.";
-                        return res;
+                        var req = new RegisterRequestDto()
+                        {
+                            area = row.Area,
+                            option = 6,
+                            day = ConvertDay(row.Day),
+                            buyer = row.Buyer,
+                            attender = row.Buyer,
+                            phone = row.Phone?.Replace("-", ""),
+                            gender = ConvertGender(row.Gender),
+                            age = ToShortOrZero(row.Age),
+                            church = row.Church,
+                            local = row.Local,
+                            denom = row.Denom,
+                            count = ToShortOrZero(row.Count),
+                            memo = row.Memo,
+                        };
+
+                        var data = await _repo.IC26DataDao.OnSiteGenerateRegisterAsync(db, req, uniqueId);
+                        if (data < 0)
+                        {
+                            res.SetResult(ErrorStatusCode.Invalid_Error);
+                            res.ResultMsg = "'2026 Solus CHRISTUS 현장구매.xlsx' 연동 중 오류 발생.";
+                            return res;
+                        }
+
+                        successCount++;
                     }
-
-                    successCount++;
+                }
+                catch (Exception)
+                {
+                    res.SetResult("", "이벤터스 연동 엑셀 컬럼이 올바르지 않습니다.");
+                    return res;
                 }
             }
             catch (Exception ex)

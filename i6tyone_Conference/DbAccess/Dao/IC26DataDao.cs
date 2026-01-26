@@ -82,7 +82,7 @@ namespace i6tyone_Conference.DbAccess.Dao
             try
             {
                 string query = @"
-                                INSERT INTO isaiah61co_conf.dbo.IC26_OnSiteData (
+                                INSERT INTO isaiah61co_conf.dbo.IC26_Data (
                                     IC26_Option,
                                     IC26_Day,
                                     IC26_Buyer,
@@ -114,8 +114,8 @@ namespace i6tyone_Conference.DbAccess.Dao
                                     @Denom,
                                     'N',
                                     @Count,
-                                    '',
-                                    '',
+                                    @Area,
+                                    @Memo,
                                     @UniqueId,
                                     'N',
                                     @applyYmd

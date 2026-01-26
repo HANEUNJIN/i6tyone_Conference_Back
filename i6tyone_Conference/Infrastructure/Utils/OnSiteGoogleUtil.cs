@@ -13,6 +13,8 @@ namespace i6tyone_Conference.Infrastructure.Utils
 
         private string Id => _googleSettings.Id;
 
-        public string CsvUrl => $"{Url}/{Id}/gviz/tq?tqx=out:csv";
+        private string Gid => _googleSettings.Gid;
+
+        public string CsvUrl => $"{Url}/{Id}/export?format=csv&gid={Gid}";
     }
 }
