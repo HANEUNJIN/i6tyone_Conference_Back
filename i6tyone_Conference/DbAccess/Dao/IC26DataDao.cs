@@ -613,6 +613,7 @@ namespace i6tyone_Conference.DbAccess.Dao
                                        IC26_Church AS church,
                                        IC26_Count AS Count,
                                        IC26_Area AS Area,
+                                       IC26_UniqueId AS UniqueId,
                                        IC26_Attend AS Attend
                                   FROM isaiah61co_conf.dbo.IC26_Data
                                  WHERE IC26_UniqueId = @UniqueId

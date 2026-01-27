@@ -41,5 +41,10 @@
         /// 출석여부 (N: 미등록, Y: 등록)
         /// </summary>
         public string attend { get; set; }
+
+        /// <summary>
+        /// QR Code 발급 키
+        /// </summary>
+        public string uniqueId { get; set; }
     }
 }
