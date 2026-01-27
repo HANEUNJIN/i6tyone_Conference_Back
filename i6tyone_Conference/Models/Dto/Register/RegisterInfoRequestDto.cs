@@ -23,6 +23,11 @@
         public List<string> area { get; set; } = new();
 
         /// <summary>
+        /// 출석여부 (N: 미등록, Y: 등록)
+        /// </summary>
+        public string attend { get; set; } = "N";
+
+        /// <summary>
         /// 현재 페이지
         /// </summary>
         public int pageNum { get; set; } = 1;

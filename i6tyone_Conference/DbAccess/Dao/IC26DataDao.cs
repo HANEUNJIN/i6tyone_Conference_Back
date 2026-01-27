@@ -257,6 +257,9 @@ namespace i6tyone_Conference.DbAccess.Dao
                 if (req.day != null && req.day.Any())
                     query += "      AND IC26_Day IN @day";
 
+                if (req.attend != "N")
+                    query += "      AND IC26_Attend = @attend";
+
                 if (!string.IsNullOrWhiteSpace(req.keyword))
                 {
                     query += @"
