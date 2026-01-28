@@ -132,5 +132,18 @@ namespace i6tyone_Conference.Controllers
             var res = await _statisticsService.GetDayAsync();
             return Ok(res);
         }
+
+        /// <summary>
+        /// 일자별 참석 유형별 집계 현황
+        /// </summary>
+        /// <returns>응답 정보<see cref="DayAttendanceSummary"/></returns>
+        [HttpGet("day-attendance-summary")]
+        [AllowAnonymousToken]
+        [SwaggerResponse(200, typeof(GenericResponse<DayAttendanceSummary>), Description = "정상 처리되었습니다.")]
+        public async Task<ActionResult<GenericResponse<DayAttendanceSummary>>> GetDayAttendanceSummary()
+        {
+            var res = await _statisticsService.GetDayAttendanceSummaryAsync();
+            return Ok(res);
+        }
     }
 }

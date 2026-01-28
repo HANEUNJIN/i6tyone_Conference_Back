@@ -37,5 +37,6 @@ namespace i6tyone_Conference.DbAccess.Dao
         public Task<bool> ClearSmsAsync(DbSession db);
         public Task<bool> CompletePaymentAsync(string uniqueId, DbSession db);
         public Task<bool> DisposeOnSiteRegisterAsync(DbSession db, string iC26UniqueId);
+        public Task<List<DayAttendance>> GetDayAttendanceSummaryAsync(DbSession db);
     }
 }

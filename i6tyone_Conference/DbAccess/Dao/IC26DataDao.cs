@@ -1006,5 +1006,71 @@ namespace i6tyone_Conference.DbAccess.Dao
                 throw;
             }
         }
+
+        public async Task<List<DayAttendance>> GetDayAttendanceSummaryAsync(DbSession db)
+        {
+            try
+            {
+                string query = @"
+                                SELECT
+                                    CASE IC26_Day
+                                        WHEN 1 then '화'
+                                        WHEN 2 then '수'
+                                        WHEN 3 then '목'
+                                        WHEN 4 then '3-day'
+                                    END AS day,
+                                    [option],
+                                    sum(IC26_Count) as totalCount,
+                                    -- 🔥 day 기준 총합
+                                    sum(sum(IC26_Count)) over (partition by IC26_Day) as dayTotalCount
+
+                                FROM (
+                                    SELECT
+                                        IC26_Day,
+                                        IC26_Count,
+                                        CASE
+                                            WHEN IC26_Option = 6
+                                             AND IC26_Attend = 'Y'
+                                                THEN '현장구매'
+
+                                            WHEN IC26_Option = 7
+                                             AND IC26_Attend = 'Y'
+                                                THEN 'VIP'
+
+                                            WHEN newBelieverYn = 'Y'
+                                             AND IC26_Attend = 'Y'
+                                                THEN '새신자'
+
+                                            WHEN IC26_Area = 'STAFF'
+                                             AND IC26_Attend = 'Y'
+                                                THEN '전체 스탭'
+
+                                            WHEN IC26_Church = '김포순복음교회'
+                                             AND IC26_Area != 'STAFF'
+                                             AND IC26_Attend = 'Y'
+                                                THEN '김순교(스탭제외)'
+
+                                            WHEN IC26_Church = '김포순복음교회'
+                                             AND IC26_Area = 'STAFF'
+                                             AND IC26_Attend = 'Y'
+                                                THEN '김순교(스탭)'
+                                        END AS [option]
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                ) t
+                                WHERE [option] IS NOT NULL
+                                GROUP BY IC26_Day, [option]
+                                ORDER BY IC26_Day ASC, [option] DESC;
+                                ";
+
+                var result = await db.QueryAsync<DayAttendance>(query);
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                //CommonUtil.WriteLoggerString(LoggerLevel.ERROR, ErrorStatusCode.Error, $"[DB SELECT ERROR] Failed to fetch data. Reason: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

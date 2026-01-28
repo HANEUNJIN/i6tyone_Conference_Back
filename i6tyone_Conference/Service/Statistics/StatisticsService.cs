@@ -132,5 +132,20 @@ namespace i6tyone_Conference.Service.Statistics
             res.Data = new DayRequestDto() { list = result };
             return res;
         }
+
+        public async Task<GenericResponse<DayAttendanceSummary>> GetDayAttendanceSummaryAsync(CancellationToken cancellationToken = default)
+        {
+            var res = new GenericResponse<DayAttendanceSummary>();
+
+            await using var scope = await _connFactory.OpenSessionAsync(cancellationToken);
+            var db = scope.Session;
+
+            var data = await _repo.IC26DataDao.GetDayAttendanceSummaryAsync(db);
+            var result = new DayAttendanceSummary() { list = data };
+
+            res.SetResult(ErrorStatusCode.Success);
+            res.Data = result;
+            return res;
+        }
     }
 }
