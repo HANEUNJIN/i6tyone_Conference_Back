@@ -1014,53 +1014,88 @@ namespace i6tyone_Conference.DbAccess.Dao
                 string query = @"
                                 SELECT
                                     CASE IC26_Day
-                                        WHEN 1 then '화'
-                                        WHEN 2 then '수'
-                                        WHEN 3 then '목'
-                                        WHEN 4 then '3-day'
+                                        WHEN 1 THEN '화'
+                                        WHEN 2 THEN '수'
+                                        WHEN 3 THEN '목'
+                                        WHEN 4 THEN '3-day'
+                                        ELSE CAST(IC26_Day AS VARCHAR)
                                     END AS day,
-                                    [option],
-                                    sum(IC26_Count) as totalCount,
-                                    -- 🔥 day 기준 총합
-                                    sum(sum(IC26_Count)) over (partition by IC26_Day) as dayTotalCount
-
+                                    opt AS [option],
+                                    SUM(IC26_Count) AS totalCount,
+                                    SUM(SUM(IC26_Count)) OVER (PARTITION BY IC26_Day) AS dayTotalCount
                                 FROM (
-                                    SELECT
-                                        IC26_Day,
-                                        IC26_Count,
-                                        CASE
-                                            WHEN IC26_Option = 6
-                                             AND IC26_Attend = 'Y'
-                                                THEN '현장구매'
-
-                                            WHEN IC26_Option = 7
-                                             AND IC26_Attend = 'Y'
-                                                THEN 'VIP'
-
-                                            WHEN newBelieverYn = 'Y'
-                                             AND IC26_Attend = 'Y'
-                                                THEN '새신자'
-
-                                            WHEN IC26_Area = 'STAFF'
-                                             AND IC26_Attend = 'Y'
-                                                THEN '전체 스탭'
-
-                                            WHEN IC26_Church = '김포순복음교회'
-                                             AND IC26_Area != 'STAFF'
-                                             AND IC26_Attend = 'Y'
-                                                THEN '김순교(스탭제외)'
-
-                                            WHEN IC26_Church = '김포순복음교회'
-                                             AND IC26_Area = 'STAFF'
-                                             AND IC26_Attend = 'Y'
-                                                THEN '김순교(스탭)'
-                                        END AS [option]
+                                    -- 김포순복음교회 스탭
+                                    SELECT IC26_Day, IC26_Count, '김순교(스탭)' AS opt
                                     FROM isaiah61co_conf.dbo.IC26_Data
                                     WHERE delYn = 'N'
+                                      AND IC26_Church = '김포순복음교회'
+                                      AND IC26_Area = 'STAFF'
+                                      AND IC26_Attend = 'Y'
+
+                                    UNION ALL
+
+                                    -- 김포순복음교회 스탭제외
+                                    SELECT IC26_Day, IC26_Count, '김순교(스탭제외)' AS opt
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                      AND IC26_Church = '김포순복음교회'
+                                      AND IC26_Area <> 'STAFF'
+                                      AND IC26_Attend = 'Y'
+
+                                    UNION ALL
+
+                                    -- 새신자
+                                    SELECT IC26_Day, IC26_Count, '새신자' AS opt
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                      AND newBelieverYn = 'Y'
+                                      AND IC26_Attend = 'Y'
+
+                                    UNION ALL
+
+                                    -- 현장구매
+                                    SELECT IC26_Day, IC26_Count, '현장구매' AS opt
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                      AND IC26_Option = 6
+                                      AND IC26_Attend = 'Y'
+
+                                    UNION ALL
+
+                                    -- VIP
+                                    SELECT IC26_Day, IC26_Count, 'VIP' AS opt
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                      AND IC26_Option = 7
+                                      AND IC26_Attend = 'Y'
+
+                                    UNION ALL
+
+                                    -- 전체 스탭
+                                    SELECT IC26_Day, IC26_Count, '전체 스탭' AS opt
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                      AND IC26_Area = 'STAFF'
+                                      AND IC26_Attend = 'Y'
+
+                                    UNION ALL
+
+                                    -- 일반
+                                    SELECT IC26_Day, IC26_Count, '일반' AS opt
+                                    FROM isaiah61co_conf.dbo.IC26_Data
+                                    WHERE delYn = 'N'
+                                      AND IC26_Attend = 'Y'
+                                      AND IC26_Option NOT IN (6, 7, 8)
+                                      AND IC26_Area <> 'STAFF'
+                                      AND newBelieverYn <> 'Y'
+                                      AND IC26_Church <> '김포순복음교회'
                                 ) t
-                                WHERE [option] IS NOT NULL
-                                GROUP BY IC26_Day, [option]
-                                ORDER BY IC26_Day ASC, [option] DESC;
+                                GROUP BY
+                                    IC26_Day,
+                                    opt
+                                ORDER BY
+                                    IC26_Day,
+                                    opt DESC;
                                 ";
 
                 var result = await db.QueryAsync<DayAttendance>(query);
