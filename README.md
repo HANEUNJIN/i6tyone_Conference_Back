@@ -1,6 +1,6 @@
-# eGhis WebService Core
+# i6tyone Core
 
-병원 **Core API 시스템**  
+2026 아이자야씩스티원 컨퍼런스 등록 웹 서비스 개발. API 시스템
 ASP.NET Core 8 기반, Dapper 기반 SQL 아키텍처 + NSwag/Stoplight 문서화 적용
 
 ---
@@ -8,9 +8,9 @@ ASP.NET Core 8 기반, Dapper 기반 SQL 아키텍처 + NSwag/Stoplight 문서�
 ## 📁 프로젝트 폴더 구조
 
 ```
-📆 eGhis_WebService_Core/
+📆 i6tyone_Core/
 │
-├── 🗭 eGhis_WebService_Core/           # 메인 API C# 프로젝트 (ASP.NET Core Web API)
+├── 🗭 i6tyone_Core/           # 메인 API C# 프로젝트 (ASP.NET Core Web API)
 │   ├──  Controllers/                  # API 컨트롤러
 │   ├──  Define/                       # 공통 상수, Enum 정의
 │   ├──  DbAccess/
@@ -67,7 +67,7 @@ dotnet publish -c Release -r linux-x64 --self-contained false -o ./publish
 ### 1️⃣ 서비스 중지
 
 ```bash
-sudo systemctl stop eghis_core_api
+sudo systemctl stop i6tyone_api
 ```
 
 ### 2️⃣ 최신 파일 덮어쓰기
@@ -78,10 +78,10 @@ sudo systemctl stop eghis_core_api
 
 ```bash
 # 개발 환경에서 직접 실행
-ASPNETCORE_ENVIRONMENT=Development dotnet eGhis_WebService_Core.dll
+ASPNETCORE_ENVIRONMENT=Development dotnet i6tyone_Core.dll
 
 # 운영 환경은 systemd 로 실행
-sudo systemctl start eghis_core_api
+sudo systemctl start i6tyone_api
 ```
 
 ---
@@ -90,10 +90,10 @@ sudo systemctl start eghis_core_api
 
 ```bash
 # 실시간 로그 확인
-journalctl -fu eghis_core_api
+journalctl -fu i6tyone_api
 
 # 최근 로그 100줄 확인
-journalctl -u eghis_core_api -n 100
+journalctl -u i6tyone_api -n 100
 ```
 
 ---
